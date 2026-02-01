@@ -82,8 +82,19 @@
 		H1000012001 /* ProgressSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000012000 /* ProgressSummaryView.swift */; };
 		H1000013001 /* RewardCelebrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000013000 /* RewardCelebrationView.swift */; };
 		H1000014001 /* RewardsTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000014000 /* RewardsTabView.swift */; };
-		I1000001001 /* CoolDownOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = I1000001000 /* CoolDownOverlayView.swift */; };
-		I1000002001 /* InsufficientFundsOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = I1000002000 /* InsufficientFundsOverlayView.swift */; };
+		I1000001001 /* Gacha.swift in Sources */ = {isa = PBXBuildFile; fileRef = I1000001000 /* Gacha.swift */; };
+		I1000002001 /* GachaConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = I1000002000 /* GachaConfig.swift */; };
+		I1000003001 /* StarParticlesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = I1000003000 /* StarParticlesView.swift */; };
+		I1000004001 /* StarBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = I1000004000 /* StarBadge.swift */; };
+		I1000005001 /* GachaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = I1000005000 /* GachaView.swift */; };
+		I1000006001 /* GachaPullResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = I1000006000 /* GachaPullResultView.swift */; };
+		I1000007001 /* GachaPullButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = I1000007000 /* GachaPullButton.swift */; };
+		I1000008001 /* PityProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = I1000008000 /* PityProgressView.swift */; };
+		I1000009001 /* DropRatesDisclosure.swift in Sources */ = {isa = PBXBuildFile; fileRef = I1000009000 /* DropRatesDisclosure.swift */; };
+		I1000010001 /* ShardProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = I1000010000 /* ShardProgressView.swift */; };
+		I1000011001 /* RecentPullsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = I1000011000 /* RecentPullsSection.swift */; };
+		J1000001001 /* CoolDownOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = J1000001000 /* CoolDownOverlayView.swift */; };
+		J1000002001 /* InsufficientFundsOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = J1000002000 /* InsufficientFundsOverlayView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -156,8 +167,19 @@
 		H1000012000 /* ProgressSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressSummaryView.swift; sourceTree = "<group>"; };
 		H1000013000 /* RewardCelebrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardCelebrationView.swift; sourceTree = "<group>"; };
 		H1000014000 /* RewardsTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardsTabView.swift; sourceTree = "<group>"; };
-		I1000001000 /* CoolDownOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoolDownOverlayView.swift; sourceTree = "<group>"; };
-		I1000002000 /* InsufficientFundsOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsufficientFundsOverlayView.swift; sourceTree = "<group>"; };
+		I1000001000 /* Gacha.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gacha.swift; sourceTree = "<group>"; };
+		I1000002000 /* GachaConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GachaConfig.swift; sourceTree = "<group>"; };
+		I1000003000 /* StarParticlesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarParticlesView.swift; sourceTree = "<group>"; };
+		I1000004000 /* StarBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarBadge.swift; sourceTree = "<group>"; };
+		I1000005000 /* GachaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GachaView.swift; sourceTree = "<group>"; };
+		I1000006000 /* GachaPullResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GachaPullResultView.swift; sourceTree = "<group>"; };
+		I1000007000 /* GachaPullButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GachaPullButton.swift; sourceTree = "<group>"; };
+		I1000008000 /* PityProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PityProgressView.swift; sourceTree = "<group>"; };
+		I1000009000 /* DropRatesDisclosure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropRatesDisclosure.swift; sourceTree = "<group>"; };
+		I1000010000 /* ShardProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShardProgressView.swift; sourceTree = "<group>"; };
+		I1000011000 /* RecentPullsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentPullsSection.swift; sourceTree = "<group>"; };
+		J1000001000 /* CoolDownOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoolDownOverlayView.swift; sourceTree = "<group>"; };
+		J1000002000 /* InsufficientFundsOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsufficientFundsOverlayView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -281,6 +303,7 @@
 				B1000033000 /* AuthorizationRequestView.swift */,
 				B1000035000 /* Components */,
 				D1000014000 /* Limits */,
+				I1000020000 /* Gacha */,
 				G1000003000 /* Rewards */,
 			);
 			path = Views;
@@ -365,6 +388,8 @@
 		B1000035000 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				I1000003000 /* StarParticlesView.swift */,
+				I1000004000 /* StarBadge.swift */,
 				B1000020000 /* CircularProgressView.swift */,
 				G1000004000 /* CircularDurationSlider.swift */,
 				B1000021000 /* RoundedButton.swift */,
@@ -412,6 +437,8 @@
 		G1000002000 /* Rewards */ = {
 			isa = PBXGroup;
 			children = (
+				I1000001000 /* Gacha.swift */,
+				I1000002000 /* GachaConfig.swift */,
 				H1000001000 /* Currency.swift */,
 				H1000002000 /* OrbStyle.swift */,
 				H1000003000 /* UserProgress.swift */,
@@ -433,6 +460,20 @@
 				H1000014000 /* RewardsTabView.swift */,
 			);
 			path = Rewards;
+			sourceTree = "<group>";
+		};
+		I1000020000 /* Gacha */ = {
+			isa = PBXGroup;
+			children = (
+				I1000005000 /* GachaView.swift */,
+				I1000006000 /* GachaPullResultView.swift */,
+				I1000007000 /* GachaPullButton.swift */,
+				I1000008000 /* PityProgressView.swift */,
+				I1000009000 /* DropRatesDisclosure.swift */,
+				I1000010000 /* ShardProgressView.swift */,
+				I1000011000 /* RecentPullsSection.swift */,
+			);
+			path = Gacha;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -711,8 +752,19 @@
 				H1000012001 /* ProgressSummaryView.swift in Sources */,
 				H1000013001 /* RewardCelebrationView.swift in Sources */,
 				H1000014001 /* RewardsTabView.swift in Sources */,
-				I1000001001 /* CoolDownOverlayView.swift in Sources */,
-				I1000002001 /* InsufficientFundsOverlayView.swift in Sources */,
+				I1000001001 /* Gacha.swift in Sources */,
+				I1000002001 /* GachaConfig.swift in Sources */,
+				I1000003001 /* StarParticlesView.swift in Sources */,
+				I1000004001 /* StarBadge.swift in Sources */,
+				I1000005001 /* GachaView.swift in Sources */,
+				I1000006001 /* GachaPullResultView.swift in Sources */,
+				I1000007001 /* GachaPullButton.swift in Sources */,
+				I1000008001 /* PityProgressView.swift in Sources */,
+				I1000009001 /* DropRatesDisclosure.swift in Sources */,
+				I1000010001 /* ShardProgressView.swift in Sources */,
+				I1000011001 /* RecentPullsSection.swift in Sources */,
+				J1000001001 /* CoolDownOverlayView.swift in Sources */,
+				J1000002001 /* InsufficientFundsOverlayView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -82,13 +82,21 @@ struct RewardsTabView: View {
                                 GradientOrbView(
                                     state: .idle,
                                     size: 70,
-                                    style: rewardsManager.equippedStyle
+                                    style: rewardsManager.equippedStyle,
+                                    starLevel: rewardsManager.starLevel(for: rewardsManager.equippedStyle.id)
                                 )
 
                                 VStack(alignment: .leading, spacing: 4) {
-                                    Text(rewardsManager.equippedStyle.name)
-                                        .font(.headline)
-                                        .foregroundColor(.pomTextPrimary)
+                                    HStack(spacing: 8) {
+                                        Text(rewardsManager.equippedStyle.name)
+                                            .font(.headline)
+                                            .foregroundColor(.pomTextPrimary)
+
+                                        let starLevel = rewardsManager.starLevel(for: rewardsManager.equippedStyle.id)
+                                        if starLevel > 1 {
+                                            StarBadge(level: starLevel)
+                                        }
+                                    }
 
                                     Text(rewardsManager.equippedStyle.rarity.displayName)
                                         .font(.caption)
@@ -121,7 +129,10 @@ struct RewardsTabView: View {
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(.horizontal)
 
-                        HStack(spacing: 16) {
+                        LazyVGrid(columns: [
+                        GridItem(.flexible(), spacing: 12),
+                        GridItem(.flexible(), spacing: 12)
+                    ], spacing: 12) {
                             NavigationLink {
                                 CollectionView()
                             } label: {
@@ -141,6 +152,17 @@ struct RewardsTabView: View {
                                     title: "Shop",
                                     subtitle: "\(rewardsManager.lockedStyles.count) available",
                                     color: .pomSecondary
+                                )
+                            }
+
+                            NavigationLink {
+                                GachaView()
+                            } label: {
+                                QuickActionCard(
+                                    icon: "dice.fill",
+                                    title: "Gacha",
+                                    subtitle: "Pull orbs",
+                                    color: .purple
                                 )
                             }
 
