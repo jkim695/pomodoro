@@ -92,26 +92,28 @@ struct TimerView: View {
     // MARK: - Timer Display with Orb
     private var timerDisplay: some View {
         ZStack {
-            // Circular duration slider (only when idle)
+            // When idle: show duration slider (includes its own track)
+            // When focusing: show progress ring
             if session.state == .idle {
                 CircularDurationSlider(
                     duration: $session.focusDuration,
-                    size: 340,
+                    size: 252,
+                    trackWidth: 12,
                     isEnabled: true
                 )
+            } else {
+                // Progress ring (only during focus sessions)
+                CircularProgressView(
+                    progress: session.timer.progress,
+                    lineWidth: 12,
+                    size: 252
+                )
             }
-
-            // Progress ring
-            CircularProgressView(
-                progress: session.timer.progress,
-                lineWidth: 20,
-                size: 280
-            )
 
             // Gradient orb in center (uses equipped style)
             GradientOrbView(
                 state: orbState,
-                size: 160,
+                size: 144,
                 style: rewardsManager.equippedStyle
             )
         }

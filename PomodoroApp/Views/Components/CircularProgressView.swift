@@ -1,9 +1,14 @@
 import SwiftUI
 
 struct CircularProgressView: View {
-    let progress: Double
+    let progress: Double  // 0 = just started, 1 = completed
     var lineWidth: CGFloat = 24
     var size: CGFloat = 280
+
+    // Remaining progress (starts full, depletes to empty)
+    private var remainingProgress: CGFloat {
+        CGFloat(max(0, min(1, 1 - progress)))
+    }
 
     var body: some View {
         ZStack {
@@ -13,27 +18,20 @@ struct CircularProgressView: View {
                     Color.pomBorder,
                     style: StrokeStyle(lineWidth: lineWidth, lineCap: .round)
                 )
+                .frame(width: size - lineWidth, height: size - lineWidth)
 
-            // Progress ring
+            // Progress ring - shows remaining time (depletes as timer runs)
             Circle()
-                .trim(from: 0, to: CGFloat(min(progress, 1.0)))
+                .trim(from: 0, to: remainingProgress)
                 .stroke(
-                    progressGradient,
+                    Color.pomPrimary,
                     style: StrokeStyle(lineWidth: lineWidth, lineCap: .round)
                 )
+                .frame(width: size - lineWidth, height: size - lineWidth)
                 .rotationEffect(.degrees(-90))
-                .animation(.easeInOut(duration: 0.3), value: progress)
-                .shadow(color: Color.pomPrimary.opacity(0.3), radius: 8, x: 0, y: 4)
+                .animation(.linear(duration: 0.5), value: remainingProgress)
         }
         .frame(width: size, height: size)
-    }
-
-    private var progressGradient: LinearGradient {
-        LinearGradient(
-            colors: [Color.pomPrimary, Color.pomAccent],
-            startPoint: .topLeading,
-            endPoint: .bottomTrailing
-        )
     }
 }
 
