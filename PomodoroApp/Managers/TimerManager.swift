@@ -2,6 +2,7 @@ import Foundation
 import Combine
 
 /// Manages countdown timer with background recovery support
+@MainActor
 final class TimerManager: ObservableObject {
     @Published var timeRemaining: Int = 0      // seconds
     @Published var totalTime: Int = 0          // seconds
@@ -103,18 +104,21 @@ final class TimerManager: ObservableObject {
 
         timerSubscription = Timer.publish(every: 1, on: .main, in: .common)
             .autoconnect()
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
-                guard let self = self else { return }
+                Task { @MainActor in
+                    guard let self = self else { return }
 
-                if self.timeRemaining > 0 {
-                    self.timeRemaining -= 1
-                }
+                    if self.timeRemaining > 0 {
+                        self.timeRemaining -= 1
+                    }
 
-                if self.timeRemaining == 0 {
-                    self.isRunning = false
-                    self.timerSubscription?.cancel()
-                    self.timerSubscription = nil
-                    self.clearSavedState()
+                    if self.timeRemaining == 0 {
+                        self.isRunning = false
+                        self.timerSubscription?.cancel()
+                        self.timerSubscription = nil
+                        self.clearSavedState()
+                    }
                 }
             }
     }

@@ -4,6 +4,7 @@ import FamilyControls
 struct ContentView: View {
     @EnvironmentObject var authorizationManager: AuthorizationManager
     @EnvironmentObject var session: PomodoroSession
+    @EnvironmentObject var limitsSession: LimitsSession
 
     var body: some View {
         Group {
@@ -11,7 +12,7 @@ struct ContentView: View {
             case .notDetermined:
                 AuthorizationRequestView()
             case .approved:
-                TimerView()
+                MainTabView()
             case .denied:
                 AuthorizationDeniedView()
             }
@@ -38,4 +39,5 @@ struct ContentView: View {
     ContentView()
         .environmentObject(AuthorizationManager())
         .environmentObject(PomodoroSession())
+        .environmentObject(LimitsSession())
 }

@@ -2,7 +2,6 @@ import SwiftUI
 
 struct TimerView: View {
     @EnvironmentObject var session: PomodoroSession
-    @State private var showAppSelection = false
     @State private var showSettings = false
     @State private var showCelebration = false
     @State private var previousState: SessionState = .idle
@@ -13,16 +12,17 @@ struct TimerView: View {
             Color.pomCream
                 .ignoresSafeArea()
 
-            VStack(spacing: 32) {
+            VStack(spacing: 0) {
                 Spacer()
 
-                // Timer display with circular progress
-                timerDisplay
+                // HERO: Avatar INSIDE the timer circle
+                timerWithAvatar
 
-                // Status text
+                Spacer()
+
+                // Status text above buttons
                 statusText
-
-                Spacer()
+                    .padding(.bottom, 24)
 
                 // Action buttons
                 actionButtons
@@ -37,9 +37,6 @@ struct TimerView: View {
             if showCelebration {
                 celebrationOverlay
             }
-        }
-        .sheet(isPresented: $showAppSelection) {
-            AppSelectionView()
         }
         .sheet(isPresented: $showSettings) {
             SettingsView()
@@ -56,42 +53,57 @@ struct TimerView: View {
         }
     }
 
-    // MARK: - Timer Display
-    private var timerDisplay: some View {
-        ZStack {
-            CircularProgressView(progress: session.timer.progress)
+    // MARK: - Timer with Avatar Inside
+    private var timerWithAvatar: some View {
+        VStack(spacing: 16) {
+            // Timer circle with avatar centered inside
+            ZStack {
+                CircularProgressView(progress: session.timer.progress)
 
-            VStack(spacing: 8) {
+                // Avatar centered inside the circle
+                avatarCompanion
+            }
+
+            // Timer text below the circle
+            VStack(spacing: 4) {
                 AnimatedTimerText(
-                    timeRemaining: session.timer.timeRemaining,
+                    timeRemaining: displayTimeRemaining,
                     isRunning: session.timer.isRunning
                 )
 
                 if session.state != .idle {
                     Text(session.state == .focusing ? "Focus Time" : "Break Time")
-                        .font(.pomCaption)
+                        .font(.system(size: 16, weight: .semibold, design: .rounded))
                         .foregroundColor(.pomLightBrown)
                 }
             }
         }
     }
 
-    // MARK: - Status Text
+    /// Returns the time to display - shows selected duration when idle, actual remaining time otherwise
+    private var displayTimeRemaining: Int {
+        if session.state == .idle {
+            return session.focusDuration * 60  // Convert minutes to seconds
+        }
+        return session.timer.timeRemaining
+    }
+
+    // MARK: - Status Text (Chunky Labels)
     private var statusText: some View {
         Group {
             switch session.state {
             case .idle:
-                VStack(spacing: 8) {
+                VStack(spacing: 6) {
                     Text("Ready to focus?")
-                        .font(.pomHeading)
+                        .font(.pomHeading)  // 24pt bold rounded
                         .foregroundColor(.pomBrown)
 
                     Text("\(session.focusDuration) minute session")
-                        .font(.pomBody)
+                        .font(.system(size: 16, weight: .medium, design: .rounded))
                         .foregroundColor(.pomLightBrown)
                 }
             case .focusing:
-                VStack(spacing: 8) {
+                VStack(spacing: 6) {
                     Text("Stay focused!")
                         .font(.pomHeading)
                         .foregroundColor(.pomBrown)
@@ -99,23 +111,33 @@ struct TimerView: View {
                     if !session.selection.applicationTokens.isEmpty || !session.selection.categoryTokens.isEmpty {
                         let appCount = session.selection.applicationTokens.count + session.selection.categoryTokens.count
                         Text("\(appCount) app\(appCount == 1 ? "" : "s") blocked")
-                            .font(.pomCaption)
+                            .font(.system(size: 14, weight: .medium, design: .rounded))
                             .foregroundColor(.pomLightBrown)
                     }
                 }
             case .onBreak:
-                VStack(spacing: 8) {
+                VStack(spacing: 6) {
                     Text("Take a break!")
                         .font(.pomHeading)
                         .foregroundColor(.pomBrown)
 
                     Text("You earned it")
-                        .font(.pomBody)
+                        .font(.system(size: 16, weight: .medium, design: .rounded))
                         .foregroundColor(.pomLightBrown)
                 }
             }
         }
         .animation(.stateTransition, value: session.state)
+    }
+
+    // MARK: - Avatar Companion (Centered inside timer circle)
+    private var avatarCompanion: some View {
+        AvatarWithMessage(
+            avatarState: session.avatarState,
+            avatarSize: 210,  // Sized to fill the 280px timer circle
+            showGroundingShadow: false  // No shadow inside the circular progress ring
+        )
+        .animation(.stateTransition, value: session.avatarState)
     }
 
     // MARK: - Action Buttons
@@ -125,10 +147,6 @@ struct TimerView: View {
             case .idle:
                 RoundedButton("Start Focus", style: .primary) {
                     session.startFocusSession()
-                }
-
-                IconRoundedButton("Select Apps to Block", icon: "apps.iphone", style: .secondary) {
-                    showAppSelection = true
                 }
 
             case .focusing:

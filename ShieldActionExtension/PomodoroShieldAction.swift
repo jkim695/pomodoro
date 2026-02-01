@@ -3,7 +3,8 @@ import ManagedSettings
 
 /// Handles user interactions with the shield overlay
 class PomodoroShieldAction: ShieldActionDelegate {
-    private let store = ManagedSettingsStore()
+    private let pomodoroStore = ManagedSettingsStore(named: .pomodoro)
+    private let limitsStore = ManagedSettingsStore(named: .limits)
 
     override func handle(
         action: ShieldAction,
@@ -35,26 +36,44 @@ class PomodoroShieldAction: ShieldActionDelegate {
         _ action: ShieldAction,
         completionHandler: @escaping (ShieldActionResponse) -> Void
     ) {
+        let context = SharedDataManager.shared.shieldContext
+
         switch action {
         case .primaryButtonPressed:
-            // "Back to Work" - just close the shield and return to home
+            // Primary button always closes the shield
             completionHandler(.close)
 
         case .secondaryButtonPressed:
-            // "End Session" - remove shields and mark session as ended early
-            removeAllShields()
-            SharedDataManager.shared.sessionEndedEarly = true
-            SharedDataManager.shared.isSessionActive = false
-            completionHandler(.close)
+            // Secondary button behavior depends on context
+            switch context {
+            case .pomodoro:
+                // "End Session" - remove shields and mark session as ended early
+                removeShields(from: pomodoroStore)
+                SharedDataManager.shared.sessionEndedEarly = true
+                SharedDataManager.shared.isSessionActive = false
+                SharedDataManager.shared.clearShieldContext()
+                completionHandler(.close)
+
+            case .timeSchedule, .usageLimit, nil:
+                // Time schedules and usage limits don't have a secondary button
+                // But if somehow pressed, just close
+                completionHandler(.close)
+            }
 
         @unknown default:
             completionHandler(.close)
         }
     }
 
-    private func removeAllShields() {
+    private func removeShields(from store: ManagedSettingsStore) {
         store.shield.applications = nil
         store.shield.applicationCategories = nil
         store.shield.webDomainCategories = nil
     }
+}
+
+// Extension to access ManagedSettingsStore names from extensions
+extension ManagedSettingsStore.Name {
+    static let pomodoro = Self("pomodoro")
+    static let limits = Self("limits")
 }
