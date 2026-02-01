@@ -15,8 +15,7 @@ struct AnimatedTimerText: View {
     var body: some View {
         Text(formattedTime)
             .font(.timerDisplay)
-            .foregroundColor(.pomBrown)
-            .monospacedDigit()
+            .foregroundColor(.pomTextPrimary)
             .scaleEffect(scale)
             .onChange(of: isRunning) { running in
                 if running {
@@ -55,5 +54,5 @@ struct AnimatedTimerText: View {
         AnimatedTimerText(timeRemaining: 300, isRunning: true)
     }
     .padding()
-    .background(Color.pomCream)
+    .background(Color.pomBackground)
 }

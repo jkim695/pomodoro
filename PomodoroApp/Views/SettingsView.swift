@@ -11,13 +11,13 @@ struct SettingsView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color.pomCream
+                Color.pomBackground
                     .ignoresSafeArea()
 
                 ScrollView {
                     VStack(spacing: 24) {
                         // Focus Duration
-                        settingsSection(title: "Focus Duration", icon: "timer") {
+                        settingsSection(title: "Set Duration", icon: "clock.fill") {
                             durationPicker(
                                 values: focusDurations,
                                 selected: $session.focusDuration,
@@ -26,7 +26,7 @@ struct SettingsView: View {
                         }
 
                         // Break Duration
-                        settingsSection(title: "Break Duration", icon: "cup.and.saucer") {
+                        settingsSection(title: "Break Length", icon: "cup.and.saucer.fill") {
                             durationPicker(
                                 values: breakDurations,
                                 selected: $session.breakDuration,
@@ -35,7 +35,7 @@ struct SettingsView: View {
                         }
 
                         // Blocked Apps
-                        settingsSection(title: "Blocked Apps", icon: "apps.iphone") {
+                        settingsSection(title: "Block Apps", icon: "shield.fill") {
                             blockedAppsSection
                         }
                     }
@@ -51,7 +51,7 @@ struct SettingsView: View {
                         dismiss()
                     }
                     .font(.pomButton)
-                    .foregroundColor(.pomPeach)
+                    .foregroundColor(.pomPrimary)
                 }
             }
         }
@@ -67,23 +67,23 @@ struct SettingsView: View {
         @ViewBuilder content: () -> Content
     ) -> some View {
         VStack(alignment: .leading, spacing: 16) {
-            HStack(spacing: 8) {
+            HStack(spacing: 10) {
                 Image(systemName: icon)
-                    .font(.system(size: 18))
-                    .foregroundColor(.pomPeach)
+                    .font(.system(size: 18, weight: .medium))
+                    .foregroundColor(.pomPrimary)
 
                 Text(title)
-                    .font(.pomHeading)
-                    .foregroundColor(.pomBrown)
+                    .font(.pomHeading2)
+                    .foregroundColor(.pomTextPrimary)
             }
 
             content()
         }
         .padding(20)
         .background(
-            RoundedRectangle(cornerRadius: 20)
-                .fill(Color.white)
-                .shadow(color: Color.pomBrown.opacity(0.1), radius: 8, x: 0, y: 4)
+            RoundedRectangle(cornerRadius: 16)
+                .fill(Color.pomCardBackground)
+                .shadow(color: Color.black.opacity(0.05), radius: 10, x: 0, y: 4)
         )
     }
 
@@ -100,15 +100,31 @@ struct SettingsView: View {
                     impactFeedback.impactOccurred()
                     selected.wrappedValue = value
                 } label: {
-                    Text("\(value) \(suffix)")
-                        .font(.pomBody)
-                        .foregroundColor(selected.wrappedValue == value ? .white : .pomBrown)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 12)
-                        .background(
-                            RoundedRectangle(cornerRadius: 12)
-                                .fill(selected.wrappedValue == value ? Color.pomPeach : Color.pomCream)
-                        )
+                    HStack(spacing: 4) {
+                        Text("\(value)")
+                            .font(.pomBody)
+                            .fontWeight(.semibold)
+                        Text(suffix)
+                            .font(.pomCaption)
+                    }
+                    .foregroundColor(selected.wrappedValue == value ? .white : .pomTextPrimary)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 14)
+                    .background(
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(selected.wrappedValue == value ? Color.pomPrimary : Color.pomCardBackgroundAlt)
+                    )
+                    .overlay(
+                        Group {
+                            if selected.wrappedValue == value {
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(Color.pomPrimaryDark, lineWidth: 1)
+                            } else {
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(Color.pomBorder, lineWidth: 1)
+                            }
+                        }
+                    )
                 }
                 .animation(.spring(response: 0.3, dampingFraction: 0.7), value: selected.wrappedValue)
             }
@@ -124,17 +140,18 @@ struct SettingsView: View {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("\(appCount) item\(appCount == 1 ? "" : "s") selected")
                         .font(.pomBody)
-                        .foregroundColor(.pomBrown)
+                        .fontWeight(.medium)
+                        .foregroundColor(.pomTextPrimary)
 
-                    Text("Apps and categories to block during focus")
+                    Text("Apps blocked during focus sessions")
                         .font(.pomCaption)
-                        .foregroundColor(.pomLightBrown)
+                        .foregroundColor(.pomTextSecondary)
                 }
 
                 Spacer()
             }
 
-            RoundedButton("Manage Blocked Apps", style: .secondary) {
+            RoundedButton("Manage Apps", style: .secondary) {
                 showAppSelection = true
             }
         }

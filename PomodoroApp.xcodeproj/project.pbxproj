@@ -34,10 +34,7 @@
 		B1000031001 /* AppSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000031000 /* AppSelectionView.swift */; };
 		B1000032001 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000032000 /* SettingsView.swift */; };
 		B1000033001 /* AuthorizationRequestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000033000 /* AuthorizationRequestView.swift */; };
-		C1000001001 /* AvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000001000 /* AvatarView.swift */; };
-		C1000002001 /* AvatarMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000002000 /* AvatarMessageView.swift */; };
-		C1000003001 /* SparkleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000003000 /* SparkleView.swift */; };
-		C1000004001 /* AvatarScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000004000 /* AvatarScene.swift */; };
+		C1000001001 /* GradientOrbView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000001000 /* GradientOrbView.swift */; };
 		D1000001001 /* TimeSchedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1000001000 /* TimeSchedule.swift */; };
 		D1000002001 /* AppLimit.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1000002000 /* AppLimit.swift */; };
 		D1000003001 /* UsageRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1000003000 /* UsageRecord.swift */; };
@@ -100,10 +97,7 @@
 		B1000031000 /* AppSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSelectionView.swift; sourceTree = "<group>"; };
 		B1000032000 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		B1000033000 /* AuthorizationRequestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorizationRequestView.swift; sourceTree = "<group>"; };
-		C1000001000 /* AvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarView.swift; sourceTree = "<group>"; };
-		C1000002000 /* AvatarMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarMessageView.swift; sourceTree = "<group>"; };
-		C1000003000 /* SparkleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SparkleView.swift; sourceTree = "<group>"; };
-		C1000004000 /* AvatarScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarScene.swift; sourceTree = "<group>"; };
+		C1000001000 /* GradientOrbView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientOrbView.swift; sourceTree = "<group>"; };
 		D1000001000 /* TimeSchedule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeSchedule.swift; sourceTree = "<group>"; };
 		D1000002000 /* AppLimit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLimit.swift; sourceTree = "<group>"; };
 		D1000003000 /* UsageRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageRecord.swift; sourceTree = "<group>"; };
@@ -298,10 +292,7 @@
 				B1000020000 /* CircularProgressView.swift */,
 				B1000021000 /* RoundedButton.swift */,
 				B1000022000 /* AnimatedTimerText.swift */,
-				C1000001000 /* AvatarView.swift */,
-				C1000002000 /* AvatarMessageView.swift */,
-				C1000003000 /* SparkleView.swift */,
-				C1000004000 /* AvatarScene.swift */,
+				C1000001000 /* GradientOrbView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -531,10 +522,7 @@
 				B1000031001 /* AppSelectionView.swift in Sources */,
 				B1000032001 /* SettingsView.swift in Sources */,
 				B1000033001 /* AuthorizationRequestView.swift in Sources */,
-				C1000001001 /* AvatarView.swift in Sources */,
-				C1000002001 /* AvatarMessageView.swift in Sources */,
-				C1000003001 /* SparkleView.swift in Sources */,
-				C1000004001 /* AvatarScene.swift in Sources */,
+				C1000001001 /* GradientOrbView.swift in Sources */,
 				D1000001001 /* TimeSchedule.swift in Sources */,
 				D1000002001 /* AppLimit.swift in Sources */,
 				D1000003001 /* UsageRecord.swift in Sources */,

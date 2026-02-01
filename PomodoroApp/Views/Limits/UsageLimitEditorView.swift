@@ -148,7 +148,7 @@ struct UsageLimitEditorView: View {
         .padding(16)
         .background(
             RoundedRectangle(cornerRadius: 16)
-                .fill(Color.white)
+                .fill(Color.pomCardBackground)
                 .shadow(color: Color.pomBrown.opacity(0.08), radius: 4, x: 0, y: 2)
         )
     }
@@ -186,7 +186,7 @@ struct UsageLimitEditorView: View {
         .padding(16)
         .background(
             RoundedRectangle(cornerRadius: 16)
-                .fill(Color.white)
+                .fill(Color.pomCardBackground)
                 .shadow(color: Color.pomBrown.opacity(0.08), radius: 4, x: 0, y: 2)
         )
     }
@@ -248,7 +248,7 @@ struct LimitAppSelectionView: View {
                     FamilyActivityPicker(selection: $selection)
                         .background(
                             RoundedRectangle(cornerRadius: 16)
-                                .fill(Color.white)
+                                .fill(Color.pomCardBackground)
                         )
                         .cornerRadius(16)
                         .shadow(color: Color.pomBrown.opacity(0.1), radius: 8, x: 0, y: 4)

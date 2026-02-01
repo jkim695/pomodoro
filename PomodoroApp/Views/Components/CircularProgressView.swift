@@ -2,40 +2,51 @@ import SwiftUI
 
 struct CircularProgressView: View {
     let progress: Double
-    var lineWidth: CGFloat = 32  // CHUNKY ring for kawaii aesthetic
+    var lineWidth: CGFloat = 24
     var size: CGFloat = 280
+    var isFocusing: Bool = true  // Controls color scheme
 
     var body: some View {
         ZStack {
-            // Track (background ring) - warm beige for kawaii aesthetic with depth
+            // Track (background ring) - subtle gray
             Circle()
                 .stroke(
-                    Color.pomLightBrown.opacity(0.2),
+                    Color.pomBorder,
                     style: StrokeStyle(lineWidth: lineWidth, lineCap: .round)
-                )
-                // Inner shadow effect for depth
-                .overlay(
-                    Circle()
-                        .stroke(
-                            Color.pomBrown.opacity(0.08),
-                            style: StrokeStyle(lineWidth: lineWidth - 4, lineCap: .round)
-                        )
-                        .blur(radius: 2)
-                        .offset(x: 1, y: 2)
                 )
 
             // Progress ring
             Circle()
                 .trim(from: 0, to: CGFloat(min(progress, 1.0)))
                 .stroke(
-                    Color.pomSage,
+                    progressGradient,
                     style: StrokeStyle(lineWidth: lineWidth, lineCap: .round)
                 )
                 .rotationEffect(.degrees(-90))
                 .animation(.easeInOut(duration: 0.3), value: progress)
-                .shadow(color: Color.pomSage.opacity(0.4), radius: 10, x: 0, y: 4)
+                .shadow(color: progressColor.opacity(0.3), radius: 8, x: 0, y: 4)
         }
         .frame(width: size, height: size)
+    }
+
+    private var progressColor: Color {
+        isFocusing ? Color.pomPrimary : Color.pomSecondary
+    }
+
+    private var progressGradient: LinearGradient {
+        if isFocusing {
+            return LinearGradient(
+                colors: [Color.pomPrimary, Color.pomAccent],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        } else {
+            return LinearGradient(
+                colors: [Color.pomSecondary, Color(hex: "4ECDC4")],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        }
     }
 }
 
@@ -44,17 +55,18 @@ struct CircularProgressBindingView: View {
     @Binding var progress: Double
     var lineWidth: CGFloat = 20
     var size: CGFloat = 280
+    var isFocusing: Bool = true
 
     var body: some View {
-        CircularProgressView(progress: progress, lineWidth: lineWidth, size: size)
+        CircularProgressView(progress: progress, lineWidth: lineWidth, size: size, isFocusing: isFocusing)
     }
 }
 
 #Preview {
     VStack(spacing: 40) {
-        CircularProgressView(progress: 0.3)
-        CircularProgressView(progress: 0.7, lineWidth: 12, size: 150)
+        CircularProgressView(progress: 0.3, isFocusing: true)
+        CircularProgressView(progress: 0.7, lineWidth: 12, size: 150, isFocusing: false)
     }
     .padding()
-    .background(Color.pomCream)
+    .background(Color.pomBackground)
 }

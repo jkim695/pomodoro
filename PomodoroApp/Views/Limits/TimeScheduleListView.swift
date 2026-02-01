@@ -35,27 +35,34 @@ struct ScheduleRow: View {
     var body: some View {
         HStack(spacing: 12) {
             // Info
-            VStack(alignment: .leading, spacing: 4) {
+            VStack(alignment: .leading, spacing: 6) {
                 Text(schedule.name)
                     .font(.pomBody)
-                    .fontWeight(.medium)
-                    .foregroundColor(.pomBrown)
+                    .fontWeight(.semibold)
+                    .foregroundColor(.pomTextPrimary)
 
                 Text(schedule.formattedTimeRange)
                     .font(.pomCaption)
-                    .foregroundColor(.pomLightBrown)
+                    .foregroundColor(.pomTextSecondary)
 
+                // Day pills
                 HStack(spacing: 4) {
-                    Text(schedule.activeDaysSummary)
-                        .font(.system(size: 12, design: .rounded))
-                        .foregroundColor(.pomLightBrown)
+                    ForEach(Weekday.allCases) { day in
+                        let isActive = schedule.activeDays.contains(day)
+                        Text(day.shortName)
+                            .font(.system(size: 10, weight: .medium))
+                            .foregroundColor(isActive ? .white : .pomTextTertiary)
+                            .frame(width: 20, height: 20)
+                            .background(
+                                Circle()
+                                    .fill(isActive ? Color.pomPrimary : Color.pomCardBackgroundAlt)
+                            )
+                    }
 
-                    Text("•")
-                        .foregroundColor(.pomLightBrown)
-
-                    Text("\(schedule.selectionCount) app\(schedule.selectionCount == 1 ? "" : "s")")
-                        .font(.system(size: 12, design: .rounded))
-                        .foregroundColor(.pomLightBrown)
+                    Text("• \(schedule.selectionCount) app\(schedule.selectionCount == 1 ? "" : "s")")
+                        .font(.system(size: 11))
+                        .foregroundColor(.pomTextTertiary)
+                        .padding(.leading, 4)
                 }
             }
 
@@ -66,13 +73,13 @@ struct ScheduleRow: View {
                 get: { schedule.isEnabled },
                 set: { onToggle($0) }
             ))
-            .tint(.pomPeach)
+            .tint(.pomPrimary)
             .labelsHidden()
         }
         .padding(16)
         .background(
             RoundedRectangle(cornerRadius: 12)
-                .fill(Color.pomCream)
+                .fill(Color.pomCardBackgroundAlt)
         )
         .contentShape(Rectangle())
         .onTapGesture {
@@ -107,5 +114,6 @@ struct ScheduleRow: View {
         TimeScheduleListView()
     }
     .padding()
+    .background(Color.pomBackground)
     .environmentObject(LimitsSession())
 }

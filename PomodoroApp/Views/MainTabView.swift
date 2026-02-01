@@ -9,15 +9,15 @@ struct MainTabView: View {
         TabView {
             TimerView()
                 .tabItem {
-                    Label("Timer", systemImage: "timer")
+                    Label("Timer", systemImage: "clock.fill")
                 }
 
             LimitsView()
                 .tabItem {
-                    Label("Limits", systemImage: "hourglass")
+                    Label("Limits", systemImage: "shield.fill")
                 }
         }
-        .tint(Color.pomPeach)
+        .tint(Color.pomPrimary)
     }
 }
 

@@ -3,6 +3,7 @@ import SwiftUI
 enum ButtonStyle {
     case primary
     case secondary
+    case destructive
 }
 
 struct RoundedButton: View {
@@ -20,47 +21,57 @@ struct RoundedButton: View {
 
     var body: some View {
         Button {
-            // Light haptic feedback
-            let impactFeedback = UIImpactFeedbackGenerator(style: .light)
+            let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
             impactFeedback.impactOccurred()
             action()
         } label: {
             Text(title)
                 .font(.pomButton)
-                .foregroundColor(style == .primary ? .white : .pomBrown)
+                .foregroundColor(foregroundColor)
                 .frame(maxWidth: .infinity)
-                .padding(.vertical, 20)
+                .padding(.vertical, 18)
                 .padding(.horizontal, 32)
-                .background(
-                    Group {
-                        if style == .primary {
-                            RoundedRectangle(cornerRadius: 20)
-                                .fill(Color.pomPeach)
-                        } else {
-                            // Filled background with chunky border for kawaii aesthetic
-                            RoundedRectangle(cornerRadius: 20)
-                                .fill(Color.pomPeach.opacity(0.15))
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 20)
-                                        .stroke(Color.pomPeach, lineWidth: 3.5)
-                                )
-                        }
-                    }
-                )
+                .background(background)
         }
-        .scaleEffect(isPressed ? 0.95 : 1.0)
-        .animation(.spring(response: 0.3, dampingFraction: 0.6), value: isPressed)
+        .scaleEffect(isPressed ? 0.97 : 1.0)
+        .animation(.spring(response: 0.25, dampingFraction: 0.7), value: isPressed)
         .simultaneousGesture(
             DragGesture(minimumDistance: 0)
                 .onChanged { _ in isPressed = true }
                 .onEnded { _ in isPressed = false }
         )
-        .shadow(
-            color: Color.pomPeach.opacity(style == .primary ? 0.3 : 0.2),
-            radius: style == .primary ? 8 : 6,
-            x: 0,
-            y: style == .primary ? 4 : 3
-        )
+    }
+
+    private var foregroundColor: Color {
+        switch style {
+        case .primary, .destructive:
+            return .white
+        case .secondary:
+            return .pomPrimary
+        }
+    }
+
+    @ViewBuilder
+    private var background: some View {
+        switch style {
+        case .primary:
+            RoundedRectangle(cornerRadius: 16)
+                .fill(isPressed ? Color.pomPrimaryDark : Color.pomPrimary)
+                .shadow(color: Color.pomPrimary.opacity(0.3), radius: 8, x: 0, y: 4)
+
+        case .secondary:
+            RoundedRectangle(cornerRadius: 16)
+                .fill(Color.pomPrimaryLight)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 16)
+                        .stroke(Color.pomPrimary, lineWidth: 2)
+                )
+
+        case .destructive:
+            RoundedRectangle(cornerRadius: 16)
+                .fill(isPressed ? Color.pomDestructive.opacity(0.8) : Color.pomDestructive)
+                .shadow(color: Color.pomDestructive.opacity(0.3), radius: 8, x: 0, y: 4)
+        }
     }
 }
 
@@ -82,7 +93,7 @@ struct IconRoundedButton: View {
 
     var body: some View {
         Button {
-            let impactFeedback = UIImpactFeedbackGenerator(style: .light)
+            let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
             impactFeedback.impactOccurred()
             action()
         } label: {
@@ -91,49 +102,61 @@ struct IconRoundedButton: View {
                 Text(title)
             }
             .font(.pomButton)
-            .foregroundColor(style == .primary ? .white : .pomBrown)
+            .foregroundColor(foregroundColor)
             .frame(maxWidth: .infinity)
-            .padding(.vertical, 20)
+            .padding(.vertical, 18)
             .padding(.horizontal, 32)
-            .background(
-                Group {
-                    if style == .primary {
-                        RoundedRectangle(cornerRadius: 20)
-                            .fill(Color.pomPeach)
-                    } else {
-                        // Filled background with chunky border for kawaii aesthetic
-                        RoundedRectangle(cornerRadius: 20)
-                            .fill(Color.pomPeach.opacity(0.15))
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 20)
-                                    .stroke(Color.pomPeach, lineWidth: 3.5)
-                            )
-                    }
-                }
-            )
+            .background(background)
         }
-        .scaleEffect(isPressed ? 0.95 : 1.0)
-        .animation(.spring(response: 0.3, dampingFraction: 0.6), value: isPressed)
+        .scaleEffect(isPressed ? 0.97 : 1.0)
+        .animation(.spring(response: 0.25, dampingFraction: 0.7), value: isPressed)
         .simultaneousGesture(
             DragGesture(minimumDistance: 0)
                 .onChanged { _ in isPressed = true }
                 .onEnded { _ in isPressed = false }
         )
-        .shadow(
-            color: Color.pomPeach.opacity(style == .primary ? 0.3 : 0.2),
-            radius: style == .primary ? 8 : 6,
-            x: 0,
-            y: style == .primary ? 4 : 3
-        )
+    }
+
+    private var foregroundColor: Color {
+        switch style {
+        case .primary, .destructive:
+            return .white
+        case .secondary:
+            return .pomPrimary
+        }
+    }
+
+    @ViewBuilder
+    private var background: some View {
+        switch style {
+        case .primary:
+            RoundedRectangle(cornerRadius: 16)
+                .fill(isPressed ? Color.pomPrimaryDark : Color.pomPrimary)
+                .shadow(color: Color.pomPrimary.opacity(0.3), radius: 8, x: 0, y: 4)
+
+        case .secondary:
+            RoundedRectangle(cornerRadius: 16)
+                .fill(Color.pomPrimaryLight)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 16)
+                        .stroke(Color.pomPrimary, lineWidth: 2)
+                )
+
+        case .destructive:
+            RoundedRectangle(cornerRadius: 16)
+                .fill(isPressed ? Color.pomDestructive.opacity(0.8) : Color.pomDestructive)
+                .shadow(color: Color.pomDestructive.opacity(0.3), radius: 8, x: 0, y: 4)
+        }
     }
 }
 
 #Preview {
     VStack(spacing: 20) {
-        RoundedButton("Start Focus", style: .primary) {}
+        RoundedButton("Begin", style: .primary) {}
         RoundedButton("Skip Break", style: .secondary) {}
+        RoundedButton("Delete", style: .destructive) {}
         IconRoundedButton("Select Apps", icon: "apps.iphone", style: .secondary) {}
     }
     .padding()
-    .background(Color.pomCream)
+    .background(Color.pomBackground)
 }
