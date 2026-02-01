@@ -41,9 +41,16 @@ struct ScheduleRow: View {
                     .fontWeight(.semibold)
                     .foregroundColor(.pomTextPrimary)
 
-                Text(schedule.formattedTimeRange)
-                    .font(.pomCaption)
-                    .foregroundColor(.pomTextSecondary)
+                // Time range and app count on same line
+                HStack(spacing: 0) {
+                    Text(schedule.formattedTimeRange)
+                        .font(.pomCaption)
+                        .foregroundColor(.pomTextSecondary)
+
+                    Text(" · \(schedule.selectionCount) app\(schedule.selectionCount == 1 ? "" : "s")")
+                        .font(.pomCaption)
+                        .foregroundColor(.pomTextTertiary)
+                }
 
                 // Day pills
                 HStack(spacing: 4) {
@@ -58,11 +65,6 @@ struct ScheduleRow: View {
                                     .fill(isActive ? Color.pomPrimary : Color.pomCardBackgroundAlt)
                             )
                     }
-
-                    Text("• \(schedule.selectionCount) app\(schedule.selectionCount == 1 ? "" : "s")")
-                        .font(.system(size: 11))
-                        .foregroundColor(.pomTextTertiary)
-                        .padding(.leading, 4)
                 }
             }
 

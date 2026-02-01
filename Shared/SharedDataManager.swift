@@ -12,7 +12,8 @@ enum ShieldContext: String, Codable {
 final class SharedDataManager {
     static let shared = SharedDataManager()
 
-    private let suiteName = "group.GMR2G7RSAM.pomodoro"
+    // Using a simpler App Group identifier
+    private let suiteName = "group.pomodoro.shared"
 
     // Pomodoro keys
     private let selectionKey = "familyActivitySelection"
@@ -28,6 +29,7 @@ final class SharedDataManager {
     private let shieldContextKey = "shieldContext"
     private let activeScheduleIdKey = "activeScheduleId"
     private let activeLimitIdKey = "activeLimitId"
+    private let appUsageDataKey = "appUsageData"
 
     private var userDefaults: UserDefaults? {
         UserDefaults(suiteName: suiteName)
@@ -315,5 +317,41 @@ final class SharedDataManager {
         activeScheduleIds = []
         activeLimitIds = []
         clearShieldContext()
+    }
+
+    // MARK: - App Usage Data (from DeviceActivityMonitor)
+
+    /// Saves app usage data from the monitor extension
+    func saveAppUsageData(_ data: AppUsageData) {
+        guard let defaults = userDefaults,
+              let encoded = try? PropertyListEncoder().encode(data) else {
+            return
+        }
+        defaults.set(encoded, forKey: appUsageDataKey)
+    }
+
+    /// Loads app usage data persisted by the extension
+    func loadAppUsageData() -> AppUsageData? {
+        guard let defaults = userDefaults,
+              let data = defaults.data(forKey: appUsageDataKey) else {
+            return nil
+        }
+
+        return try? PropertyListDecoder().decode(AppUsageData.self, from: data)
+    }
+}
+
+/// Raw app usage data persisted by the DeviceActivityMonitor extension
+struct AppUsageData: Codable {
+    var date: Date
+    var totalSeconds: Int
+    var lastUpdated: Date
+
+    init(date: Date = Calendar.current.startOfDay(for: Date()),
+         totalSeconds: Int = 0,
+         lastUpdated: Date = Date()) {
+        self.date = date
+        self.totalSeconds = totalSeconds
+        self.lastUpdated = lastUpdated
     }
 }

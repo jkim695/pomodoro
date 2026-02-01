@@ -1,4 +1,5 @@
 import SwiftUI
+import FamilyControls
 
 /// Main view for the Limits tab - shows time schedules and usage limits
 struct LimitsView: View {
