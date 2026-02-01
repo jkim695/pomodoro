@@ -4,6 +4,8 @@ import FamilyControls
 import ManagedSettings
 
 /// Extension that provides Screen Time usage reports for the Limits feature
+/// NOTE: This extension CANNOT write to App Groups due to iOS privacy sandbox.
+/// Usage tracking for progress bars is done via DeviceActivityMonitor instead.
 @main
 struct UsageReportExtension: DeviceActivityReportExtension {
     var body: some DeviceActivityReportScene {
@@ -42,7 +44,6 @@ struct TotalUsageReport: DeviceActivityReportScene {
 
         // Process activity data - iterate through the async sequence
         for await activityData in data {
-            // Access the activity segments
             let segments = activityData.activitySegments
 
             for await segment in segments {

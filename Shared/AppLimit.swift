@@ -41,6 +41,21 @@ struct AppLimit: Identifiable, Codable {
         }
     }
 
+    /// Formatted daily limit string without "/day" suffix (e.g., "30 min", "1 hr 30 min")
+    var formattedLimitShort: String {
+        if dailyLimitMinutes < 60 {
+            return "\(dailyLimitMinutes) min"
+        } else {
+            let hours = dailyLimitMinutes / 60
+            let minutes = dailyLimitMinutes % 60
+            if minutes == 0 {
+                return "\(hours) hr"
+            } else {
+                return "\(hours) hr \(minutes) min"
+            }
+        }
+    }
+
     /// Daily limit as DateComponents for DeviceActivityEvent
     var limitAsDateComponents: DateComponents {
         let hours = dailyLimitMinutes / 60
