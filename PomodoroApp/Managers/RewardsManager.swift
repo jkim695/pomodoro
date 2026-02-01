@@ -30,6 +30,9 @@ enum PurchaseError: Error, LocalizedError {
 final class RewardsManager: ObservableObject {
     static let shared = RewardsManager()
 
+    /// Stardust required to start a focus session (ante/buy-in)
+    static let sessionAnteAmount: Int = 50
+
     // MARK: - Published State
 
     @Published var balance: StardustBalance
@@ -67,6 +70,16 @@ final class RewardsManager: ObservableObject {
         OrbCatalog.all.filter { collection.owns($0.id) }
     }
 
+    /// Whether user has enough Stardust to start a session (can afford ante)
+    var canStartSession: Bool {
+        balance.canAffordAnte(Self.sessionAnteAmount)
+    }
+
+    /// Whether there's currently an ante held in escrow
+    var hasAnteInEscrow: Bool {
+        balance.anteInEscrow > 0
+    }
+
     // MARK: - Private
 
     private var cancellables = Set<AnyCancellable>()
@@ -78,6 +91,9 @@ final class RewardsManager: ObservableObject {
         self.balance = Self.loadBalance()
         self.progress = Self.loadProgress()
         self.collection = Self.loadCollection()
+
+        // Recover any orphaned ante from a previous crash
+        recoverOrphanedAnte()
 
         // Listen for session completion notifications
         NotificationCenter.default.publisher(for: .sessionCompleted)
@@ -200,6 +216,49 @@ final class RewardsManager: ObservableObject {
         guard collection.equip(style.id) else { return false }
         save()
         return true
+    }
+
+    // MARK: - Session Ante Management
+
+    /// Hold ante for session start (deducts from balance, holds in escrow)
+    /// - Returns: true if ante was successfully held, false if insufficient balance
+    func holdSessionAnte() -> Bool {
+        guard balance.holdAnte(Self.sessionAnteAmount) else { return false }
+        // Also persist to SharedDataManager for crash recovery
+        SharedDataManager.shared.anteInEscrow = Self.sessionAnteAmount
+        save()
+        return true
+    }
+
+    /// Return ante after successful session completion (adds back to balance)
+    func returnSessionAnte() {
+        balance.returnAnte()
+        SharedDataManager.shared.anteInEscrow = 0
+        save()
+    }
+
+    /// Burn ante when user quits early (ante is permanently lost)
+    func burnSessionAnte() {
+        balance.burnAnte()
+        SharedDataManager.shared.anteInEscrow = 0
+        save()
+    }
+
+    /// Recover orphaned ante from a previous crash
+    /// If the app crashed during a session, return the ante to the user
+    private func recoverOrphanedAnte() {
+        let orphanedAnte = SharedDataManager.shared.anteInEscrow
+        let sessionActive = SharedDataManager.shared.isSessionActive
+
+        // If there's ante in escrow but no active session, the app crashed
+        // Return the ante to the user (benefit of the doubt)
+        if orphanedAnte > 0 && !sessionActive {
+            balance.current += orphanedAnte
+            balance.anteInEscrow = 0
+            SharedDataManager.shared.anteInEscrow = 0
+            save()
+            print("Recovered \(orphanedAnte) orphaned Stardust ante from previous crash")
+        }
     }
 
     // MARK: - Persistence
