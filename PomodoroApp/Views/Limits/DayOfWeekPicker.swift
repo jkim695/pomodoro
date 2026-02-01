@@ -5,7 +5,7 @@ struct DayOfWeekPicker: View {
     @Binding var selectedDays: Set<Weekday>
 
     var body: some View {
-        HStack(spacing: 8) {
+        HStack(spacing: 10) {
             ForEach(Weekday.allCases) { day in
                 dayButton(for: day)
             }
@@ -13,11 +13,13 @@ struct DayOfWeekPicker: View {
     }
 
     private func dayButton(for day: Weekday) -> some View {
-        Button {
+        let isSelected = selectedDays.contains(day)
+
+        return Button {
             let impactFeedback = UIImpactFeedbackGenerator(style: .light)
             impactFeedback.impactOccurred()
 
-            if selectedDays.contains(day) {
+            if isSelected {
                 // Don't allow deselecting if it's the last day
                 if selectedDays.count > 1 {
                     selectedDays.remove(day)
@@ -27,12 +29,26 @@ struct DayOfWeekPicker: View {
             }
         } label: {
             Text(day.shortName)
-                .font(.system(size: 14, weight: .medium))
-                .foregroundColor(selectedDays.contains(day) ? .white : .pomTextPrimary)
-                .frame(width: 36, height: 36)
+                .font(.system(size: 13, weight: .semibold))
+                .foregroundColor(isSelected ? .white : .pomTextSecondary)
+                .frame(width: 38, height: 38)
                 .background(
-                    Circle()
-                        .fill(selectedDays.contains(day) ? Color.pomPrimary : Color.pomCardBackgroundAlt)
+                    ZStack {
+                        // Glow layer (only when selected)
+                        if isSelected {
+                            Circle()
+                                .fill(Color.pomShieldActive.opacity(0.3))
+                                .frame(width: 46, height: 46)
+                                .blur(radius: 4)
+                        }
+                        // Main circle
+                        Circle()
+                            .fill(isSelected ? Color.pomShieldActive : Color.pomCardBackgroundAlt)
+                            .shadow(
+                                color: isSelected ? Color.pomShieldActive.opacity(0.5) : .clear,
+                                radius: 6
+                            )
+                    }
                 )
         }
         .animation(.spring(response: 0.3, dampingFraction: 0.7), value: selectedDays)
@@ -52,19 +68,33 @@ struct DayPresetButtons: View {
     }
 
     private func presetButton(title: String, days: Set<Weekday>) -> some View {
-        Button {
+        let isSelected = selectedDays == days
+
+        return Button {
             let impactFeedback = UIImpactFeedbackGenerator(style: .light)
             impactFeedback.impactOccurred()
             selectedDays = days
         } label: {
             Text(title)
                 .font(.pomCaption)
-                .foregroundColor(selectedDays == days ? .white : .pomTextSecondary)
-                .padding(.horizontal, 12)
-                .padding(.vertical, 8)
+                .foregroundColor(isSelected ? .white : .pomTextSecondary)
+                .padding(.horizontal, 14)
+                .padding(.vertical, 10)
                 .background(
-                    Capsule()
-                        .fill(selectedDays == days ? Color.pomPrimary : Color.pomCardBackgroundAlt)
+                    ZStack {
+                        if isSelected {
+                            Capsule()
+                                .fill(Color.pomShieldActive.opacity(0.3))
+                                .blur(radius: 4)
+                                .padding(-2)
+                        }
+                        Capsule()
+                            .fill(isSelected ? Color.pomShieldActive : Color.pomCardBackgroundAlt)
+                            .shadow(
+                                color: isSelected ? Color.pomShieldActive.opacity(0.4) : .clear,
+                                radius: 6
+                            )
+                    }
                 )
         }
         .animation(.spring(response: 0.3, dampingFraction: 0.7), value: selectedDays)

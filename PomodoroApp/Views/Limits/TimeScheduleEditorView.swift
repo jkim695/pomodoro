@@ -54,7 +54,7 @@ struct TimeScheduleEditorView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color.pomCream
+                Color.pomBackground
                     .ignoresSafeArea()
 
                 ScrollView {
@@ -63,11 +63,11 @@ struct TimeScheduleEditorView: View {
                         editorSection(title: "Name", icon: "pencil") {
                             TextField("Schedule name", text: $name)
                                 .font(.pomBody)
-                                .foregroundColor(.pomBrown)
+                                .foregroundColor(.pomTextPrimary)
                                 .padding(12)
                                 .background(
                                     RoundedRectangle(cornerRadius: 12)
-                                        .fill(Color.pomCream)
+                                        .fill(Color.pomCardBackgroundAlt)
                                 )
                         }
 
@@ -77,35 +77,40 @@ struct TimeScheduleEditorView: View {
                                 HStack {
                                     Text("From")
                                         .font(.pomBody)
-                                        .foregroundColor(.pomLightBrown)
+                                        .foregroundColor(.pomTextSecondary)
 
                                     Spacer()
 
                                     DatePicker("", selection: $startTime, displayedComponents: .hourAndMinute)
                                         .labelsHidden()
-                                        .tint(.pomPeach)
+                                        .tint(.pomShieldActive)
                                 }
 
                                 HStack {
                                     Text("To")
                                         .font(.pomBody)
-                                        .foregroundColor(.pomLightBrown)
+                                        .foregroundColor(.pomTextSecondary)
 
                                     Spacer()
 
                                     DatePicker("", selection: $endTime, displayedComponents: .hourAndMinute)
                                         .labelsHidden()
-                                        .tint(.pomPeach)
+                                        .tint(.pomShieldActive)
                                 }
 
                                 if isOvernight {
                                     HStack {
                                         Image(systemName: "moon.fill")
-                                            .foregroundColor(.pomPeach)
+                                            .foregroundColor(.pomShieldActive)
                                         Text("This schedule runs overnight")
                                             .font(.pomCaption)
-                                            .foregroundColor(.pomLightBrown)
+                                            .foregroundColor(.pomTextSecondary)
                                     }
+                                    .padding(8)
+                                    .background(
+                                        RoundedRectangle(cornerRadius: 8)
+                                            .fill(Color.pomShieldActive.opacity(0.1))
+                                    )
                                 }
                             }
                         }
@@ -119,14 +124,14 @@ struct TimeScheduleEditorView: View {
                         }
 
                         // Apps
-                        editorSection(title: "Apps to Block", icon: "apps.iphone") {
+                        editorSection(title: "Apps to Block", icon: "shield.fill") {
                             VStack(spacing: 12) {
                                 let appCount = selection.applicationTokens.count + selection.categoryTokens.count
 
                                 HStack {
                                     Text("\(appCount) item\(appCount == 1 ? "" : "s") selected")
                                         .font(.pomBody)
-                                        .foregroundColor(.pomBrown)
+                                        .foregroundColor(.pomTextPrimary)
                                     Spacer()
                                 }
 
@@ -139,11 +144,11 @@ struct TimeScheduleEditorView: View {
                                         Spacer()
                                         Image(systemName: "chevron.right")
                                     }
-                                    .foregroundColor(.pomPeach)
+                                    .foregroundColor(.pomShieldActive)
                                     .padding(12)
                                     .background(
                                         RoundedRectangle(cornerRadius: 12)
-                                            .fill(Color.pomCream)
+                                            .fill(Color.pomShieldActive.opacity(0.1))
                                     )
                                 }
                             }
@@ -167,7 +172,7 @@ struct TimeScheduleEditorView: View {
                     Button("Cancel") {
                         dismiss()
                     }
-                    .foregroundColor(.pomLightBrown)
+                    .foregroundColor(.pomTextSecondary)
                 }
             }
         }
@@ -186,22 +191,18 @@ struct TimeScheduleEditorView: View {
             HStack(spacing: 8) {
                 Image(systemName: icon)
                     .font(.system(size: 16))
-                    .foregroundColor(.pomPeach)
+                    .foregroundColor(.pomShieldActive)
 
                 Text(title)
                     .font(.pomBody)
                     .fontWeight(.medium)
-                    .foregroundColor(.pomBrown)
+                    .foregroundColor(.pomTextPrimary)
             }
 
             content()
         }
         .padding(16)
-        .background(
-            RoundedRectangle(cornerRadius: 16)
-                .fill(Color.pomCardBackground)
-                .shadow(color: Color.pomBrown.opacity(0.08), radius: 4, x: 0, y: 2)
-        )
+        .cosmicCard(isActive: false, cornerRadius: 16, showBorder: false)
     }
 
     // MARK: - Computed Properties
@@ -271,22 +272,20 @@ struct ScheduleAppSelectionView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color.pomCream
+                Color.pomBackground
                     .ignoresSafeArea()
 
                 VStack(spacing: 24) {
                     VStack(spacing: 12) {
-                        Image(systemName: "clock.badge.xmark")
-                            .font(.system(size: 40))
-                            .foregroundColor(.pomPeach)
+                        ShieldOrbView(isActive: true, size: 48)
 
                         Text("Apps to Block")
-                            .font(.pomHeading)
-                            .foregroundColor(.pomBrown)
+                            .font(.pomHeading2)
+                            .foregroundColor(.pomTextPrimary)
 
                         Text("Select apps and categories to block during this schedule.")
                             .font(.pomBody)
-                            .foregroundColor(.pomLightBrown)
+                            .foregroundColor(.pomTextSecondary)
                             .multilineTextAlignment(.center)
                     }
                     .padding(.vertical, 16)
@@ -297,7 +296,7 @@ struct ScheduleAppSelectionView: View {
                                 .fill(Color.pomCardBackground)
                         )
                         .cornerRadius(16)
-                        .shadow(color: Color.pomBrown.opacity(0.1), radius: 8, x: 0, y: 4)
+                        .shadow(color: Color.black.opacity(0.1), radius: 8, x: 0, y: 4)
 
                     Spacer()
                 }
@@ -311,7 +310,7 @@ struct ScheduleAppSelectionView: View {
                         dismiss()
                     }
                     .font(.pomButton)
-                    .foregroundColor(.pomPeach)
+                    .foregroundColor(.pomShieldActive)
                 }
             }
         }

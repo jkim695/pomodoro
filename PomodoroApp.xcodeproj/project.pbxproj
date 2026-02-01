@@ -82,6 +82,9 @@
 		H1000012001 /* ProgressSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000012000 /* ProgressSummaryView.swift */; };
 		H1000013001 /* RewardCelebrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000013000 /* RewardCelebrationView.swift */; };
 		H1000014001 /* RewardsTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000014000 /* RewardsTabView.swift */; };
+		N1000001001 /* ShieldOrbView.swift in Sources */ = {isa = PBXBuildFile; fileRef = N1000001000 /* ShieldOrbView.swift */; };
+		N1000002001 /* GlowingProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = N1000002000 /* GlowingProgressBar.swift */; };
+		N1000003001 /* CosmicCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = N1000003000 /* CosmicCard.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -154,6 +157,9 @@
 		H1000012000 /* ProgressSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressSummaryView.swift; sourceTree = "<group>"; };
 		H1000013000 /* RewardCelebrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardCelebrationView.swift; sourceTree = "<group>"; };
 		H1000014000 /* RewardsTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardsTabView.swift; sourceTree = "<group>"; };
+		N1000001000 /* ShieldOrbView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShieldOrbView.swift; sourceTree = "<group>"; };
+		N1000002000 /* GlowingProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlowingProgressBar.swift; sourceTree = "<group>"; };
+		N1000003000 /* CosmicCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CosmicCard.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -366,6 +372,9 @@
 				B1000021000 /* RoundedButton.swift */,
 				B1000022000 /* AnimatedTimerText.swift */,
 				C1000001000 /* GradientOrbView.swift */,
+				N1000001000 /* ShieldOrbView.swift */,
+				N1000002000 /* GlowingProgressBar.swift */,
+				N1000003000 /* CosmicCard.swift */,
 				H1000007000 /* StardustBadge.swift */,
 			);
 			path = Components;
@@ -677,6 +686,9 @@
 				B1000032001 /* SettingsView.swift in Sources */,
 				B1000033001 /* AuthorizationRequestView.swift in Sources */,
 				C1000001001 /* GradientOrbView.swift in Sources */,
+				N1000001001 /* ShieldOrbView.swift in Sources */,
+				N1000002001 /* GlowingProgressBar.swift in Sources */,
+				N1000003001 /* CosmicCard.swift in Sources */,
 				D1000001001 /* TimeSchedule.swift in Sources */,
 				D1000002001 /* AppLimit.swift in Sources */,
 				D1000003001 /* UsageRecord.swift in Sources */,

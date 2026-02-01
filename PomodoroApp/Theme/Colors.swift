@@ -92,6 +92,10 @@ extension Color {
             : UIColor(hex: "EF4444")   // Red
     })
 
+    // MARK: - Shield/Limits (Cyan for protective feel)
+    static let pomShieldActive = Color(hex: "00D9FF")   // Bright cyan
+    static let pomShieldInactive = Color(hex: "4A5568") // Muted gray
+
     // MARK: - Rewards (Stardust gold)
     static let pomStardust = Color(UIColor { traitCollection in
         traitCollection.userInterfaceStyle == .dark

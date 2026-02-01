@@ -113,14 +113,14 @@ struct UsageLimitRow: View {
                     get: { limit.isEnabled },
                     set: { onToggle($0) }
                 ))
-                .tint(.pomPrimary)
+                .tint(.pomShieldActive)
                 .labelsHidden()
             }
 
             // Usage progress - always shown for consistent card height
             VStack(spacing: 6) {
-                // Progress bar
-                LimitProgressBar(progress: usageProgress)
+                // Progress bar with glow effects
+                GlowingProgressBar(progress: usageProgress, showGlow: limit.isEnabled)
 
                 // Usage text
                 HStack {
@@ -148,10 +148,7 @@ struct UsageLimitRow: View {
                 .clipShape(RoundedRectangle(cornerRadius: 8))
         }
         .padding(16)
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(Color.pomCardBackgroundAlt)
-        )
+        .cosmicCard(isActive: limit.isEnabled, cornerRadius: 12)
         .contentShape(Rectangle())
         .onTapGesture {
             onEdit()

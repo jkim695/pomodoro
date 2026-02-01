@@ -19,6 +19,11 @@ extension Animation {
     // Orb animations
     static let orbBreathing = Animation.easeInOut(duration: 3.0).repeatForever(autoreverses: true)
     static let orbPulse = Animation.easeInOut(duration: 1.5).repeatForever(autoreverses: true)
+
+    // Shield/Limits animations
+    static let shieldBreathing = Animation.easeInOut(duration: 4.0).repeatForever(autoreverses: true)
+    static let cardActivePulse = Animation.easeInOut(duration: 3.0).repeatForever(autoreverses: true)
+    static let warningPulse = Animation.easeInOut(duration: 1.0).repeatForever(autoreverses: true)
 }
 
 // MARK: - View Modifiers for Animations

@@ -79,10 +79,8 @@ struct LimitsView: View {
         VStack(alignment: .leading, spacing: 16) {
             // Header
             HStack {
-                HStack(spacing: 10) {
-                    Image(systemName: icon)
-                        .font(.system(size: 18, weight: .medium))
-                        .foregroundColor(.pomPrimary)
+                HStack(spacing: 12) {
+                    ShieldOrbView(isActive: !isEmpty, size: 28)
 
                     VStack(alignment: .leading, spacing: 2) {
                         Text(title)
@@ -102,9 +100,14 @@ struct LimitsView: View {
                     impactFeedback.impactOccurred()
                     addAction()
                 } label: {
-                    Image(systemName: "plus.circle.fill")
-                        .font(.system(size: 28))
-                        .foregroundColor(.pomPrimary)
+                    ZStack {
+                        Circle()
+                            .fill(Color.pomShieldActive.opacity(0.15))
+                            .frame(width: 36, height: 36)
+                        Image(systemName: "plus")
+                            .font(.system(size: 16, weight: .semibold))
+                            .foregroundColor(.pomShieldActive)
+                    }
                 }
             }
 
@@ -116,18 +119,13 @@ struct LimitsView: View {
             }
         }
         .padding(20)
-        .background(
-            RoundedRectangle(cornerRadius: 16)
-                .fill(Color.pomCardBackground)
-                .shadow(color: Color.black.opacity(0.05), radius: 10, x: 0, y: 4)
-        )
+        .cosmicCard(isActive: !isEmpty, cornerRadius: 16, showBorder: !isEmpty)
     }
 
     private func emptyState(message: String) -> some View {
-        VStack(spacing: 12) {
-            Image(systemName: "tray")
-                .font(.system(size: 32))
-                .foregroundColor(.pomTextTertiary)
+        VStack(spacing: 16) {
+            ShieldOrbView(isActive: false, size: 48)
+                .opacity(0.6)
 
             Text(message)
                 .font(.pomBody)
