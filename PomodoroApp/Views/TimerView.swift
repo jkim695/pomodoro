@@ -2,9 +2,12 @@ import SwiftUI
 
 struct TimerView: View {
     @EnvironmentObject var session: PomodoroSession
+    @EnvironmentObject var rewardsManager: RewardsManager
     @State private var showSettings = false
     @State private var showCelebration = false
     @State private var previousState: SessionState = .idle
+    @State private var earnedStardust: Int = 0
+    @State private var earnedMilestones: [Milestone] = []
     @AppStorage("completedSessions") private var completedSessions: Int = 0
 
     var body: some View {
@@ -38,9 +41,15 @@ struct TimerView: View {
                     .frame(height: 40)
             }
 
-            // Celebration overlay
+            // Celebration overlay with rewards
             if showCelebration {
-                celebrationOverlay
+                RewardCelebrationView(
+                    earnedStardust: earnedStardust,
+                    milestones: earnedMilestones
+                ) {
+                    showCelebration = false
+                    rewardsManager.clearPendingMilestones()
+                }
             }
         }
         .sheet(isPresented: $showSettings) {
@@ -50,12 +59,17 @@ struct TimerView: View {
             // Trigger celebration when focus session completes
             if previousState == .focusing && newState == .idle {
                 completedSessions += 1
+                // Capture reward info for celebration display
+                earnedStardust = rewardsManager.balance.lastSessionReward
+                earnedMilestones = rewardsManager.pendingMilestones
                 triggerCelebration()
             }
             previousState = newState
         }
         .onAppear {
             previousState = session.state
+            // Migrate existing sessions if this is first launch with rewards
+            rewardsManager.migrateExistingSessions(completedSessions)
         }
     }
 
@@ -94,10 +108,11 @@ struct TimerView: View {
                 size: 280
             )
 
-            // Gradient orb in center
+            // Gradient orb in center (uses equipped style)
             GradientOrbView(
                 state: orbState,
-                size: 160
+                size: 160,
+                style: rewardsManager.equippedStyle
             )
         }
     }
@@ -182,56 +197,14 @@ struct TimerView: View {
         }
     }
 
-    // MARK: - Celebration Overlay
-    private var celebrationOverlay: some View {
-        ZStack {
-            Color.black.opacity(0.4)
-                .ignoresSafeArea()
-
-            VStack(spacing: 20) {
-                Image(systemName: "checkmark.circle.fill")
-                    .font(.system(size: 72))
-                    .foregroundColor(.pomSecondary)
-
-                Text("Great job!")
-                    .font(.pomHeading1)
-                    .foregroundColor(.white)
-
-                Text("Focus session complete")
-                    .font(.pomBody)
-                    .foregroundColor(.white.opacity(0.8))
-            }
-            .padding(48)
-            .background(
-                RoundedRectangle(cornerRadius: 24)
-                    .fill(Color.pomTextPrimary)
-            )
-            .scaleEffect(showCelebration ? 1 : 0.5)
-            .opacity(showCelebration ? 1 : 0)
-            .animation(.spring(response: 0.4, dampingFraction: 0.6), value: showCelebration)
-        }
-        .onTapGesture {
-            withAnimation {
-                showCelebration = false
-            }
-        }
-    }
-
+    // MARK: - Celebration
     private func triggerCelebration() {
-        withAnimation {
-            showCelebration = true
-        }
-
-        // Auto-dismiss after 2 seconds
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            withAnimation {
-                showCelebration = false
-            }
-        }
+        showCelebration = true
     }
 }
 
 #Preview {
     TimerView()
         .environmentObject(PomodoroSession())
+        .environmentObject(RewardsManager.shared)
 }

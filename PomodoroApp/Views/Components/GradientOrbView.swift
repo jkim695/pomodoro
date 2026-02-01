@@ -5,6 +5,7 @@ import SwiftUI
 struct GradientOrbView: View {
     let state: OrbState
     var size: CGFloat = 180
+    var style: OrbStyle? = nil  // Optional custom style override
 
     @State private var breathingScale: CGFloat = 1.0
     @State private var glowOpacity: Double = 0.6
@@ -143,6 +144,11 @@ struct GradientOrbView: View {
     // MARK: - Colors
 
     private var primaryColor: Color {
+        // Use custom style if provided (for idle/focusing states)
+        if let style = style, state == .idle || state == .focusing {
+            return style.primaryColor
+        }
+        // Default state-based colors
         switch state {
         case .idle, .focusing:
             return Color.pomPrimary
@@ -152,6 +158,11 @@ struct GradientOrbView: View {
     }
 
     private var secondaryColor: Color {
+        // Use custom style if provided (for idle/focusing states)
+        if let style = style, state == .idle || state == .focusing {
+            return style.secondaryColor
+        }
+        // Default state-based colors
         switch state {
         case .idle:
             return Color.pomAccent
@@ -163,6 +174,11 @@ struct GradientOrbView: View {
     }
 
     private var shadowColor: Color {
+        // Use custom style glow color if provided (for idle/focusing states)
+        if let style = style, state == .idle || state == .focusing {
+            return style.glowColor
+        }
+        // Default state-based colors
         switch state {
         case .idle, .focusing:
             return Color.pomPrimary
@@ -207,19 +223,28 @@ struct GradientOrbView: View {
         // Reset celebration scale
         celebrationScale = 1.0
 
+        // Get animation properties from style if available
+        let animStyle = style?.animationStyle
+        let styleDuration = animStyle?.breathingDuration ?? 3.0
+        let styleScale = animStyle?.scaleAmount ?? 1.03
+
         switch newState {
         case .idle:
-            // Gentle, calm breathing
-            withAnimation(.easeInOut(duration: 3.0).repeatForever(autoreverses: true)) {
-                breathingScale = 1.03
+            // Use style animation or default gentle, calm breathing
+            let duration = style != nil ? styleDuration : 3.0
+            let scale = style != nil ? styleScale : 1.03
+            withAnimation(.easeInOut(duration: duration).repeatForever(autoreverses: true)) {
+                breathingScale = scale
                 glowOpacity = 0.5
                 highlightOffset = 2
             }
 
         case .focusing:
-            // Energized, faster pulse
-            withAnimation(.easeInOut(duration: 1.5).repeatForever(autoreverses: true)) {
-                breathingScale = 1.05
+            // Use style animation or default energized pulse
+            let duration = style != nil ? max(styleDuration * 0.5, 1.0) : 1.5
+            let scale = style != nil ? min(styleScale + 0.02, 1.08) : 1.05
+            withAnimation(.easeInOut(duration: duration).repeatForever(autoreverses: true)) {
+                breathingScale = scale
                 glowOpacity = 0.8
                 highlightOffset = 4
             }

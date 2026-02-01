@@ -1,9 +1,10 @@
 import SwiftUI
 
-/// Main tab navigation container with Timer and Limits tabs
+/// Main tab navigation container with Timer, Limits, and Rewards tabs
 struct MainTabView: View {
     @EnvironmentObject var session: PomodoroSession
     @EnvironmentObject var limitsSession: LimitsSession
+    @EnvironmentObject var rewardsManager: RewardsManager
 
     var body: some View {
         TabView {
@@ -16,6 +17,11 @@ struct MainTabView: View {
                 .tabItem {
                     Label("Limits", systemImage: "shield.fill")
                 }
+
+            RewardsTabView()
+                .tabItem {
+                    Label("Rewards", systemImage: "sparkles")
+                }
         }
         .tint(Color.pomPrimary)
     }
@@ -25,4 +31,5 @@ struct MainTabView: View {
     MainTabView()
         .environmentObject(PomodoroSession())
         .environmentObject(LimitsSession())
+        .environmentObject(RewardsManager.shared)
 }

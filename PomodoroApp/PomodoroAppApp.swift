@@ -5,6 +5,7 @@ struct PomodoroAppApp: App {
     @StateObject private var authorizationManager = AuthorizationManager()
     @StateObject private var session = PomodoroSession()
     @StateObject private var limitsSession = LimitsSession()
+    @StateObject private var rewardsManager = RewardsManager.shared
     @Environment(\.scenePhase) private var scenePhase
 
     var body: some Scene {
@@ -13,6 +14,7 @@ struct PomodoroAppApp: App {
                 .environmentObject(authorizationManager)
                 .environmentObject(session)
                 .environmentObject(limitsSession)
+                .environmentObject(rewardsManager)
                 .onChange(of: scenePhase) { newPhase in
                     handleScenePhaseChange(to: newPhase)
                 }
@@ -26,6 +28,7 @@ struct PomodoroAppApp: App {
             Task { @MainActor in
                 session.handleAppBecameActive()
                 limitsSession.handleAppBecameActive()
+                rewardsManager.refresh()
             }
         case .background:
             // App going to background - timer state is already persisted by TimerManager

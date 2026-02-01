@@ -92,6 +92,19 @@ extension Color {
             : UIColor(hex: "EF4444")   // Red
     })
 
+    // MARK: - Rewards (Stardust gold)
+    static let pomStardust = Color(UIColor { traitCollection in
+        traitCollection.userInterfaceStyle == .dark
+            ? UIColor(hex: "FFD700")   // Bright gold for dark mode
+            : UIColor(hex: "F5A623")   // Warm gold
+    })
+
+    static let pomStardustLight = Color(UIColor { traitCollection in
+        traitCollection.userInterfaceStyle == .dark
+            ? UIColor(hex: "3D3522")   // Dark gold tint
+            : UIColor(hex: "FFF8E7")   // Light gold
+    })
+
     static let pomBorder = Color(UIColor { traitCollection in
         traitCollection.userInterfaceStyle == .dark
             ? UIColor(hex: "3A3A3A")   // Dark border
