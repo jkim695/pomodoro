@@ -86,6 +86,28 @@ enum OrbRarity: String, Codable, CaseIterable {
         case .legendary: return Color.orange
         }
     }
+
+    // MARK: - Gacha Properties
+
+    /// Number of shards needed to unlock an orb of this rarity
+    var shardsToUnlock: Int {
+        GachaConfig.shardsToUnlock(rarity: self)
+    }
+
+    /// Number of shards needed for each star upgrade
+    var shardsPerStar: Int {
+        GachaConfig.shardsPerStar(rarity: self)
+    }
+
+    /// Drop rate percentage for this rarity
+    var dropRate: Double {
+        GachaConfig.dropRates[self] ?? 0
+    }
+
+    /// Number of shards awarded when pulling this rarity
+    var shardsPerPull: Int {
+        GachaConfig.shardsPerPull(rarity: self)
+    }
 }
 
 /// Animation style variants for orbs

@@ -6,6 +6,7 @@ struct GradientOrbView: View {
     let state: OrbState
     var size: CGFloat = 180
     var style: OrbStyle? = nil  // Optional custom style override
+    var starLevel: Int = 1  // Star level (1-5) affects glow, animation, particles
 
     @State private var breathingScale: CGFloat = 1.0
     @State private var glowOpacity: Double = 0.6
@@ -18,14 +19,31 @@ struct GradientOrbView: View {
         case complete
     }
 
+    // MARK: - Star Level Multipliers
+
+    /// Glow intensity multiplier based on star level (1.0 to 1.60)
+    private var glowMultiplier: CGFloat {
+        1.0 + (CGFloat(starLevel - 1) * 0.15)
+    }
+
+    /// Animation speed multiplier based on star level (1.0 to 1.40)
+    private var animationSpeedMultiplier: Double {
+        1.0 + (Double(starLevel - 1) * 0.1)
+    }
+
+    /// Number of orbiting particles (0 for 1-2 stars, 3/6/9 for 3/4/5 stars)
+    private var particleCount: Int {
+        starLevel >= 3 ? (starLevel - 2) * 3 : 0
+    }
+
     var body: some View {
         ZStack {
-            // Outer glow layer
+            // Outer glow layer (enhanced by star level)
             Circle()
                 .fill(glowGradient)
-                .frame(width: size * 1.4, height: size * 1.4)
-                .blur(radius: 25)
-                .opacity(glowOpacity)
+                .frame(width: size * 1.4 * glowMultiplier, height: size * 1.4 * glowMultiplier)
+                .blur(radius: 25 * glowMultiplier)
+                .opacity(glowOpacity * Double(glowMultiplier))
 
             // Main sphere body - base layer with radial gradient for 3D depth
             Circle()
@@ -130,6 +148,15 @@ struct GradientOrbView: View {
                     )
                 )
                 .frame(width: size * 0.8, height: size * 0.8)
+
+            // Star particles for 3+ star orbs
+            if particleCount > 0 {
+                StarParticlesView(
+                    count: particleCount,
+                    size: size,
+                    color: primaryColor
+                )
+            }
         }
         .scaleEffect(breathingScale * celebrationScale)
         .shadow(color: shadowColor.opacity(0.4), radius: 15, x: 0, y: 8)
@@ -231,7 +258,9 @@ struct GradientOrbView: View {
         switch newState {
         case .idle:
             // Use style animation or default gentle, calm breathing
-            let duration = style != nil ? styleDuration : 3.0
+            // Apply star level speed multiplier
+            let baseDuration = style != nil ? styleDuration : 3.0
+            let duration = baseDuration / animationSpeedMultiplier
             let scale = style != nil ? styleScale : 1.03
             withAnimation(.easeInOut(duration: duration).repeatForever(autoreverses: true)) {
                 breathingScale = scale
@@ -241,7 +270,9 @@ struct GradientOrbView: View {
 
         case .focusing:
             // Use style animation or default energized pulse
-            let duration = style != nil ? max(styleDuration * 0.5, 1.0) : 1.5
+            // Apply star level speed multiplier
+            let baseDuration = style != nil ? max(styleDuration * 0.5, 1.0) : 1.5
+            let duration = baseDuration / animationSpeedMultiplier
             let scale = style != nil ? min(styleScale + 0.02, 1.08) : 1.05
             withAnimation(.easeInOut(duration: duration).repeatForever(autoreverses: true)) {
                 breathingScale = scale
@@ -259,7 +290,8 @@ struct GradientOrbView: View {
                     celebrationScale = 1.0
                 }
             }
-            withAnimation(.easeInOut(duration: 2.0).repeatForever(autoreverses: true)) {
+            let completeDuration = 2.0 / animationSpeedMultiplier
+            withAnimation(.easeInOut(duration: completeDuration).repeatForever(autoreverses: true)) {
                 breathingScale = 1.04
                 glowOpacity = 0.9
                 highlightOffset = 3

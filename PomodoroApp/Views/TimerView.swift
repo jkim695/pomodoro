@@ -51,13 +51,34 @@ struct TimerView: View {
                     rewardsManager.clearPendingMilestones()
                 }
             }
+
+            // Cool-down overlay (quit confirmation)
+            if session.state == .coolingDown {
+                CoolDownOverlayView(
+                    timeRemaining: session.coolDownTimeRemaining,
+                    anteAmount: RewardsManager.sessionAnteAmount,
+                    onResume: { session.cancelQuit() },
+                    onConfirmQuit: { session.confirmQuit() }
+                )
+            }
+
+            // Insufficient funds overlay
+            if session.startError == .insufficientStardust {
+                InsufficientFundsOverlayView(
+                    required: RewardsManager.sessionAnteAmount,
+                    current: rewardsManager.balance.current,
+                    onDismiss: { session.startError = nil }
+                )
+            }
         }
         .sheet(isPresented: $showSettings) {
             SettingsView()
         }
         .onChange(of: session.state) { newState in
-            // Trigger celebration when focus session completes
-            if previousState == .focusing && newState == .idle {
+            // Trigger celebration when focus session completes (from focusing or coolingDown)
+            // Only celebrate if there was a reward (natural completion, not quit)
+            let wasInSession = previousState == .focusing || previousState == .coolingDown
+            if wasInSession && newState == .idle && rewardsManager.balance.lastSessionReward > 0 {
                 completedSessions += 1
                 // Capture reward info for celebration display
                 earnedStardust = rewardsManager.balance.lastSessionReward
@@ -93,7 +114,7 @@ struct TimerView: View {
     private var timerDisplay: some View {
         ZStack {
             // When idle: show duration slider (includes its own track)
-            // When focusing: show progress ring
+            // When focusing or cooling down: show progress ring
             if session.state == .idle {
                 CircularDurationSlider(
                     duration: $session.focusDuration,
@@ -102,7 +123,7 @@ struct TimerView: View {
                     isEnabled: true
                 )
             } else {
-                // Progress ring (only during focus sessions)
+                // Progress ring (during focus sessions and cool-down)
                 // Animate from slider's fill position for smooth transition
                 CircularProgressView(
                     progress: session.timer.progress,
@@ -125,7 +146,7 @@ struct TimerView: View {
         switch session.state {
         case .idle:
             return .idle
-        case .focusing:
+        case .focusing, .coolingDown:
             return .focusing
         }
     }
@@ -152,7 +173,7 @@ struct TimerView: View {
                 Text("Today: \(completedSessions) session\(completedSessions == 1 ? "" : "s")")
                     .font(.pomCaption)
                     .foregroundColor(.pomTextTertiary)
-            } else if session.state == .focusing && hasBlockedApps {
+            } else if (session.state == .focusing || session.state == .coolingDown) && hasBlockedApps {
                 Text("\(blockedAppCount) app\(blockedAppCount == 1 ? "" : "s") blocked")
                     .font(.pomCaption)
                     .foregroundColor(.pomTextTertiary)
@@ -166,6 +187,8 @@ struct TimerView: View {
             return "Focus"
         case .focusing:
             return "Focusing"
+        case .coolingDown:
+            return "Paused"
         }
     }
 
@@ -173,7 +196,16 @@ struct TimerView: View {
         if session.state == .idle {
             return session.focusDuration * 60
         }
+        // For focusing and cooling down, show the timer
         return session.timer.timeRemaining
+    }
+
+    private var stardustGradient: LinearGradient {
+        LinearGradient(
+            colors: [Color(hex: "FFD700"), Color(hex: "FFA500")],
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+        )
     }
 
     private var hasBlockedApps: Bool {
@@ -196,14 +228,32 @@ struct TimerView: View {
         Group {
             switch session.state {
             case .idle:
-                RoundedButton("Begin", style: .primary) {
-                    session.startFocusSession()
+                VStack(spacing: 8) {
+                    RoundedButton("Begin", style: .primary) {
+                        session.startFocusSession()
+                    }
+                    .disabled(!rewardsManager.canStartSession)
+                    .opacity(rewardsManager.canStartSession ? 1.0 : 0.5)
+
+                    // Show ante requirement
+                    HStack(spacing: 4) {
+                        Image(systemName: "sparkles")
+                            .font(.caption)
+                            .foregroundStyle(stardustGradient)
+                        Text("\(RewardsManager.sessionAnteAmount) Stardust ante required")
+                            .font(.pomCaption)
+                            .foregroundColor(.pomTextTertiary)
+                    }
                 }
 
             case .focusing:
-                RoundedButton("End Session", style: .secondary) {
-                    session.endFocusSession()
+                RoundedButton("Give Up", style: .secondary) {
+                    session.requestQuit()
                 }
+
+            case .coolingDown:
+                // Buttons shown in overlay instead
+                EmptyView()
             }
         }
     }

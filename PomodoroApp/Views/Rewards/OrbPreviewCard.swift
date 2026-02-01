@@ -5,6 +5,7 @@ struct OrbPreviewCard: View {
     let style: OrbStyle
     let isOwned: Bool
     let isEquipped: Bool
+    var starLevel: Int = 1
     var onTap: () -> Void = {}
 
     var body: some View {
@@ -91,6 +92,12 @@ struct OrbPreviewCard: View {
                             .foregroundStyle(Color.pomSecondary)
                             .background(Circle().fill(Color.white).padding(-2))
                             .offset(x: 20, y: -20)
+                    }
+
+                    // Star badge for owned orbs with 2+ stars
+                    if isOwned && starLevel > 1 {
+                        StarBadge(level: starLevel)
+                            .offset(x: 0, y: 32)
                     }
                 }
 

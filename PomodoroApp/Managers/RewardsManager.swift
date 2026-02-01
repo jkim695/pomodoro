@@ -25,10 +25,28 @@ enum PurchaseError: Error, LocalizedError {
     }
 }
 
+/// Errors that can occur during gacha operations
+enum GachaError: Error, LocalizedError {
+    case insufficientBalance
+    case noOrbsAvailable
+
+    var errorDescription: String? {
+        switch self {
+        case .insufficientBalance:
+            return "Not enough Stardust for this pull"
+        case .noOrbsAvailable:
+            return "No orbs available to pull"
+        }
+    }
+}
+
 /// Central manager for the rewards/gamification system
 @MainActor
 final class RewardsManager: ObservableObject {
     static let shared = RewardsManager()
+
+    /// Stardust required to start a focus session (ante/buy-in)
+    static let sessionAnteAmount: Int = 50
 
     // MARK: - Published State
 
@@ -67,6 +85,16 @@ final class RewardsManager: ObservableObject {
         OrbCatalog.all.filter { collection.owns($0.id) }
     }
 
+    /// Whether user has enough Stardust to start a session (can afford ante)
+    var canStartSession: Bool {
+        balance.canAffordAnte(Self.sessionAnteAmount)
+    }
+
+    /// Whether there's currently an ante held in escrow
+    var hasAnteInEscrow: Bool {
+        balance.anteInEscrow > 0
+    }
+
     // MARK: - Private
 
     private var cancellables = Set<AnyCancellable>()
@@ -78,6 +106,9 @@ final class RewardsManager: ObservableObject {
         self.balance = Self.loadBalance()
         self.progress = Self.loadProgress()
         self.collection = Self.loadCollection()
+
+        // Recover any orphaned ante from a previous crash
+        recoverOrphanedAnte()
 
         // Listen for session completion notifications
         NotificationCenter.default.publisher(for: .sessionCompleted)
@@ -186,6 +217,9 @@ final class RewardsManager: ObservableObject {
         // Add to collection
         collection.addPurchase(styleId: style.id, price: style.price)
 
+        // Initialize star level for direct purchases
+        collection.starLevels.unlock(style.id)
+
         // Persist
         save()
 
@@ -200,6 +234,184 @@ final class RewardsManager: ObservableObject {
         guard collection.equip(style.id) else { return false }
         save()
         return true
+    }
+
+    // MARK: - Session Ante Management
+
+    /// Hold ante for session start (deducts from balance, holds in escrow)
+    /// - Returns: true if ante was successfully held, false if insufficient balance
+    func holdSessionAnte() -> Bool {
+        guard balance.holdAnte(Self.sessionAnteAmount) else { return false }
+        // Also persist to SharedDataManager for crash recovery
+        SharedDataManager.shared.anteInEscrow = Self.sessionAnteAmount
+        save()
+        return true
+    }
+
+    /// Return ante after successful session completion (adds back to balance)
+    func returnSessionAnte() {
+        balance.returnAnte()
+        SharedDataManager.shared.anteInEscrow = 0
+        save()
+    }
+
+    /// Burn ante when user quits early (ante is permanently lost)
+    func burnSessionAnte() {
+        balance.burnAnte()
+        SharedDataManager.shared.anteInEscrow = 0
+        save()
+    }
+
+    /// Recover orphaned ante from a previous crash
+    /// If the app crashed during a session, return the ante to the user
+    private func recoverOrphanedAnte() {
+        let orphanedAnte = SharedDataManager.shared.anteInEscrow
+        let sessionActive = SharedDataManager.shared.isSessionActive
+
+        // If there's ante in escrow but no active session, the app crashed
+        // Return the ante to the user (benefit of the doubt)
+        if orphanedAnte > 0 && !sessionActive {
+            balance.current += orphanedAnte
+            balance.anteInEscrow = 0
+            SharedDataManager.shared.anteInEscrow = 0
+            save()
+            print("Recovered \(orphanedAnte) orphaned Stardust ante from previous crash")
+        }
+    }
+
+    // MARK: - Gacha Operations
+
+    /// Check if user can afford a single pull
+    func canAffordSinglePull() -> Bool {
+        balance.current >= GachaConfig.singlePullCost
+    }
+
+    /// Check if user can afford a 10-pull
+    func canAffordTenPull() -> Bool {
+        balance.current >= GachaConfig.tenPullCost
+    }
+
+    /// Perform a single gacha pull
+    /// - Returns: The pull result or an error
+    func performSinglePull() -> Result<GachaPullResult, GachaError> {
+        guard balance.spend(GachaConfig.singlePullCost) else {
+            return .failure(.insufficientBalance)
+        }
+
+        let result = executePull()
+        collection.pullHistory.add(result)
+        save()
+        return .success(result)
+    }
+
+    /// Perform a 10-pull with discount
+    /// - Returns: Array of pull results or an error
+    func performTenPull() -> Result<[GachaPullResult], GachaError> {
+        guard balance.spend(GachaConfig.tenPullCost) else {
+            return .failure(.insufficientBalance)
+        }
+
+        var results: [GachaPullResult] = []
+        for _ in 0..<10 {
+            let result = executePull()
+            results.append(result)
+            collection.pullHistory.add(result)
+        }
+
+        save()
+        return .success(results)
+    }
+
+    /// Core pull logic with pity system
+    private func executePull() -> GachaPullResult {
+        // Check for pity guarantee first
+        let guaranteedRarity = collection.pityCounter.guaranteedRarity()
+        let rarity = guaranteedRarity ?? calculateDropRarity()
+
+        // Select random orb of that rarity
+        let orbsOfRarity = OrbCatalog.all.filter { $0.rarity == rarity }
+        let selectedOrb = orbsOfRarity.randomElement() ?? OrbCatalog.defaultStyle
+
+        // Calculate shards to award
+        let shardsAwarded = rarity.shardsPerPull
+
+        // Add shards to inventory
+        collection.shardInventory.add(shardsAwarded, for: selectedOrb.id)
+
+        // Update pity counter
+        collection.pityCounter.recordPull(rarity: rarity)
+
+        return GachaPullResult(
+            orbId: selectedOrb.id,
+            orbName: selectedOrb.name,
+            rarity: rarity,
+            shardsAwarded: shardsAwarded,
+            wasGuaranteed: guaranteedRarity != nil
+        )
+    }
+
+    /// Calculate drop rarity based on configured rates
+    private func calculateDropRarity() -> OrbRarity {
+        let roll = Double.random(in: 0..<100)
+        var cumulative: Double = 0
+
+        for rarity in [OrbRarity.common, .uncommon, .rare, .epic, .legendary] {
+            cumulative += rarity.dropRate
+            if roll < cumulative {
+                return rarity
+            }
+        }
+
+        return .common // Fallback
+    }
+
+    // MARK: - Shard Operations
+
+    /// Try to unlock an orb with accumulated shards
+    /// - Parameter styleId: The orb style ID to unlock
+    /// - Returns: true if successfully unlocked
+    func unlockWithShards(_ styleId: String) -> Bool {
+        guard collection.canUnlock(styleId),
+              let style = OrbCatalog.style(for: styleId) else {
+            return false
+        }
+
+        // Consume shards
+        guard collection.shardInventory.consume(style.rarity.shardsToUnlock, for: styleId) else {
+            return false
+        }
+
+        // Add to owned collection
+        collection.ownedOrbStyleIds.insert(styleId)
+        collection.starLevels.unlock(styleId)
+
+        save()
+        return true
+    }
+
+    /// Try to upgrade an orb's star level
+    /// - Parameter styleId: The orb style ID to upgrade
+    /// - Returns: The new star level, or nil if upgrade failed
+    func upgradeStarLevel(_ styleId: String) -> Int? {
+        guard collection.canUpgrade(styleId),
+              let style = OrbCatalog.style(for: styleId) else {
+            return nil
+        }
+
+        // Consume shards
+        guard collection.shardInventory.consume(style.rarity.shardsPerStar, for: styleId) else {
+            return nil
+        }
+
+        // Upgrade star level
+        let newLevel = collection.starLevels.upgrade(styleId)
+        save()
+        return newLevel
+    }
+
+    /// Get the star level for an orb
+    func starLevel(for styleId: String) -> Int {
+        collection.starLevel(for: styleId)
     }
 
     // MARK: - Persistence
@@ -302,5 +514,19 @@ final class RewardsManager: ObservableObject {
         _ = checkAndAwardMilestones()
 
         save()
+    }
+
+    /// Migrate existing owned orbs to gacha system (sets star levels)
+    func migrateToGachaSystem() {
+        var migrated = false
+        for orbId in collection.ownedOrbStyleIds {
+            if collection.starLevels.level(for: orbId) == 0 {
+                collection.starLevels.unlock(orbId)
+                migrated = true
+            }
+        }
+        if migrated {
+            save()
+        }
     }
 }

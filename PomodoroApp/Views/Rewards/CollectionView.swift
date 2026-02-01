@@ -36,17 +36,25 @@ struct CollectionView: View {
                         .padding(.horizontal)
 
                     HStack(spacing: 16) {
-                        // Mini orb preview
+                        // Mini orb preview with star level
                         GradientOrbView(
                             state: .idle,
                             size: 60,
-                            style: rewardsManager.equippedStyle
+                            style: rewardsManager.equippedStyle,
+                            starLevel: rewardsManager.starLevel(for: rewardsManager.equippedStyle.id)
                         )
 
                         VStack(alignment: .leading, spacing: 4) {
-                            Text(rewardsManager.equippedStyle.name)
-                                .font(.headline)
-                                .foregroundColor(.pomTextPrimary)
+                            HStack(spacing: 8) {
+                                Text(rewardsManager.equippedStyle.name)
+                                    .font(.headline)
+                                    .foregroundColor(.pomTextPrimary)
+
+                                let equippedStarLevel = rewardsManager.starLevel(for: rewardsManager.equippedStyle.id)
+                                if equippedStarLevel > 1 {
+                                    StarBadge(level: equippedStarLevel)
+                                }
+                            }
 
                             Text(rewardsManager.equippedStyle.rarity.displayName)
                                 .font(.caption)
@@ -82,7 +90,8 @@ struct CollectionView: View {
                                 OrbPreviewCard(
                                     style: style,
                                     isOwned: true,
-                                    isEquipped: rewardsManager.collection.isEquipped(style.id)
+                                    isEquipped: rewardsManager.collection.isEquipped(style.id),
+                                    starLevel: rewardsManager.starLevel(for: style.id)
                                 ) {
                                     selectedStyle = style
                                 }
