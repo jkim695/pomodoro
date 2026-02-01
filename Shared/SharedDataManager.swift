@@ -19,6 +19,7 @@ final class SharedDataManager {
     private let selectionKey = "familyActivitySelection"
     private let sessionActiveKey = "isSessionActive"
     private let sessionEndedEarlyKey = "sessionEndedEarly"
+    private let anteInEscrowKey = "anteInEscrow"
 
     // Limits keys
     private let schedulesKey = "timeSchedules"
@@ -95,10 +96,21 @@ final class SharedDataManager {
         }
     }
 
+    /// Stardust ante currently held in escrow (for crash recovery)
+    var anteInEscrow: Int {
+        get {
+            userDefaults?.integer(forKey: anteInEscrowKey) ?? 0
+        }
+        set {
+            userDefaults?.set(newValue, forKey: anteInEscrowKey)
+        }
+    }
+
     /// Resets all session-related state
     func resetSessionState() {
         isSessionActive = false
         sessionEndedEarly = false
+        anteInEscrow = 0
     }
 
     // MARK: - Time Schedules
