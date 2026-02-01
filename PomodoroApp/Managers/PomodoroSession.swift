@@ -42,6 +42,10 @@ final class PomodoroSession: ObservableObject {
     @Published var avatarState: AvatarState = .sleeping
     @Published var startError: SessionStartError?
     @Published var coolDownTimeRemaining: Int = 0
+    @Published var useAnte: Bool = false  // User's choice to bet ante for 2x rewards
+
+    /// Tracks whether ante was held for the current session (for reward calculation)
+    private var sessionAnteUsed: Bool = false
 
     @AppStorage("focusDuration") var focusDuration: Int = 25  // minutes (10-180)
 
@@ -89,10 +93,15 @@ final class PomodoroSession: ObservableObject {
             return
         }
 
-        // Check and hold Stardust ante
-        guard RewardsManager.shared.holdSessionAnte() else {
-            startError = .insufficientStardust
-            return
+        // Optionally hold Stardust ante if user chose to bet
+        sessionAnteUsed = false
+        if useAnte {
+            if RewardsManager.shared.holdSessionAnte() {
+                sessionAnteUsed = true
+            } else {
+                // User toggled ante but doesn't have enough - disable toggle and continue without ante
+                useAnte = false
+            }
         }
 
         startError = nil
@@ -114,7 +123,10 @@ final class PomodoroSession: ObservableObject {
             )
         } catch {
             // Return ante since session failed to start
-            RewardsManager.shared.returnSessionAnte()
+            if sessionAnteUsed {
+                RewardsManager.shared.returnSessionAnte()
+                sessionAnteUsed = false
+            }
             startError = .monitoringFailed(error.localizedDescription)
             self.error = "Failed to start monitoring: \(error.localizedDescription)"
             shieldManager.removeAllShields()
@@ -159,16 +171,22 @@ final class PomodoroSession: ObservableObject {
 
         // Handle ante and rewards based on completion status
         if wasCompleted {
-            // Return ante (user completed successfully)
-            RewardsManager.shared.returnSessionAnte()
+            // Return ante if it was used (user completed successfully)
+            if sessionAnteUsed {
+                RewardsManager.shared.returnSessionAnte()
+            }
 
-            // Post notification for rewards system
+            // Post notification for rewards system (include ante status for bonus calculation)
             NotificationCenter.default.post(
                 name: .sessionCompleted,
                 object: nil,
-                userInfo: ["duration": focusDuration]
+                userInfo: ["duration": focusDuration, "anteUsed": sessionAnteUsed]
             )
         }
+
+        // Reset ante tracking for next session
+        sessionAnteUsed = false
+        useAnte = false
 
         // Celebrate completion then return to idle
         avatarState = .celebrating
@@ -245,7 +263,7 @@ final class PomodoroSession: ObservableObject {
         state = .focusing
     }
 
-    /// Confirms quit after cool-down period (burns ante)
+    /// Confirms quit after cool-down period (burns ante if used)
     func confirmQuit() {
         guard state == .coolingDown, coolDownTimeRemaining == 0 else { return }
 
@@ -253,8 +271,12 @@ final class PomodoroSession: ObservableObject {
         coolDownTimer?.cancel()
         coolDownTimer = nil
 
-        // Burn the ante (permanently lost)
-        RewardsManager.shared.burnSessionAnte()
+        // Burn the ante if it was used (permanently lost)
+        if sessionAnteUsed {
+            RewardsManager.shared.burnSessionAnte()
+            sessionAnteUsed = false
+        }
+        useAnte = false  // Reset toggle for next session
 
         // Clean up session
         shieldManager.removeAllShields()
@@ -303,8 +325,12 @@ final class PomodoroSession: ObservableObject {
             sharedData.sessionEndedEarly = false
             sharedData.isSessionActive = false
 
-            // Burn ante since user ended via shield bypass
-            RewardsManager.shared.burnSessionAnte()
+            // Burn ante if it was used (user ended via shield bypass)
+            if sessionAnteUsed {
+                RewardsManager.shared.burnSessionAnte()
+                sessionAnteUsed = false
+            }
+            useAnte = false  // Reset toggle for next session
 
             // Cancel any active cool-down
             coolDownTimer?.cancel()

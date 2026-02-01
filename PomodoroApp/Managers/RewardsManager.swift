@@ -48,6 +48,9 @@ final class RewardsManager: ObservableObject {
     /// Stardust required to start a focus session (ante/buy-in)
     static let sessionAnteAmount: Int = 50
 
+    /// Reward multiplier when user bets the ante
+    static let anteBonusMultiplier: Double = 2.0
+
     // MARK: - Published State
 
     @Published var balance: StardustBalance
@@ -85,8 +88,13 @@ final class RewardsManager: ObservableObject {
         OrbCatalog.all.filter { collection.owns($0.id) }
     }
 
-    /// Whether user has enough Stardust to start a session (can afford ante)
+    /// Whether user can start a session (always true - ante is optional)
     var canStartSession: Bool {
+        true
+    }
+
+    /// Whether user has enough Stardust to bet the optional ante
+    var canAffordAnte: Bool {
         balance.canAffordAnte(Self.sessionAnteAmount)
     }
 
@@ -115,7 +123,8 @@ final class RewardsManager: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] notification in
                 if let duration = notification.userInfo?["duration"] as? Int {
-                    self?.awardSessionCompletion(duration: duration)
+                    let anteUsed = notification.userInfo?["anteUsed"] as? Bool ?? false
+                    self?.awardSessionCompletion(duration: duration, anteUsed: anteUsed)
                 }
             }
             .store(in: &cancellables)
@@ -127,8 +136,9 @@ final class RewardsManager: ObservableObject {
     /// - Parameters:
     ///   - minutes: Session duration in minutes
     ///   - completed: Whether session was completed successfully
+    ///   - withAnteBonus: Whether to apply the 2x ante bonus multiplier
     /// - Returns: Stardust amount to award
-    func calculateReward(forDuration minutes: Int, completed: Bool) -> Int {
+    func calculateReward(forDuration minutes: Int, completed: Bool, withAnteBonus: Bool = false) -> Int {
         guard completed else { return 0 }
 
         // Base rate: ~0.4 Stardust per minute
@@ -137,15 +147,22 @@ final class RewardsManager: ObservableObject {
 
         // Apply streak bonus
         let streakMultiplier = 1.0 + progress.streakBonusMultiplier
-        let withStreak = Int(Double(baseReward) * streakMultiplier)
+        var reward = Int(Double(baseReward) * streakMultiplier)
 
-        return max(withStreak, 1) // Minimum 1 Stardust
+        // Apply ante bonus if user bet the ante
+        if withAnteBonus {
+            reward = Int(Double(reward) * Self.anteBonusMultiplier)
+        }
+
+        return max(reward, 1) // Minimum 1 Stardust
     }
 
     /// Award Stardust for a completed session
-    /// - Parameter duration: Session duration in minutes
-    func awardSessionCompletion(duration: Int) {
-        let reward = calculateReward(forDuration: duration, completed: true)
+    /// - Parameters:
+    ///   - duration: Session duration in minutes
+    ///   - anteUsed: Whether user bet the ante (applies 2x bonus if true)
+    func awardSessionCompletion(duration: Int, anteUsed: Bool = false) {
+        let reward = calculateReward(forDuration: duration, completed: true, withAnteBonus: anteUsed)
 
         // Update balance
         balance.add(reward)
