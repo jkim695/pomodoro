@@ -124,10 +124,12 @@ struct TimerView: View {
                 )
             } else {
                 // Progress ring (during focus sessions and cool-down)
+                // Animate from slider's fill position for smooth transition
                 CircularProgressView(
                     progress: session.timer.progress,
                     lineWidth: 12,
-                    size: 252
+                    size: 252,
+                    animateFromProgress: sliderFillProgress
                 )
             }
 
@@ -212,6 +214,13 @@ struct TimerView: View {
 
     private var blockedAppCount: Int {
         session.selection.applicationTokens.count + session.selection.categoryTokens.count
+    }
+
+    // Progress of the duration slider (0 to 1) for smooth animation transition
+    private var sliderFillProgress: Double {
+        let minDuration = 10
+        let maxDuration = 180
+        return Double(session.focusDuration - minDuration) / Double(maxDuration - minDuration)
     }
 
     // MARK: - Action Button

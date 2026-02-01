@@ -26,20 +26,20 @@ struct UsageLimitEditorView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color.pomCream
+                Color.pomBackground
                     .ignoresSafeArea()
 
                 ScrollView {
                     VStack(spacing: 24) {
                         // Apps
-                        editorSection(title: "Apps to Limit", icon: "apps.iphone") {
+                        editorSection(title: "Apps to Limit", icon: "shield.fill") {
                             VStack(spacing: 12) {
                                 let appCount = selection.applicationTokens.count + selection.categoryTokens.count
 
                                 HStack {
                                     Text("\(appCount) item\(appCount == 1 ? "" : "s") selected")
                                         .font(.pomBody)
-                                        .foregroundColor(.pomBrown)
+                                        .foregroundColor(.pomTextPrimary)
                                     Spacer()
                                 }
 
@@ -52,11 +52,11 @@ struct UsageLimitEditorView: View {
                                         Spacer()
                                         Image(systemName: "chevron.right")
                                     }
-                                    .foregroundColor(.pomPeach)
+                                    .foregroundColor(.pomShieldActive)
                                     .padding(12)
                                     .background(
                                         RoundedRectangle(cornerRadius: 12)
-                                            .fill(Color.pomCream)
+                                            .fill(Color.pomShieldActive.opacity(0.1))
                                     )
                                 }
                             }
@@ -67,7 +67,7 @@ struct UsageLimitEditorView: View {
                             VStack(spacing: 16) {
                                 Text(AppLimit.formatMinutes(dailyLimitMinutes))
                                     .font(.system(size: 32, weight: .bold, design: .rounded))
-                                    .foregroundColor(.pomBrown)
+                                    .foregroundColor(.pomTextPrimary)
 
                                 durationPicker
                             }
@@ -94,7 +94,7 @@ struct UsageLimitEditorView: View {
                     Button("Cancel") {
                         dismiss()
                     }
-                    .foregroundColor(.pomLightBrown)
+                    .foregroundColor(.pomTextSecondary)
                 }
             }
         }
@@ -107,6 +107,7 @@ struct UsageLimitEditorView: View {
     private var durationPicker: some View {
         LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 12), count: 4), spacing: 12) {
             ForEach(AppLimit.presets, id: \.self) { minutes in
+                let isSelected = dailyLimitMinutes == minutes
                 Button {
                     let impactFeedback = UIImpactFeedbackGenerator(style: .light)
                     impactFeedback.impactOccurred()
@@ -114,12 +115,24 @@ struct UsageLimitEditorView: View {
                 } label: {
                     Text(AppLimit.formatMinutes(minutes))
                         .font(.system(size: 14, weight: .medium, design: .rounded))
-                        .foregroundColor(dailyLimitMinutes == minutes ? .white : .pomBrown)
+                        .foregroundColor(isSelected ? .white : .pomTextSecondary)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 10)
                         .background(
-                            RoundedRectangle(cornerRadius: 10)
-                                .fill(dailyLimitMinutes == minutes ? Color.pomPeach : Color.pomCream)
+                            ZStack {
+                                if isSelected {
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .fill(Color.pomShieldActive.opacity(0.3))
+                                        .blur(radius: 4)
+                                        .padding(-2)
+                                }
+                                RoundedRectangle(cornerRadius: 10)
+                                    .fill(isSelected ? Color.pomShieldActive : Color.pomCardBackgroundAlt)
+                                    .shadow(
+                                        color: isSelected ? Color.pomShieldActive.opacity(0.4) : .clear,
+                                        radius: 6
+                                    )
+                            }
                         )
                 }
                 .animation(.spring(response: 0.3, dampingFraction: 0.7), value: dailyLimitMinutes)
@@ -132,11 +145,11 @@ struct UsageLimitEditorView: View {
         VStack(alignment: .leading, spacing: 8) {
             HStack(spacing: 8) {
                 Image(systemName: "info.circle")
-                    .foregroundColor(.pomPeach)
+                    .foregroundColor(.pomShieldActive)
                 Text("How it works")
                     .font(.pomBody)
                     .fontWeight(.medium)
-                    .foregroundColor(.pomBrown)
+                    .foregroundColor(.pomTextPrimary)
             }
 
             VStack(alignment: .leading, spacing: 4) {
@@ -146,20 +159,16 @@ struct UsageLimitEditorView: View {
             }
         }
         .padding(16)
-        .background(
-            RoundedRectangle(cornerRadius: 16)
-                .fill(Color.pomCardBackground)
-                .shadow(color: Color.pomBrown.opacity(0.08), radius: 4, x: 0, y: 2)
-        )
+        .cosmicCard(isActive: false, cornerRadius: 16, showBorder: false)
     }
 
     private func bulletPoint(_ text: String) -> some View {
         HStack(alignment: .top, spacing: 8) {
             Text("•")
-                .foregroundColor(.pomPeach)
+                .foregroundColor(.pomShieldActive)
             Text(text)
                 .font(.pomCaption)
-                .foregroundColor(.pomLightBrown)
+                .foregroundColor(.pomTextSecondary)
         }
     }
 
@@ -173,22 +182,18 @@ struct UsageLimitEditorView: View {
             HStack(spacing: 8) {
                 Image(systemName: icon)
                     .font(.system(size: 16))
-                    .foregroundColor(.pomPeach)
+                    .foregroundColor(.pomShieldActive)
 
                 Text(title)
                     .font(.pomBody)
                     .fontWeight(.medium)
-                    .foregroundColor(.pomBrown)
+                    .foregroundColor(.pomTextPrimary)
             }
 
             content()
         }
         .padding(16)
-        .background(
-            RoundedRectangle(cornerRadius: 16)
-                .fill(Color.pomCardBackground)
-                .shadow(color: Color.pomBrown.opacity(0.08), radius: 4, x: 0, y: 2)
-        )
+        .cosmicCard(isActive: false, cornerRadius: 16, showBorder: false)
     }
 
     // MARK: - Computed Properties
@@ -225,22 +230,20 @@ struct LimitAppSelectionView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color.pomCream
+                Color.pomBackground
                     .ignoresSafeArea()
 
                 VStack(spacing: 24) {
                     VStack(spacing: 12) {
-                        Image(systemName: "hourglass.badge.plus")
-                            .font(.system(size: 40))
-                            .foregroundColor(.pomPeach)
+                        ShieldOrbView(isActive: true, size: 48)
 
                         Text("Apps to Limit")
-                            .font(.pomHeading)
-                            .foregroundColor(.pomBrown)
+                            .font(.pomHeading2)
+                            .foregroundColor(.pomTextPrimary)
 
                         Text("Select apps and categories to set a daily usage limit for.")
                             .font(.pomBody)
-                            .foregroundColor(.pomLightBrown)
+                            .foregroundColor(.pomTextSecondary)
                             .multilineTextAlignment(.center)
                     }
                     .padding(.vertical, 16)
@@ -251,7 +254,7 @@ struct LimitAppSelectionView: View {
                                 .fill(Color.pomCardBackground)
                         )
                         .cornerRadius(16)
-                        .shadow(color: Color.pomBrown.opacity(0.1), radius: 8, x: 0, y: 4)
+                        .shadow(color: Color.black.opacity(0.1), radius: 8, x: 0, y: 4)
 
                     Spacer()
                 }
@@ -265,7 +268,7 @@ struct LimitAppSelectionView: View {
                         dismiss()
                     }
                     .font(.pomButton)
-                    .foregroundColor(.pomPeach)
+                    .foregroundColor(.pomShieldActive)
                 }
             }
         }

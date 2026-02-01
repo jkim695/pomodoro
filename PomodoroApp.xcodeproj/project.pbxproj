@@ -95,6 +95,9 @@
 		I1000011001 /* RecentPullsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = I1000011000 /* RecentPullsSection.swift */; };
 		J1000001001 /* CoolDownOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = J1000001000 /* CoolDownOverlayView.swift */; };
 		J1000002001 /* InsufficientFundsOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = J1000002000 /* InsufficientFundsOverlayView.swift */; };
+		N1000001001 /* ShieldOrbView.swift in Sources */ = {isa = PBXBuildFile; fileRef = N1000001000 /* ShieldOrbView.swift */; };
+		N1000002001 /* GlowingProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = N1000002000 /* GlowingProgressBar.swift */; };
+		N1000003001 /* CosmicCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = N1000003000 /* CosmicCard.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -180,6 +183,9 @@
 		I1000011000 /* RecentPullsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentPullsSection.swift; sourceTree = "<group>"; };
 		J1000001000 /* CoolDownOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoolDownOverlayView.swift; sourceTree = "<group>"; };
 		J1000002000 /* InsufficientFundsOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsufficientFundsOverlayView.swift; sourceTree = "<group>"; };
+		N1000001000 /* ShieldOrbView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShieldOrbView.swift; sourceTree = "<group>"; };
+		N1000002000 /* GlowingProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlowingProgressBar.swift; sourceTree = "<group>"; };
+		N1000003000 /* CosmicCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CosmicCard.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -395,6 +401,9 @@
 				B1000021000 /* RoundedButton.swift */,
 				B1000022000 /* AnimatedTimerText.swift */,
 				C1000001000 /* GradientOrbView.swift */,
+				N1000001000 /* ShieldOrbView.swift */,
+				N1000002000 /* GlowingProgressBar.swift */,
+				N1000003000 /* CosmicCard.swift */,
 				H1000007000 /* StardustBadge.swift */,
 				I1000001000 /* CoolDownOverlayView.swift */,
 				I1000002000 /* InsufficientFundsOverlayView.swift */,
@@ -724,6 +733,9 @@
 				B1000032001 /* SettingsView.swift in Sources */,
 				B1000033001 /* AuthorizationRequestView.swift in Sources */,
 				C1000001001 /* GradientOrbView.swift in Sources */,
+				N1000001001 /* ShieldOrbView.swift in Sources */,
+				N1000002001 /* GlowingProgressBar.swift in Sources */,
+				N1000003001 /* CosmicCard.swift in Sources */,
 				D1000001001 /* TimeSchedule.swift in Sources */,
 				D1000002001 /* AppLimit.swift in Sources */,
 				D1000003001 /* UsageRecord.swift in Sources */,

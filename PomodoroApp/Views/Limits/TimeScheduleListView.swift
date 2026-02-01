@@ -52,20 +52,29 @@ struct ScheduleRow: View {
                         .foregroundColor(.pomTextTertiary)
                 }
 
-                // Day pills
-                HStack(spacing: 4) {
+                // Glowing day pills
+                HStack(spacing: 6) {
                     ForEach(Weekday.allCases) { day in
                         let isActive = schedule.activeDays.contains(day)
                         Text(day.shortName)
-                            .font(.system(size: 10, weight: .medium))
+                            .font(.system(size: 9, weight: .semibold))
                             .foregroundColor(isActive ? .white : .pomTextTertiary)
-                            .frame(width: 20, height: 20)
+                            .frame(width: 22, height: 22)
                             .background(
-                                Circle()
-                                    .fill(isActive ? Color.pomPrimary : Color.pomCardBackgroundAlt)
+                                ZStack {
+                                    if isActive && schedule.isEnabled {
+                                        Circle()
+                                            .fill(Color.pomShieldActive.opacity(0.3))
+                                            .frame(width: 26, height: 26)
+                                            .blur(radius: 3)
+                                    }
+                                    Circle()
+                                        .fill(isActive ? Color.pomShieldActive : Color.pomCardBackgroundAlt)
+                                }
                             )
                     }
                 }
+                .padding(.top, 2)
             }
 
             Spacer()
@@ -75,14 +84,11 @@ struct ScheduleRow: View {
                 get: { schedule.isEnabled },
                 set: { onToggle($0) }
             ))
-            .tint(.pomPrimary)
+            .tint(.pomShieldActive)
             .labelsHidden()
         }
         .padding(16)
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(Color.pomCardBackgroundAlt)
-        )
+        .cosmicCard(isActive: schedule.isEnabled, cornerRadius: 12)
         .contentShape(Rectangle())
         .onTapGesture {
             onEdit()
