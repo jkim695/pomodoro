@@ -103,6 +103,9 @@ final class PomodoroSession: ObservableObject {
 
     /// Ends the focus session and returns to idle
     func endFocusSession() {
+        // Check if session completed naturally (for rewards)
+        let wasCompleted = timer.timeRemaining == 0
+
         // Remove shields
         shieldManager.removeAllShields()
 
@@ -117,6 +120,15 @@ final class PomodoroSession: ObservableObject {
 
         // Cancel focus notification
         notifications.cancelFocusNotification()
+
+        // Post notification for rewards system if session was completed naturally
+        if wasCompleted {
+            NotificationCenter.default.post(
+                name: .sessionCompleted,
+                object: nil,
+                userInfo: ["duration": focusDuration]
+            )
+        }
 
         // Celebrate completion then return to idle
         avatarState = .celebrating

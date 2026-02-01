@@ -68,6 +68,20 @@
 		F1000003001 /* ShieldActionExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = A4000000000 /* ShieldActionExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		F1000004001 /* DeviceActivityReportExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E5000000000 /* DeviceActivityReportExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		G1000001001 /* CircularDurationSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = G1000001000 /* CircularDurationSlider.swift */; };
+		H1000001001 /* Currency.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000001000 /* Currency.swift */; };
+		H1000002001 /* OrbStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000002000 /* OrbStyle.swift */; };
+		H1000003001 /* UserProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000003000 /* UserProgress.swift */; };
+		H1000004001 /* UserCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000004000 /* UserCollection.swift */; };
+		H1000005001 /* OrbCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000005000 /* OrbCatalog.swift */; };
+		H1000006001 /* RewardsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000006000 /* RewardsManager.swift */; };
+		H1000007001 /* StardustBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000007000 /* StardustBadge.swift */; };
+		H1000008001 /* CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000008000 /* CollectionView.swift */; };
+		H1000009001 /* ShopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000009000 /* ShopView.swift */; };
+		H1000010001 /* OrbPreviewCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000010000 /* OrbPreviewCard.swift */; };
+		H1000011001 /* OrbDetailSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000011000 /* OrbDetailSheet.swift */; };
+		H1000012001 /* ProgressSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000012000 /* ProgressSummaryView.swift */; };
+		H1000013001 /* RewardCelebrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000013000 /* RewardCelebrationView.swift */; };
+		H1000014001 /* RewardsTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000014000 /* RewardsTabView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -126,6 +140,20 @@
 		E5000005000 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E5000006000 /* DeviceActivityReportExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DeviceActivityReportExtension.entitlements; sourceTree = "<group>"; };
 		G1000001000 /* CircularDurationSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularDurationSlider.swift; sourceTree = "<group>"; };
+		H1000001000 /* Currency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Currency.swift; sourceTree = "<group>"; };
+		H1000002000 /* OrbStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrbStyle.swift; sourceTree = "<group>"; };
+		H1000003000 /* UserProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProgress.swift; sourceTree = "<group>"; };
+		H1000004000 /* UserCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCollection.swift; sourceTree = "<group>"; };
+		H1000005000 /* OrbCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrbCatalog.swift; sourceTree = "<group>"; };
+		H1000006000 /* RewardsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardsManager.swift; sourceTree = "<group>"; };
+		H1000007000 /* StardustBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StardustBadge.swift; sourceTree = "<group>"; };
+		H1000008000 /* CollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionView.swift; sourceTree = "<group>"; };
+		H1000009000 /* ShopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopView.swift; sourceTree = "<group>"; };
+		H1000010000 /* OrbPreviewCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrbPreviewCard.swift; sourceTree = "<group>"; };
+		H1000011000 /* OrbDetailSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrbDetailSheet.swift; sourceTree = "<group>"; };
+		H1000012000 /* ProgressSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressSummaryView.swift; sourceTree = "<group>"; };
+		H1000013000 /* RewardCelebrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardCelebrationView.swift; sourceTree = "<group>"; };
+		H1000014000 /* RewardsTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardsTabView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -228,6 +256,7 @@
 			children = (
 				A1000001000 /* PomodoroAppApp.swift */,
 				A1000031000 /* Views */,
+				G1000001000 /* Models */,
 				A1000032000 /* Managers */,
 				B1000034000 /* Theme */,
 				A1000003000 /* Assets.xcassets */,
@@ -248,6 +277,7 @@
 				B1000033000 /* AuthorizationRequestView.swift */,
 				B1000035000 /* Components */,
 				D1000014000 /* Limits */,
+				G1000003000 /* Rewards */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -264,6 +294,7 @@
 				D1000004000 /* LimitsSession.swift */,
 				D1000005000 /* LimitsScheduler.swift */,
 				D1000006000 /* LimitsShieldManager.swift */,
+				H1000006000 /* RewardsManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -335,6 +366,7 @@
 				B1000021000 /* RoundedButton.swift */,
 				B1000022000 /* AnimatedTimerText.swift */,
 				C1000001000 /* GradientOrbView.swift */,
+				H1000007000 /* StardustBadge.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -361,6 +393,40 @@
 				E5000006000 /* DeviceActivityReportExtension.entitlements */,
 			);
 			path = DeviceActivityReportExtension;
+			sourceTree = "<group>";
+		};
+		G1000001000 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				G1000002000 /* Rewards */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		G1000002000 /* Rewards */ = {
+			isa = PBXGroup;
+			children = (
+				H1000001000 /* Currency.swift */,
+				H1000002000 /* OrbStyle.swift */,
+				H1000003000 /* UserProgress.swift */,
+				H1000004000 /* UserCollection.swift */,
+				H1000005000 /* OrbCatalog.swift */,
+			);
+			path = Rewards;
+			sourceTree = "<group>";
+		};
+		G1000003000 /* Rewards */ = {
+			isa = PBXGroup;
+			children = (
+				H1000008000 /* CollectionView.swift */,
+				H1000009000 /* ShopView.swift */,
+				H1000010000 /* OrbPreviewCard.swift */,
+				H1000011000 /* OrbDetailSheet.swift */,
+				H1000012000 /* ProgressSummaryView.swift */,
+				H1000013000 /* RewardCelebrationView.swift */,
+				H1000014000 /* RewardsTabView.swift */,
+			);
+			path = Rewards;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -625,6 +691,20 @@
 				D1000012001 /* UsageLimitEditorView.swift in Sources */,
 				D1000013001 /* DayOfWeekPicker.swift in Sources */,
 				E1000001001 /* UsageReportView.swift in Sources */,
+				H1000001001 /* Currency.swift in Sources */,
+				H1000002001 /* OrbStyle.swift in Sources */,
+				H1000003001 /* UserProgress.swift in Sources */,
+				H1000004001 /* UserCollection.swift in Sources */,
+				H1000005001 /* OrbCatalog.swift in Sources */,
+				H1000006001 /* RewardsManager.swift in Sources */,
+				H1000007001 /* StardustBadge.swift in Sources */,
+				H1000008001 /* CollectionView.swift in Sources */,
+				H1000009001 /* ShopView.swift in Sources */,
+				H1000010001 /* OrbPreviewCard.swift in Sources */,
+				H1000011001 /* OrbDetailSheet.swift in Sources */,
+				H1000012001 /* ProgressSummaryView.swift in Sources */,
+				H1000013001 /* RewardCelebrationView.swift in Sources */,
+				H1000014001 /* RewardsTabView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -40,4 +40,5 @@ struct ContentView: View {
         .environmentObject(AuthorizationManager())
         .environmentObject(PomodoroSession())
         .environmentObject(LimitsSession())
+        .environmentObject(RewardsManager.shared)
 }
