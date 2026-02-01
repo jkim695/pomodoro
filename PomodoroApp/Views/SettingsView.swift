@@ -5,8 +5,7 @@ struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var showAppSelection = false
 
-    private let focusDurations = [15, 20, 25, 30, 45, 60]
-    private let breakDurations = [5, 10, 15, 20]
+    private let focusDurations = [15, 25, 30, 45, 60, 90]
 
     var body: some View {
         NavigationStack {
@@ -21,15 +20,6 @@ struct SettingsView: View {
                             durationPicker(
                                 values: focusDurations,
                                 selected: $session.focusDuration,
-                                suffix: "min"
-                            )
-                        }
-
-                        // Break Duration
-                        settingsSection(title: "Break Length", icon: "cup.and.saucer.fill") {
-                            durationPicker(
-                                values: breakDurations,
-                                selected: $session.breakDuration,
                                 suffix: "min"
                             )
                         }

@@ -59,6 +59,7 @@
 		D4000003001 /* UsageRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1000003000 /* UsageRecord.swift */; };
 		E1000001001 /* UsageReportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1000001000 /* UsageReportView.swift */; };
 		E5000001001 /* UsageReportExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5000001000 /* UsageReportExtension.swift */; };
+		F1000001001 /* CircularDurationSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000001000 /* CircularDurationSlider.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -116,6 +117,7 @@
 		E5000001000 /* UsageReportExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageReportExtension.swift; sourceTree = "<group>"; };
 		E5000005000 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E5000006000 /* DeviceActivityReportExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DeviceActivityReportExtension.entitlements; sourceTree = "<group>"; };
+		F1000001000 /* CircularDurationSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularDurationSlider.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -290,6 +292,7 @@
 			isa = PBXGroup;
 			children = (
 				B1000020000 /* CircularProgressView.swift */,
+				F1000001000 /* CircularDurationSlider.swift */,
 				B1000021000 /* RoundedButton.swift */,
 				B1000022000 /* AnimatedTimerText.swift */,
 				C1000001000 /* GradientOrbView.swift */,
@@ -516,6 +519,7 @@
 				B1000011001 /* Fonts.swift in Sources */,
 				B1000012001 /* Animations.swift in Sources */,
 				B1000020001 /* CircularProgressView.swift in Sources */,
+				F1000001001 /* CircularDurationSlider.swift in Sources */,
 				B1000021001 /* RoundedButton.swift in Sources */,
 				B1000022001 /* AnimatedTimerText.swift in Sources */,
 				B1000030001 /* TimerView.swift in Sources */,

@@ -34,13 +34,6 @@ struct TimerView: View {
                 actionButton
                     .padding(.horizontal, 24)
 
-                // Quick duration picker (only show when idle)
-                if session.state == .idle {
-                    quickDurationPicker
-                        .padding(.top, 24)
-                        .padding(.horizontal, 24)
-                }
-
                 Spacer()
                     .frame(height: 40)
             }
@@ -55,7 +48,7 @@ struct TimerView: View {
         }
         .onChange(of: session.state) { newState in
             // Trigger celebration when focus session completes
-            if previousState == .focusing && newState == .onBreak {
+            if previousState == .focusing && newState == .idle {
                 completedSessions += 1
                 triggerCelebration()
             }
@@ -85,12 +78,20 @@ struct TimerView: View {
     // MARK: - Timer Display with Orb
     private var timerDisplay: some View {
         ZStack {
+            // Circular duration slider (only when idle)
+            if session.state == .idle {
+                CircularDurationSlider(
+                    duration: $session.focusDuration,
+                    size: 340,
+                    isEnabled: true
+                )
+            }
+
             // Progress ring
             CircularProgressView(
                 progress: session.timer.progress,
                 lineWidth: 20,
-                size: 280,
-                isFocusing: session.state != .onBreak
+                size: 280
             )
 
             // Gradient orb in center
@@ -107,8 +108,6 @@ struct TimerView: View {
             return .idle
         case .focusing:
             return .focusing
-        case .onBreak:
-            return .onBreak
         }
     }
 
@@ -148,8 +147,6 @@ struct TimerView: View {
             return "Focus"
         case .focusing:
             return "Focusing"
-        case .onBreak:
-            return "Break"
         }
     }
 
@@ -179,37 +176,7 @@ struct TimerView: View {
 
             case .focusing:
                 RoundedButton("End Session", style: .secondary) {
-                    session.endFocusSession(startBreak: false)
-                }
-
-            case .onBreak:
-                RoundedButton("Skip Break", style: .secondary) {
-                    session.endBreak()
-                }
-            }
-        }
-    }
-
-    // MARK: - Quick Duration Picker
-    private var quickDurationPicker: some View {
-        let durations = [25, 50, 60]
-        return HStack(spacing: 12) {
-            ForEach(durations, id: \.self) { duration in
-                Button {
-                    let impactFeedback = UIImpactFeedbackGenerator(style: .light)
-                    impactFeedback.impactOccurred()
-                    session.focusDuration = duration
-                } label: {
-                    Text("\(duration)m")
-                        .font(.pomBody)
-                        .fontWeight(.medium)
-                        .foregroundColor(session.focusDuration == duration ? .white : .pomTextSecondary)
-                        .padding(.horizontal, 20)
-                        .padding(.vertical, 10)
-                        .background(
-                            Capsule()
-                                .fill(session.focusDuration == duration ? Color.pomPrimary : Color.pomCardBackgroundAlt)
-                        )
+                    session.endFocusSession()
                 }
             }
         }

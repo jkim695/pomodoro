@@ -7,7 +7,6 @@ import Combine
 enum SessionState: String, Codable {
     case idle
     case focusing
-    case onBreak
 }
 
 /// Represents the avatar's emotional/visual state
@@ -27,8 +26,7 @@ final class PomodoroSession: ObservableObject {
     @Published var error: String?
     @Published var avatarState: AvatarState = .sleeping
 
-    @AppStorage("focusDuration") var focusDuration: Int = 25  // minutes
-    @AppStorage("breakDuration") var breakDuration: Int = 5   // minutes
+    @AppStorage("focusDuration") var focusDuration: Int = 25  // minutes (10-180)
 
     let timer = TimerManager()
 
@@ -103,9 +101,8 @@ final class PomodoroSession: ObservableObject {
         avatarState = .working
     }
 
-    /// Ends the focus session and optionally transitions to break
-    /// - Parameter startBreak: Whether to start a break after focus ends
-    func endFocusSession(startBreak: Bool = true) {
+    /// Ends the focus session and returns to idle
+    func endFocusSession() {
         // Remove shields
         shieldManager.removeAllShields()
 
@@ -121,37 +118,18 @@ final class PomodoroSession: ObservableObject {
         // Cancel focus notification
         notifications.cancelFocusNotification()
 
-        if startBreak && breakDuration > 0 {
-            // Celebrate completion then start break
-            avatarState = .celebrating
-            Task {
-                try? await Task.sleep(for: .seconds(3))
-                await MainActor.run {
-                    if self.avatarState == .celebrating {
-                        self.avatarState = .sleeping
-                    }
+        // Celebrate completion then return to idle
+        avatarState = .celebrating
+        state = .idle
+
+        Task {
+            try? await Task.sleep(for: .seconds(3))
+            await MainActor.run {
+                if self.avatarState == .celebrating {
+                    self.avatarState = .sleeping
                 }
             }
-            self.startBreak()
-        } else {
-            state = .idle
-            avatarState = .sleeping
         }
-    }
-
-    /// Starts a break period (no shields)
-    func startBreak() {
-        state = .onBreak
-        timer.start(durationSeconds: breakDuration * 60)
-        notifications.scheduleBreakComplete(in: breakDuration * 60)
-    }
-
-    /// Ends the break and returns to idle
-    func endBreak() {
-        timer.reset()
-        notifications.cancelBreakNotification()
-        state = .idle
-        avatarState = .sleeping
     }
 
     /// Cancels the current session and returns to idle
@@ -201,14 +179,10 @@ final class PomodoroSession: ObservableObject {
         }
 
         // Sync state with timer
-        if state == .focusing || state == .onBreak {
+        if state == .focusing {
             if timer.timeRemaining == 0 && !timer.isRunning {
                 // Timer completed while backgrounded
-                if state == .focusing {
-                    endFocusSession(startBreak: true)
-                } else {
-                    endBreak()
-                }
+                endFocusSession()
             }
         }
     }
@@ -219,13 +193,8 @@ final class PomodoroSession: ObservableObject {
         guard timeRemaining == 0, !timer.isRunning else { return }
 
         // Timer just finished
-        switch state {
-        case .focusing:
-            endFocusSession(startBreak: true)
-        case .onBreak:
-            endBreak()
-        case .idle:
-            break
+        if state == .focusing {
+            endFocusSession()
         }
     }
 }

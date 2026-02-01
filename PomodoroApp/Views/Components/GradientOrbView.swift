@@ -14,7 +14,6 @@ struct GradientOrbView: View {
     enum OrbState {
         case idle
         case focusing
-        case onBreak
         case complete
     }
 
@@ -147,7 +146,7 @@ struct GradientOrbView: View {
         switch state {
         case .idle, .focusing:
             return Color.pomPrimary
-        case .onBreak, .complete:
+        case .complete:
             return Color.pomSecondary
         }
     }
@@ -158,8 +157,6 @@ struct GradientOrbView: View {
             return Color.pomAccent
         case .focusing:
             return Color(hex: "FF8A80") // Pink
-        case .onBreak:
-            return Color(hex: "4ECDC4") // Teal
         case .complete:
             return Color(hex: "85E085") // Light green
         }
@@ -169,7 +166,7 @@ struct GradientOrbView: View {
         switch state {
         case .idle, .focusing:
             return Color.pomPrimary
-        case .onBreak, .complete:
+        case .complete:
             return Color.pomSecondary
         }
     }
@@ -227,14 +224,6 @@ struct GradientOrbView: View {
                 highlightOffset = 4
             }
 
-        case .onBreak:
-            // Slow, relaxed rhythm
-            withAnimation(.easeInOut(duration: 4.0).repeatForever(autoreverses: true)) {
-                breathingScale = 1.02
-                glowOpacity = 0.6
-                highlightOffset = 1
-            }
-
         case .complete:
             // Celebration burst
             withAnimation(.spring(response: 0.4, dampingFraction: 0.5)) {
@@ -258,7 +247,7 @@ struct GradientOrbView: View {
     VStack(spacing: 40) {
         GradientOrbView(state: .idle, size: 150)
         GradientOrbView(state: .focusing, size: 150)
-        GradientOrbView(state: .onBreak, size: 150)
+        GradientOrbView(state: .complete, size: 150)
     }
     .padding()
     .background(Color.pomBackground)
