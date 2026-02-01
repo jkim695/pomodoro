@@ -67,6 +67,7 @@
 		F1000002001 /* ShieldConfigurationExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = A3000000000 /* ShieldConfigurationExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		F1000003001 /* ShieldActionExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = A4000000000 /* ShieldActionExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		F1000004001 /* DeviceActivityReportExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E5000000000 /* DeviceActivityReportExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		G1000001001 /* CircularDurationSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = G1000001000 /* CircularDurationSlider.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -124,6 +125,7 @@
 		E5000001000 /* UsageReportExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageReportExtension.swift; sourceTree = "<group>"; };
 		E5000005000 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E5000006000 /* DeviceActivityReportExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DeviceActivityReportExtension.entitlements; sourceTree = "<group>"; };
+		G1000001000 /* CircularDurationSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularDurationSlider.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -329,6 +331,7 @@
 			isa = PBXGroup;
 			children = (
 				B1000020000 /* CircularProgressView.swift */,
+				G1000001000 /* CircularDurationSlider.swift */,
 				B1000021000 /* RoundedButton.swift */,
 				B1000022000 /* AnimatedTimerText.swift */,
 				C1000001000 /* GradientOrbView.swift */,
@@ -600,6 +603,7 @@
 				B1000011001 /* Fonts.swift in Sources */,
 				B1000012001 /* Animations.swift in Sources */,
 				B1000020001 /* CircularProgressView.swift in Sources */,
+				G1000001001 /* CircularDurationSlider.swift in Sources */,
 				B1000021001 /* RoundedButton.swift in Sources */,
 				B1000022001 /* AnimatedTimerText.swift in Sources */,
 				B1000030001 /* TimerView.swift in Sources */,

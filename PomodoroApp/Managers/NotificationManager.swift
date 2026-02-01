@@ -1,12 +1,11 @@
 import Foundation
 import UserNotifications
 
-/// Manages local notifications for focus and break completion
+/// Manages local notifications for focus completion
 final class NotificationManager {
     static let shared = NotificationManager()
 
     private let focusCompleteIdentifier = "pomodoro.focus.complete"
-    private let breakCompleteIdentifier = "pomodoro.break.complete"
 
     private init() {}
 
@@ -32,18 +31,7 @@ final class NotificationManager {
         scheduleNotification(
             identifier: focusCompleteIdentifier,
             title: "Focus Complete!",
-            body: "Great work! Time for a break.",
-            seconds: seconds
-        )
-    }
-
-    /// Schedules a notification for when the break completes
-    /// - Parameter seconds: Time in seconds until notification
-    func scheduleBreakComplete(in seconds: Int) {
-        scheduleNotification(
-            identifier: breakCompleteIdentifier,
-            title: "Break Over",
-            body: "Ready to focus again?",
+            body: "Great work! Session complete.",
             seconds: seconds
         )
     }
@@ -59,12 +47,6 @@ final class NotificationManager {
     func cancelFocusNotification() {
         let center = UNUserNotificationCenter.current()
         center.removePendingNotificationRequests(withIdentifiers: [focusCompleteIdentifier])
-    }
-
-    /// Cancels only the break complete notification
-    func cancelBreakNotification() {
-        let center = UNUserNotificationCenter.current()
-        center.removePendingNotificationRequests(withIdentifiers: [breakCompleteIdentifier])
     }
 
     // MARK: - Private Methods
