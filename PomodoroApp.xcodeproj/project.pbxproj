@@ -82,6 +82,8 @@
 		H1000012001 /* ProgressSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000012000 /* ProgressSummaryView.swift */; };
 		H1000013001 /* RewardCelebrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000013000 /* RewardCelebrationView.swift */; };
 		H1000014001 /* RewardsTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000014000 /* RewardsTabView.swift */; };
+		I1000001001 /* CoolDownOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = I1000001000 /* CoolDownOverlayView.swift */; };
+		I1000002001 /* InsufficientFundsOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = I1000002000 /* InsufficientFundsOverlayView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -154,6 +156,8 @@
 		H1000012000 /* ProgressSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressSummaryView.swift; sourceTree = "<group>"; };
 		H1000013000 /* RewardCelebrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardCelebrationView.swift; sourceTree = "<group>"; };
 		H1000014000 /* RewardsTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardsTabView.swift; sourceTree = "<group>"; };
+		I1000001000 /* CoolDownOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoolDownOverlayView.swift; sourceTree = "<group>"; };
+		I1000002000 /* InsufficientFundsOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsufficientFundsOverlayView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -367,6 +371,8 @@
 				B1000022000 /* AnimatedTimerText.swift */,
 				C1000001000 /* GradientOrbView.swift */,
 				H1000007000 /* StardustBadge.swift */,
+				I1000001000 /* CoolDownOverlayView.swift */,
+				I1000002000 /* InsufficientFundsOverlayView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -705,6 +711,8 @@
 				H1000012001 /* ProgressSummaryView.swift in Sources */,
 				H1000013001 /* RewardCelebrationView.swift in Sources */,
 				H1000014001 /* RewardsTabView.swift in Sources */,
+				I1000001001 /* CoolDownOverlayView.swift in Sources */,
+				I1000002001 /* InsufficientFundsOverlayView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
