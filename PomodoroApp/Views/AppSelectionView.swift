@@ -19,7 +19,7 @@ struct AppSelectionView: View {
                     FamilyActivityPicker(selection: $session.selection)
                         .background(
                             RoundedRectangle(cornerRadius: 16)
-                                .fill(Color.white)
+                                .fill(Color.pomCardBackground)
                         )
                         .cornerRadius(16)
                         .shadow(color: Color.pomBrown.opacity(0.1), radius: 8, x: 0, y: 4)

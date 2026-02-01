@@ -8,19 +8,17 @@ extension Animation {
         .repeatForever(autoreverses: true)
 
     // Button press feedback
-    static let buttonPress = Animation.spring(response: 0.3, dampingFraction: 0.6)
+    static let buttonPress = Animation.spring(response: 0.25, dampingFraction: 0.7)
 
     // State transitions
     static let stateTransition = Animation.spring(response: 0.5, dampingFraction: 0.7)
 
     // Celebration bounce
-    static let celebration = Animation.spring(response: 0.4, dampingFraction: 0.5)
+    static let celebration = Animation.spring(response: 0.4, dampingFraction: 0.6)
 
-    // Avatar-specific animations
-    static let avatarBreathing = Animation.easeInOut(duration: 2.0).repeatForever(autoreverses: true)
-    static let avatarBounce = Animation.easeInOut(duration: 0.8).repeatForever(autoreverses: true)
-    static let avatarCelebrate = Animation.spring(response: 0.4, dampingFraction: 0.5)
-    static let avatarShake = Animation.easeInOut(duration: 0.15)
+    // Orb animations
+    static let orbBreathing = Animation.easeInOut(duration: 3.0).repeatForever(autoreverses: true)
+    static let orbPulse = Animation.easeInOut(duration: 1.5).repeatForever(autoreverses: true)
 }
 
 // MARK: - View Modifiers for Animations
@@ -58,7 +56,7 @@ struct ButtonPressModifier: ViewModifier {
 
     func body(content: Content) -> some View {
         content
-            .scaleEffect(isPressed ? 0.95 : 1.0)
+            .scaleEffect(isPressed ? 0.97 : 1.0)
             .animation(.buttonPress, value: isPressed)
             .simultaneousGesture(
                 DragGesture(minimumDistance: 0)

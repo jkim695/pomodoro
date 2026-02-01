@@ -9,7 +9,7 @@ struct LimitsView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color.pomCream
+                Color.pomBackground
                     .ignoresSafeArea()
 
                 ScrollView {
@@ -20,7 +20,7 @@ struct LimitsView: View {
                             subtitle: "Block apps during specific hours",
                             icon: "clock.fill",
                             isEmpty: limitsSession.schedules.isEmpty,
-                            emptyMessage: "No time schedules yet",
+                            emptyMessage: "No schedules yet",
                             addAction: { showAddSchedule = true }
                         ) {
                             TimeScheduleListView()
@@ -30,9 +30,9 @@ struct LimitsView: View {
                         limitsSection(
                             title: "Daily Limits",
                             subtitle: "Limit how long you use certain apps",
-                            icon: "hourglass",
+                            icon: "chart.bar.fill",
                             isEmpty: limitsSession.limits.isEmpty,
-                            emptyMessage: "No usage limits yet",
+                            emptyMessage: "No limits yet",
                             addAction: { showAddLimit = true }
                         ) {
                             UsageLimitListView()
@@ -78,19 +78,19 @@ struct LimitsView: View {
         VStack(alignment: .leading, spacing: 16) {
             // Header
             HStack {
-                HStack(spacing: 8) {
+                HStack(spacing: 10) {
                     Image(systemName: icon)
-                        .font(.system(size: 18))
-                        .foregroundColor(.pomPeach)
+                        .font(.system(size: 18, weight: .medium))
+                        .foregroundColor(.pomPrimary)
 
                     VStack(alignment: .leading, spacing: 2) {
                         Text(title)
-                            .font(.pomHeading)
-                            .foregroundColor(.pomBrown)
+                            .font(.pomHeading2)
+                            .foregroundColor(.pomTextPrimary)
 
                         Text(subtitle)
                             .font(.pomCaption)
-                            .foregroundColor(.pomLightBrown)
+                            .foregroundColor(.pomTextSecondary)
                     }
                 }
 
@@ -102,8 +102,8 @@ struct LimitsView: View {
                     addAction()
                 } label: {
                     Image(systemName: "plus.circle.fill")
-                        .font(.system(size: 24))
-                        .foregroundColor(.pomPeach)
+                        .font(.system(size: 28))
+                        .foregroundColor(.pomPrimary)
                 }
             }
 
@@ -116,20 +116,24 @@ struct LimitsView: View {
         }
         .padding(20)
         .background(
-            RoundedRectangle(cornerRadius: 20)
-                .fill(Color.white)
-                .shadow(color: Color.pomBrown.opacity(0.1), radius: 8, x: 0, y: 4)
+            RoundedRectangle(cornerRadius: 16)
+                .fill(Color.pomCardBackground)
+                .shadow(color: Color.black.opacity(0.05), radius: 10, x: 0, y: 4)
         )
     }
 
     private func emptyState(message: String) -> some View {
-        VStack(spacing: 8) {
+        VStack(spacing: 12) {
+            Image(systemName: "tray")
+                .font(.system(size: 32))
+                .foregroundColor(.pomTextTertiary)
+
             Text(message)
                 .font(.pomBody)
-                .foregroundColor(.pomLightBrown)
+                .foregroundColor(.pomTextSecondary)
         }
         .frame(maxWidth: .infinity)
-        .padding(.vertical, 24)
+        .padding(.vertical, 32)
     }
 }
 

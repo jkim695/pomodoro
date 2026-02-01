@@ -27,12 +27,12 @@ struct DayOfWeekPicker: View {
             }
         } label: {
             Text(day.shortName)
-                .font(.system(size: 14, weight: .medium, design: .rounded))
-                .foregroundColor(selectedDays.contains(day) ? .white : .pomBrown)
+                .font(.system(size: 14, weight: .medium))
+                .foregroundColor(selectedDays.contains(day) ? .white : .pomTextPrimary)
                 .frame(width: 36, height: 36)
                 .background(
                     Circle()
-                        .fill(selectedDays.contains(day) ? Color.pomPeach : Color.pomCream)
+                        .fill(selectedDays.contains(day) ? Color.pomPrimary : Color.pomCardBackgroundAlt)
                 )
         }
         .animation(.spring(response: 0.3, dampingFraction: 0.7), value: selectedDays)
@@ -59,12 +59,12 @@ struct DayPresetButtons: View {
         } label: {
             Text(title)
                 .font(.pomCaption)
-                .foregroundColor(selectedDays == days ? .white : .pomLightBrown)
+                .foregroundColor(selectedDays == days ? .white : .pomTextSecondary)
                 .padding(.horizontal, 12)
                 .padding(.vertical, 8)
                 .background(
                     Capsule()
-                        .fill(selectedDays == days ? Color.pomPeach : Color.pomCream)
+                        .fill(selectedDays == days ? Color.pomPrimary : Color.pomCardBackgroundAlt)
                 )
         }
         .animation(.spring(response: 0.3, dampingFraction: 0.7), value: selectedDays)

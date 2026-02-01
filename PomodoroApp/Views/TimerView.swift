@@ -5,33 +5,45 @@ struct TimerView: View {
     @State private var showSettings = false
     @State private var showCelebration = false
     @State private var previousState: SessionState = .idle
+    @AppStorage("completedSessions") private var completedSessions: Int = 0
 
     var body: some View {
         ZStack {
             // Background
-            Color.pomCream
+            Color.pomBackground
                 .ignoresSafeArea()
 
             VStack(spacing: 0) {
+                // Top navigation bar
+                topNavBar
+                    .padding(.horizontal, 24)
+                    .padding(.top, 8)
+
                 Spacer()
 
-                // HERO: Avatar INSIDE the timer circle
-                timerWithAvatar
+                // Main timer display
+                timerDisplay
 
                 Spacer()
 
-                // Status text above buttons
-                statusText
-                    .padding(.bottom, 24)
+                // State label and session counter
+                stateSection
+                    .padding(.bottom, 32)
 
-                // Action buttons
-                actionButtons
+                // Action button
+                actionButton
+                    .padding(.horizontal, 24)
 
-                // Bottom toolbar
-                bottomToolbar
+                // Quick duration picker (only show when idle)
+                if session.state == .idle {
+                    quickDurationPicker
+                        .padding(.top, 24)
+                        .padding(.horizontal, 24)
+                }
+
+                Spacer()
+                    .frame(height: 40)
             }
-            .padding(.horizontal, 24)
-            .padding(.bottom, 16)
 
             // Celebration overlay
             if showCelebration {
@@ -44,6 +56,7 @@ struct TimerView: View {
         .onChange(of: session.state) { newState in
             // Trigger celebration when focus session completes
             if previousState == .focusing && newState == .onBreak {
+                completedSessions += 1
                 triggerCelebration()
             }
             previousState = newState
@@ -53,99 +66,114 @@ struct TimerView: View {
         }
     }
 
-    // MARK: - Timer with Avatar Inside
-    private var timerWithAvatar: some View {
-        VStack(spacing: 16) {
-            // Timer circle with avatar centered inside
-            ZStack {
-                CircularProgressView(progress: session.timer.progress)
+    // MARK: - Top Navigation Bar
+    private var topNavBar: some View {
+        HStack {
+            Spacer()
 
-                // Avatar centered inside the circle
-                avatarCompanion
-            }
-
-            // Timer text below the circle
-            VStack(spacing: 4) {
-                AnimatedTimerText(
-                    timeRemaining: displayTimeRemaining,
-                    isRunning: session.timer.isRunning
-                )
-
-                if session.state != .idle {
-                    Text(session.state == .focusing ? "Focus Time" : "Break Time")
-                        .font(.system(size: 16, weight: .semibold, design: .rounded))
-                        .foregroundColor(.pomLightBrown)
-                }
+            Button {
+                showSettings = true
+            } label: {
+                Image(systemName: "gearshape.fill")
+                    .font(.system(size: 24, weight: .medium))
+                    .foregroundColor(.pomTextSecondary)
+                    .padding(8)
             }
         }
     }
 
-    /// Returns the time to display - shows selected duration when idle, actual remaining time otherwise
+    // MARK: - Timer Display with Orb
+    private var timerDisplay: some View {
+        ZStack {
+            // Progress ring
+            CircularProgressView(
+                progress: session.timer.progress,
+                lineWidth: 20,
+                size: 280,
+                isFocusing: session.state != .onBreak
+            )
+
+            // Gradient orb in center
+            GradientOrbView(
+                state: orbState,
+                size: 160
+            )
+        }
+    }
+
+    private var orbState: GradientOrbView.OrbState {
+        switch session.state {
+        case .idle:
+            return .idle
+        case .focusing:
+            return .focusing
+        case .onBreak:
+            return .onBreak
+        }
+    }
+
+    // MARK: - State Section
+    private var stateSection: some View {
+        VStack(spacing: 8) {
+            // Timer text
+            AnimatedTimerText(
+                timeRemaining: displayTimeRemaining,
+                isRunning: session.timer.isRunning
+            )
+
+            // State label
+            Text(stateLabel)
+                .font(.pomHeading2)
+                .fontWeight(.semibold)
+                .foregroundColor(.pomTextSecondary)
+                .textCase(.uppercase)
+                .tracking(2)
+
+            // Session counter or app blocked info
+            if session.state == .idle {
+                Text("Today: \(completedSessions) session\(completedSessions == 1 ? "" : "s")")
+                    .font(.pomCaption)
+                    .foregroundColor(.pomTextTertiary)
+            } else if session.state == .focusing && hasBlockedApps {
+                Text("\(blockedAppCount) app\(blockedAppCount == 1 ? "" : "s") blocked")
+                    .font(.pomCaption)
+                    .foregroundColor(.pomTextTertiary)
+            }
+        }
+    }
+
+    private var stateLabel: String {
+        switch session.state {
+        case .idle:
+            return "Focus"
+        case .focusing:
+            return "Focusing"
+        case .onBreak:
+            return "Break"
+        }
+    }
+
     private var displayTimeRemaining: Int {
         if session.state == .idle {
-            return session.focusDuration * 60  // Convert minutes to seconds
+            return session.focusDuration * 60
         }
         return session.timer.timeRemaining
     }
 
-    // MARK: - Status Text (Chunky Labels)
-    private var statusText: some View {
+    private var hasBlockedApps: Bool {
+        !session.selection.applicationTokens.isEmpty || !session.selection.categoryTokens.isEmpty
+    }
+
+    private var blockedAppCount: Int {
+        session.selection.applicationTokens.count + session.selection.categoryTokens.count
+    }
+
+    // MARK: - Action Button
+    private var actionButton: some View {
         Group {
             switch session.state {
             case .idle:
-                VStack(spacing: 6) {
-                    Text("Ready to focus?")
-                        .font(.pomHeading)  // 24pt bold rounded
-                        .foregroundColor(.pomBrown)
-
-                    Text("\(session.focusDuration) minute session")
-                        .font(.system(size: 16, weight: .medium, design: .rounded))
-                        .foregroundColor(.pomLightBrown)
-                }
-            case .focusing:
-                VStack(spacing: 6) {
-                    Text("Stay focused!")
-                        .font(.pomHeading)
-                        .foregroundColor(.pomBrown)
-
-                    if !session.selection.applicationTokens.isEmpty || !session.selection.categoryTokens.isEmpty {
-                        let appCount = session.selection.applicationTokens.count + session.selection.categoryTokens.count
-                        Text("\(appCount) app\(appCount == 1 ? "" : "s") blocked")
-                            .font(.system(size: 14, weight: .medium, design: .rounded))
-                            .foregroundColor(.pomLightBrown)
-                    }
-                }
-            case .onBreak:
-                VStack(spacing: 6) {
-                    Text("Take a break!")
-                        .font(.pomHeading)
-                        .foregroundColor(.pomBrown)
-
-                    Text("You earned it")
-                        .font(.system(size: 16, weight: .medium, design: .rounded))
-                        .foregroundColor(.pomLightBrown)
-                }
-            }
-        }
-        .animation(.stateTransition, value: session.state)
-    }
-
-    // MARK: - Avatar Companion (Centered inside timer circle)
-    private var avatarCompanion: some View {
-        AvatarWithMessage(
-            avatarState: session.avatarState,
-            avatarSize: 210,  // Sized to fill the 280px timer circle
-            showGroundingShadow: false  // No shadow inside the circular progress ring
-        )
-        .animation(.stateTransition, value: session.avatarState)
-    }
-
-    // MARK: - Action Buttons
-    private var actionButtons: some View {
-        VStack(spacing: 16) {
-            switch session.state {
-            case .idle:
-                RoundedButton("Start Focus", style: .primary) {
+                RoundedButton("Begin", style: .primary) {
                     session.startFocusSession()
                 }
 
@@ -160,21 +188,29 @@ struct TimerView: View {
                 }
             }
         }
-        .animation(.stateTransition, value: session.state)
     }
 
-    // MARK: - Bottom Toolbar
-    private var bottomToolbar: some View {
-        HStack {
-            Spacer()
-
-            Button {
-                showSettings = true
-            } label: {
-                Image(systemName: "gearshape.fill")
-                    .font(.system(size: 22))
-                    .foregroundColor(.pomLightBrown)
-                    .padding(12)
+    // MARK: - Quick Duration Picker
+    private var quickDurationPicker: some View {
+        let durations = [25, 50, 60]
+        return HStack(spacing: 12) {
+            ForEach(durations, id: \.self) { duration in
+                Button {
+                    let impactFeedback = UIImpactFeedbackGenerator(style: .light)
+                    impactFeedback.impactOccurred()
+                    session.focusDuration = duration
+                } label: {
+                    Text("\(duration)m")
+                        .font(.pomBody)
+                        .fontWeight(.medium)
+                        .foregroundColor(session.focusDuration == duration ? .white : .pomTextSecondary)
+                        .padding(.horizontal, 20)
+                        .padding(.vertical, 10)
+                        .background(
+                            Capsule()
+                                .fill(session.focusDuration == duration ? Color.pomPrimary : Color.pomCardBackgroundAlt)
+                        )
+                }
             }
         }
     }
@@ -182,31 +218,30 @@ struct TimerView: View {
     // MARK: - Celebration Overlay
     private var celebrationOverlay: some View {
         ZStack {
-            Color.black.opacity(0.3)
+            Color.black.opacity(0.4)
                 .ignoresSafeArea()
 
-            VStack(spacing: 24) {
+            VStack(spacing: 20) {
                 Image(systemName: "checkmark.circle.fill")
-                    .font(.system(size: 80))
-                    .foregroundColor(.pomSage)
-                    .celebrationAnimation(isActive: showCelebration)
+                    .font(.system(size: 72))
+                    .foregroundColor(.pomSecondary)
 
                 Text("Great job!")
-                    .font(.pomHeading)
+                    .font(.pomHeading1)
                     .foregroundColor(.white)
 
                 Text("Focus session complete")
                     .font(.pomBody)
                     .foregroundColor(.white.opacity(0.8))
             }
-            .padding(40)
+            .padding(48)
             .background(
                 RoundedRectangle(cornerRadius: 24)
-                    .fill(Color.pomBrown)
+                    .fill(Color.pomTextPrimary)
             )
             .scaleEffect(showCelebration ? 1 : 0.5)
             .opacity(showCelebration ? 1 : 0)
-            .animation(.celebration, value: showCelebration)
+            .animation(.spring(response: 0.4, dampingFraction: 0.6), value: showCelebration)
         }
         .onTapGesture {
             withAnimation {

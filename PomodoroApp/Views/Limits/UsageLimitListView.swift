@@ -73,12 +73,12 @@ struct UsageLimitRow: View {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("\(limit.selectionCount) app\(limit.selectionCount == 1 ? "" : "s")")
                         .font(.pomBody)
-                        .fontWeight(.medium)
-                        .foregroundColor(.pomBrown)
+                        .fontWeight(.semibold)
+                        .foregroundColor(.pomTextPrimary)
 
                     Text("Limit: \(limit.formattedLimit)")
                         .font(.pomCaption)
-                        .foregroundColor(.pomLightBrown)
+                        .foregroundColor(.pomTextSecondary)
                 }
 
                 Spacer()
@@ -88,7 +88,7 @@ struct UsageLimitRow: View {
                     get: { limit.isEnabled },
                     set: { onToggle($0) }
                 ))
-                .tint(.pomPeach)
+                .tint(.pomPrimary)
                 .labelsHidden()
             }
 
@@ -102,7 +102,7 @@ struct UsageLimitRow: View {
         .padding(16)
         .background(
             RoundedRectangle(cornerRadius: 12)
-                .fill(Color.pomCream)
+                .fill(Color.pomCardBackgroundAlt)
         )
         .contentShape(Rectangle())
         .onTapGesture {
@@ -141,7 +141,7 @@ struct LimitProgressBar: View {
             ZStack(alignment: .leading) {
                 // Background
                 RoundedRectangle(cornerRadius: 4)
-                    .fill(Color.pomCream.opacity(0.5))
+                    .fill(Color.pomBorder)
 
                 // Progress
                 RoundedRectangle(cornerRadius: 4)
@@ -155,11 +155,11 @@ struct LimitProgressBar: View {
 
     private var progressColor: Color {
         if progress >= 1.0 {
-            return .red
+            return .pomDestructive
         } else if progress >= 0.75 {
-            return .orange
+            return .pomAccent
         } else {
-            return .pomSage
+            return .pomSecondary
         }
     }
 }
@@ -169,5 +169,6 @@ struct LimitProgressBar: View {
         UsageLimitListView()
     }
     .padding()
+    .background(Color.pomBackground)
     .environmentObject(LimitsSession())
 }
