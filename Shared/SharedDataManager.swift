@@ -5,7 +5,7 @@ import FamilyControls
 final class SharedDataManager {
     static let shared = SharedDataManager()
 
-    private let suiteName = "group.com.pomodoro.app"
+    private let suiteName = "group.GMR2G7RSAM.pomodoro"
     private let selectionKey = "familyActivitySelection"
     private let sessionActiveKey = "isSessionActive"
     private let sessionEndedEarlyKey = "sessionEndedEarly"
