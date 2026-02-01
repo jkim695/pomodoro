@@ -228,22 +228,13 @@ struct TimerView: View {
         Group {
             switch session.state {
             case .idle:
-                VStack(spacing: 8) {
+                VStack(spacing: 12) {
                     RoundedButton("Begin", style: .primary) {
                         session.startFocusSession()
                     }
-                    .disabled(!rewardsManager.canStartSession)
-                    .opacity(rewardsManager.canStartSession ? 1.0 : 0.5)
 
-                    // Show ante requirement
-                    HStack(spacing: 4) {
-                        Image(systemName: "sparkles")
-                            .font(.caption)
-                            .foregroundStyle(stardustGradient)
-                        Text("\(RewardsManager.sessionAnteAmount) Stardust ante required")
-                            .font(.pomCaption)
-                            .foregroundColor(.pomTextTertiary)
-                    }
+                    // Ante toggle for bonus rewards
+                    anteToggle
                 }
 
             case .focusing:
@@ -256,6 +247,41 @@ struct TimerView: View {
                 EmptyView()
             }
         }
+    }
+
+    // MARK: - Ante Toggle
+    private var anteToggle: some View {
+        Button {
+            if rewardsManager.canAffordAnte {
+                session.useAnte.toggle()
+            }
+        } label: {
+            HStack(spacing: 6) {
+                Image(systemName: session.useAnte ? "checkmark.circle.fill" : "circle")
+                    .font(.system(size: 18))
+                    .foregroundColor(session.useAnte ? .pomAccent : .pomTextTertiary)
+
+                Text("Bet \(RewardsManager.sessionAnteAmount)")
+                    .font(.pomCaption)
+                    .foregroundColor(rewardsManager.canAffordAnte ? .pomTextSecondary : .pomTextTertiary)
+
+                Image(systemName: "sparkles")
+                    .font(.caption2)
+                    .foregroundStyle(stardustGradient)
+
+                Text("for 2× rewards")
+                    .font(.pomCaption)
+                    .foregroundColor(rewardsManager.canAffordAnte ? .pomTextSecondary : .pomTextTertiary)
+            }
+            .padding(.horizontal, 12)
+            .padding(.vertical, 8)
+            .background(
+                RoundedRectangle(cornerRadius: 8)
+                    .fill(session.useAnte ? Color.pomAccent.opacity(0.15) : Color.clear)
+            )
+        }
+        .disabled(!rewardsManager.canAffordAnte)
+        .opacity(rewardsManager.canAffordAnte ? 1.0 : 0.5)
     }
 
     // MARK: - Celebration
