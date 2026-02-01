@@ -48,6 +48,25 @@ class PomodoroShieldConfiguration: ShieldConfigurationDataSource {
     // MARK: - Private Methods
 
     private func createShieldConfiguration() -> ShieldConfiguration {
+        let context = SharedDataManager.shared.shieldContext
+
+        switch context {
+        case .pomodoro:
+            return createPomodoroShield()
+
+        case .timeSchedule:
+            return createTimeScheduleShield()
+
+        case .usageLimit:
+            return createUsageLimitShield()
+
+        case nil:
+            // Default to Pomodoro style if no context
+            return createPomodoroShield()
+        }
+    }
+
+    private func createPomodoroShield() -> ShieldConfiguration {
         ShieldConfiguration(
             backgroundBlurStyle: .light,
             backgroundColor: creamColor,
@@ -70,5 +89,71 @@ class PomodoroShieldConfiguration: ShieldConfigurationDataSource {
                 color: redColor
             )
         )
+    }
+
+    private func createTimeScheduleShield() -> ShieldConfiguration {
+        // Get schedule info for end time
+        var subtitleText = "This app is blocked during your scheduled time."
+
+        if let scheduleId = SharedDataManager.shared.activeScheduleId {
+            let schedules = SharedDataManager.shared.loadSchedules()
+            if let schedule = schedules.first(where: { $0.id == scheduleId }) {
+                subtitleText = "Blocked until \(formatTime(hour: schedule.endHour, minute: schedule.endMinute))"
+            }
+        }
+
+        return ShieldConfiguration(
+            backgroundBlurStyle: .light,
+            backgroundColor: creamColor,
+            icon: nil,
+            title: ShieldConfiguration.Label(
+                text: "Scheduled Block",
+                color: darkTextColor
+            ),
+            subtitle: ShieldConfiguration.Label(
+                text: subtitleText,
+                color: darkTextColor
+            ),
+            primaryButtonLabel: ShieldConfiguration.Label(
+                text: "OK",
+                color: .white
+            ),
+            primaryButtonBackgroundColor: sageColor,
+            secondaryButtonLabel: nil  // No bypass option for scheduled blocks
+        )
+    }
+
+    private func createUsageLimitShield() -> ShieldConfiguration {
+        ShieldConfiguration(
+            backgroundBlurStyle: .light,
+            backgroundColor: creamColor,
+            icon: nil,
+            title: ShieldConfiguration.Label(
+                text: "Daily Limit Reached",
+                color: darkTextColor
+            ),
+            subtitle: ShieldConfiguration.Label(
+                text: "You've used all your allotted time for this app today.",
+                color: darkTextColor
+            ),
+            primaryButtonLabel: ShieldConfiguration.Label(
+                text: "OK",
+                color: .white
+            ),
+            primaryButtonBackgroundColor: sageColor,
+            secondaryButtonLabel: nil  // No bypass option for usage limits
+        )
+    }
+
+    private func formatTime(hour: Int, minute: Int) -> String {
+        let isPM = hour >= 12
+        let displayHour = hour == 0 ? 12 : (hour > 12 ? hour - 12 : hour)
+        let suffix = isPM ? "PM" : "AM"
+
+        if minute == 0 {
+            return "\(displayHour) \(suffix)"
+        } else {
+            return String(format: "%d:%02d %@", displayHour, minute, suffix)
+        }
     }
 }

@@ -2,11 +2,17 @@ import Foundation
 import ManagedSettings
 import FamilyControls
 
-/// Manages app shielding using ManagedSettings
+/// Named store identifiers for different shield contexts
+extension ManagedSettingsStore.Name {
+    static let pomodoro = Self("pomodoro")
+    static let limits = Self("limits")
+}
+
+/// Manages app shielding using ManagedSettings for Pomodoro sessions
 final class ShieldManager {
     static let shared = ShieldManager()
 
-    private let store = ManagedSettingsStore()
+    private let store = ManagedSettingsStore(named: .pomodoro)
 
     private init() {}
 

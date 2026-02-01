@@ -15,6 +15,12 @@ extension Animation {
 
     // Celebration bounce
     static let celebration = Animation.spring(response: 0.4, dampingFraction: 0.5)
+
+    // Avatar-specific animations
+    static let avatarBreathing = Animation.easeInOut(duration: 2.0).repeatForever(autoreverses: true)
+    static let avatarBounce = Animation.easeInOut(duration: 0.8).repeatForever(autoreverses: true)
+    static let avatarCelebrate = Animation.spring(response: 0.4, dampingFraction: 0.5)
+    static let avatarShake = Animation.easeInOut(duration: 0.15)
 }
 
 // MARK: - View Modifiers for Animations

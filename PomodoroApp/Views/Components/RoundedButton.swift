@@ -27,18 +27,23 @@ struct RoundedButton: View {
         } label: {
             Text(title)
                 .font(.pomButton)
-                .foregroundColor(style == .primary ? .white : .pomPeach)
+                .foregroundColor(style == .primary ? .white : .pomBrown)
                 .frame(maxWidth: .infinity)
-                .padding(.vertical, 16)
-                .padding(.horizontal, 24)
+                .padding(.vertical, 20)
+                .padding(.horizontal, 32)
                 .background(
                     Group {
                         if style == .primary {
-                            RoundedRectangle(cornerRadius: 16)
+                            RoundedRectangle(cornerRadius: 20)
                                 .fill(Color.pomPeach)
                         } else {
-                            RoundedRectangle(cornerRadius: 16)
-                                .stroke(Color.pomPeach, lineWidth: 2)
+                            // Filled background with chunky border for kawaii aesthetic
+                            RoundedRectangle(cornerRadius: 20)
+                                .fill(Color.pomPeach.opacity(0.15))
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 20)
+                                        .stroke(Color.pomPeach, lineWidth: 3.5)
+                                )
                         }
                     }
                 )
@@ -51,10 +56,10 @@ struct RoundedButton: View {
                 .onEnded { _ in isPressed = false }
         )
         .shadow(
-            color: style == .primary ? Color.pomPeach.opacity(0.3) : .clear,
-            radius: 8,
+            color: Color.pomPeach.opacity(style == .primary ? 0.3 : 0.2),
+            radius: style == .primary ? 8 : 6,
             x: 0,
-            y: 4
+            y: style == .primary ? 4 : 3
         )
     }
 }
@@ -86,18 +91,23 @@ struct IconRoundedButton: View {
                 Text(title)
             }
             .font(.pomButton)
-            .foregroundColor(style == .primary ? .white : .pomPeach)
+            .foregroundColor(style == .primary ? .white : .pomBrown)
             .frame(maxWidth: .infinity)
-            .padding(.vertical, 16)
-            .padding(.horizontal, 24)
+            .padding(.vertical, 20)
+            .padding(.horizontal, 32)
             .background(
                 Group {
                     if style == .primary {
-                        RoundedRectangle(cornerRadius: 16)
+                        RoundedRectangle(cornerRadius: 20)
                             .fill(Color.pomPeach)
                     } else {
-                        RoundedRectangle(cornerRadius: 16)
-                            .stroke(Color.pomPeach, lineWidth: 2)
+                        // Filled background with chunky border for kawaii aesthetic
+                        RoundedRectangle(cornerRadius: 20)
+                            .fill(Color.pomPeach.opacity(0.15))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 20)
+                                    .stroke(Color.pomPeach, lineWidth: 3.5)
+                            )
                     }
                 }
             )
@@ -110,10 +120,10 @@ struct IconRoundedButton: View {
                 .onEnded { _ in isPressed = false }
         )
         .shadow(
-            color: style == .primary ? Color.pomPeach.opacity(0.3) : .clear,
-            radius: 8,
+            color: Color.pomPeach.opacity(style == .primary ? 0.3 : 0.2),
+            radius: style == .primary ? 8 : 6,
             x: 0,
-            y: 4
+            y: style == .primary ? 4 : 3
         )
     }
 }

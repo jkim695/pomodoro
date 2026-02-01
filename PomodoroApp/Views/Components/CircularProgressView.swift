@@ -2,18 +2,27 @@ import SwiftUI
 
 struct CircularProgressView: View {
     let progress: Double
-    var lineWidth: CGFloat = 20
+    var lineWidth: CGFloat = 32  // CHUNKY ring for kawaii aesthetic
     var size: CGFloat = 280
 
     var body: some View {
         ZStack {
-            // Track (background ring)
+            // Track (background ring) - warm beige for kawaii aesthetic with depth
             Circle()
                 .stroke(
-                    Color.pomCream,
+                    Color.pomLightBrown.opacity(0.2),
                     style: StrokeStyle(lineWidth: lineWidth, lineCap: .round)
                 )
-                .shadow(color: Color.pomBrown.opacity(0.1), radius: 8, x: 0, y: 4)
+                // Inner shadow effect for depth
+                .overlay(
+                    Circle()
+                        .stroke(
+                            Color.pomBrown.opacity(0.08),
+                            style: StrokeStyle(lineWidth: lineWidth - 4, lineCap: .round)
+                        )
+                        .blur(radius: 2)
+                        .offset(x: 1, y: 2)
+                )
 
             // Progress ring
             Circle()
@@ -24,6 +33,7 @@ struct CircularProgressView: View {
                 )
                 .rotationEffect(.degrees(-90))
                 .animation(.easeInOut(duration: 0.3), value: progress)
+                .shadow(color: Color.pomSage.opacity(0.4), radius: 10, x: 0, y: 4)
         }
         .frame(width: size, height: size)
     }

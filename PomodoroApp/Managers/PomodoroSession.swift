@@ -10,6 +10,14 @@ enum SessionState: String, Codable {
     case onBreak
 }
 
+/// Represents the avatar's emotional/visual state
+enum AvatarState: String, Codable {
+    case sleeping      // Idle - waiting for session
+    case working       // Focus session active
+    case celebrating   // Just completed focus session
+    case disappointed  // User tried to bypass shield
+}
+
 /// Single source of truth for the pomodoro app state
 /// Coordinates timer, shields, and activity monitoring
 @MainActor
@@ -17,6 +25,7 @@ final class PomodoroSession: ObservableObject {
     @Published var state: SessionState = .idle
     @Published var selection = FamilyActivitySelection()
     @Published var error: String?
+    @Published var avatarState: AvatarState = .sleeping
 
     @AppStorage("focusDuration") var focusDuration: Int = 25  // minutes
     @AppStorage("breakDuration") var breakDuration: Int = 5   // minutes
@@ -29,8 +38,16 @@ final class PomodoroSession: ObservableObject {
     private let notifications = NotificationManager.shared
 
     private var timerCancellable: AnyCancellable?
+    private var timerObjectWillChangeCancellable: AnyCancellable?
 
     init() {
+        // Forward timer's objectWillChange to trigger SwiftUI updates
+        timerObjectWillChangeCancellable = timer.objectWillChange
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.objectWillChange.send()
+            }
+
         // Observe timer completion to auto-transition states
         timerCancellable = timer.$timeRemaining
             .receive(on: DispatchQueue.main)
@@ -83,6 +100,7 @@ final class PomodoroSession: ObservableObject {
         notifications.scheduleFocusComplete(in: focusDuration * 60)
 
         state = .focusing
+        avatarState = .working
     }
 
     /// Ends the focus session and optionally transitions to break
@@ -104,9 +122,20 @@ final class PomodoroSession: ObservableObject {
         notifications.cancelFocusNotification()
 
         if startBreak && breakDuration > 0 {
+            // Celebrate completion then start break
+            avatarState = .celebrating
+            Task {
+                try? await Task.sleep(for: .seconds(3))
+                await MainActor.run {
+                    if self.avatarState == .celebrating {
+                        self.avatarState = .sleeping
+                    }
+                }
+            }
             self.startBreak()
         } else {
             state = .idle
+            avatarState = .sleeping
         }
     }
 
@@ -122,6 +151,7 @@ final class PomodoroSession: ObservableObject {
         timer.reset()
         notifications.cancelBreakNotification()
         state = .idle
+        avatarState = .sleeping
     }
 
     /// Cancels the current session and returns to idle
@@ -137,6 +167,7 @@ final class PomodoroSession: ObservableObject {
         timer.reset()
         notifications.cancelAll()
         state = .idle
+        avatarState = .sleeping
     }
 
     // MARK: - App Lifecycle
@@ -156,6 +187,17 @@ final class PomodoroSession: ObservableObject {
             timer.reset()
             notifications.cancelAll()
             state = .idle
+
+            // Show disappointed avatar with auto-revert
+            avatarState = .disappointed
+            Task {
+                try? await Task.sleep(for: .seconds(3))
+                await MainActor.run {
+                    if self.avatarState == .disappointed {
+                        self.avatarState = .sleeping
+                    }
+                }
+            }
         }
 
         // Sync state with timer
