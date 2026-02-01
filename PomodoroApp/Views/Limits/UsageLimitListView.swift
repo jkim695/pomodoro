@@ -66,6 +66,31 @@ struct UsageLimitRow: View {
         ))
     }
 
+    private var usageProgress: Double {
+        guard let record = usageRecord else { return 0 }
+        return record.progress(limitMinutes: limit.dailyLimitMinutes)
+    }
+
+    private var remainingText: String {
+        if let record = usageRecord {
+            let remaining = record.remainingMinutes(limitMinutes: limit.dailyLimitMinutes)
+            if remaining <= 0 {
+                return "Limit reached"
+            }
+            return "\(AppLimit.formatMinutes(remaining)) left"
+        }
+        return "\(limit.formattedLimitShort) left"
+    }
+
+    private var remainingColor: Color {
+        if usageProgress >= 1.0 {
+            return .pomDestructive
+        } else if usageProgress >= 0.75 {
+            return .pomAccent
+        }
+        return .pomTextSecondary
+    }
+
     var body: some View {
         VStack(spacing: 12) {
             HStack(spacing: 12) {
@@ -92,12 +117,35 @@ struct UsageLimitRow: View {
                 .labelsHidden()
             }
 
-            // Show actual Screen Time usage from DeviceActivityReport
-            if limit.isEnabled {
-                DeviceActivityReport(.totalUsage, filter: filter)
-                    .frame(minHeight: 60)
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
+            // Usage progress - always shown for consistent card height
+            VStack(spacing: 6) {
+                // Progress bar
+                LimitProgressBar(progress: usageProgress)
+
+                // Usage text
+                HStack {
+                    if let record = usageRecord, record.usedMinutes > 0 {
+                        Text("\(record.formattedUsedTime) used")
+                            .font(.system(size: 11))
+                            .foregroundColor(.pomTextTertiary)
+                    } else {
+                        Text("No usage today")
+                            .font(.system(size: 11))
+                            .foregroundColor(.pomTextTertiary)
+                    }
+
+                    Spacer()
+
+                    Text(remainingText)
+                        .font(.system(size: 11, weight: .medium))
+                        .foregroundColor(remainingColor)
+                }
             }
+
+            // DeviceActivityReport shows real-time Screen Time usage
+            DeviceActivityReport(.totalUsage, filter: filter)
+                .frame(height: 100)
+                .clipShape(RoundedRectangle(cornerRadius: 8))
         }
         .padding(16)
         .background(
@@ -139,18 +187,20 @@ struct LimitProgressBar: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack(alignment: .leading) {
-                // Background
-                RoundedRectangle(cornerRadius: 4)
-                    .fill(Color.pomBorder)
+                // Background track
+                RoundedRectangle(cornerRadius: 3)
+                    .fill(Color.pomBorder.opacity(0.5))
 
-                // Progress
-                RoundedRectangle(cornerRadius: 4)
-                    .fill(progressColor)
-                    .frame(width: min(CGFloat(progress) * geometry.size.width, geometry.size.width))
-                    .animation(.spring(response: 0.3), value: progress)
+                // Progress fill
+                if progress > 0 {
+                    RoundedRectangle(cornerRadius: 3)
+                        .fill(progressColor)
+                        .frame(width: max(6, min(CGFloat(progress) * geometry.size.width, geometry.size.width)))
+                        .animation(.spring(response: 0.3), value: progress)
+                }
             }
         }
-        .frame(height: 8)
+        .frame(height: 6)
     }
 
     private var progressColor: Color {

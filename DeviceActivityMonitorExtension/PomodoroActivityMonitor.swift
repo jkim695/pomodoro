@@ -1,3 +1,4 @@
+import Foundation
 import DeviceActivity
 import ManagedSettings
 import FamilyControls
@@ -49,10 +50,9 @@ class PomodoroActivityMonitor: DeviceActivityMonitor {
         case .timeSchedule(let id):
             handleScheduleStart(scheduleId: id)
 
-        case .usageLimit:
-            // Usage limits don't apply shields on interval start
-            // They apply shields when threshold is reached
-            break
+        case .usageLimit(let id):
+            // New day/interval started - reset usage tracking for this limit
+            handleUsageLimitIntervalStart(limitId: id)
         }
     }
 
@@ -85,8 +85,55 @@ class PomodoroActivityMonitor: DeviceActivityMonitor {
         let context = parseActivityName(activity)
 
         if case .usageLimit(let id) = context {
-            handleUsageLimitReached(limitId: id)
+            let eventName = event.rawValue
+
+            if eventName == "limitReached" {
+                // Full limit reached - apply shields and record final usage
+                handleUsageLimitReached(limitId: id)
+                // Record that limit was reached
+                recordUsageProgress(limitId: id, minutes: nil, limitReached: true)
+            } else if eventName.hasPrefix("progress_") {
+                // Progress checkpoint - update usage data in App Group
+                if let minutesString = eventName.split(separator: "_").last,
+                   let minutes = Int(minutesString) {
+                    recordUsageProgress(limitId: id, minutes: minutes, limitReached: false)
+                }
+            }
         }
+    }
+
+    /// Records usage progress to App Group (Monitor extension CAN write to App Group!)
+    private func recordUsageProgress(limitId: UUID, minutes: Int?, limitReached: Bool) {
+        let limits = SharedDataManager.shared.loadLimits()
+        guard let limit = limits.first(where: { $0.id == limitId }) else { return }
+
+        // Determine the used seconds
+        let usedSeconds: Int
+        if limitReached {
+            usedSeconds = limit.dailyLimitMinutes * 60
+        } else if let mins = minutes {
+            usedSeconds = mins * 60
+        } else {
+            return
+        }
+
+        // Save app usage data for the main app to read
+        let usageData = AppUsageData(
+            date: Calendar.current.startOfDay(for: Date()),
+            totalSeconds: usedSeconds,
+            lastUpdated: Date()
+        )
+        SharedDataManager.shared.saveAppUsageData(usageData)
+
+        // Also update the usage record for this specific limit
+        var usageRecords = SharedDataManager.shared.loadUsageRecords()
+        usageRecords.records[limitId] = UsageRecord(
+            limitId: limitId,
+            date: Calendar.current.startOfDay(for: Date()),
+            usedSeconds: usedSeconds,
+            lastUpdated: Date()
+        )
+        SharedDataManager.shared.saveUsageRecords(usageRecords)
     }
 
     // MARK: - Pomodoro Handlers
@@ -136,6 +183,30 @@ class PomodoroActivityMonitor: DeviceActivityMonitor {
     }
 
     // MARK: - Usage Limit Handlers
+
+    /// Called when a new monitoring interval starts (new day)
+    private func handleUsageLimitIntervalStart(limitId: UUID) {
+        // Reset usage data for this limit at the start of a new day
+        var usageRecords = SharedDataManager.shared.loadUsageRecords()
+        usageRecords.records[limitId] = UsageRecord(
+            limitId: limitId,
+            date: Calendar.current.startOfDay(for: Date()),
+            usedSeconds: 0,
+            lastUpdated: Date()
+        )
+        SharedDataManager.shared.saveUsageRecords(usageRecords)
+
+        // Also reset the general app usage data
+        let usageData = AppUsageData(
+            date: Calendar.current.startOfDay(for: Date()),
+            totalSeconds: 0,
+            lastUpdated: Date()
+        )
+        SharedDataManager.shared.saveAppUsageData(usageData)
+
+        // Clear any shields from the previous day
+        removeShields(from: limitsStore)
+    }
 
     private func handleUsageLimitReached(limitId: UUID) {
         let limits = SharedDataManager.shared.loadLimits()

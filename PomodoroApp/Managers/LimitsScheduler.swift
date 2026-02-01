@@ -129,6 +129,17 @@ final class LimitsScheduler {
     /// Event name for when a usage limit is reached
     static let limitReachedEventName = DeviceActivityEvent.Name("limitReached")
 
+    /// Event name prefix for progress checkpoints
+    static let progressEventPrefix = "progress_"
+
+    /// Interval for progress checkpoints in minutes
+    static let progressIntervalMinutes = 1
+
+    /// Creates event name for a progress checkpoint
+    static func progressEventName(minutes: Int) -> DeviceActivityEvent.Name {
+        DeviceActivityEvent.Name("\(progressEventPrefix)\(minutes)")
+    }
+
     /// Starts monitoring usage for an app limit
     /// - Parameter limit: The AppLimit to monitor
     /// - Throws: DeviceActivityCenter errors if monitoring fails to start
@@ -160,14 +171,34 @@ final class LimitsScheduler {
             repeats: true
         )
 
-        // Create threshold event
-        let events: [DeviceActivityEvent.Name: DeviceActivityEvent] = [
-            Self.limitReachedEventName: DeviceActivityEvent(
+        // Create events: limit reached event + progress checkpoint events
+        var events: [DeviceActivityEvent.Name: DeviceActivityEvent] = [:]
+
+        // Add the main limit reached event
+        events[Self.limitReachedEventName] = DeviceActivityEvent(
+            applications: limit.selection.applicationTokens,
+            categories: limit.selection.categoryTokens,
+            threshold: limit.limitAsDateComponents
+        )
+
+        // Add progress checkpoint events up to the limit
+        // This allows us to track usage progress and update the UI
+        let limitMinutes = limit.dailyLimitMinutes
+        var checkpointMinutes = Self.progressIntervalMinutes
+
+        while checkpointMinutes < limitMinutes {
+            let hours = checkpointMinutes / 60
+            let minutes = checkpointMinutes % 60
+            let threshold = DateComponents(hour: hours, minute: minutes)
+
+            events[Self.progressEventName(minutes: checkpointMinutes)] = DeviceActivityEvent(
                 applications: limit.selection.applicationTokens,
                 categories: limit.selection.categoryTokens,
-                threshold: limit.limitAsDateComponents
+                threshold: threshold
             )
-        ]
+
+            checkpointMinutes += Self.progressIntervalMinutes
+        }
 
         // Start monitoring with events
         try center.startMonitoring(

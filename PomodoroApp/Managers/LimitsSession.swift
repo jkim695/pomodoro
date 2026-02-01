@@ -190,11 +190,44 @@ final class LimitsSession: ObservableObject {
         objectWillChange.send()
     }
 
+    /// Syncs usage data from extension's persisted app usage data
+    private func syncUsageFromExtension() {
+        guard let appUsageData = sharedData.loadAppUsageData() else {
+            return
+        }
+
+        // Ignore marker value (-1 means extension started but didn't finish)
+        if appUsageData.totalSeconds == -1 {
+            return
+        }
+
+        // Verify data is from today
+        let today = Calendar.current.startOfDay(for: Date())
+        guard Calendar.current.isDate(appUsageData.date, inSameDayAs: today) else {
+            return
+        }
+
+        // Update each limit's usage record with the total usage
+        for limit in limits {
+            usageRecords.records[limit.id] = UsageRecord(
+                limitId: limit.id,
+                date: today,
+                usedSeconds: appUsageData.totalSeconds,
+                lastUpdated: Date()
+            )
+        }
+
+        sharedData.saveUsageRecords(usageRecords)
+    }
+
     // MARK: - App Lifecycle
 
     /// Called when app becomes active to sync state
     func handleAppBecameActive() {
-        // Refresh usage records (extensions may have updated them)
+        // First sync from extension data
+        syncUsageFromExtension()
+
+        // Refresh usage records (may reset if needed for new day)
         refreshUsageRecords()
 
         // Re-sync schedules in case system state changed
