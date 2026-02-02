@@ -1,5 +1,9 @@
 import Foundation
 import FamilyControls
+import os.log
+
+/// Shared logger for data operations in Shared module
+private let sharedDataLogger = Logger(subsystem: "com.orchard.app", category: "data")
 
 /// Context for determining which feature triggered a shield
 enum ShieldContext: String, Codable {
@@ -49,7 +53,7 @@ final class SharedDataManager {
             let data = try PropertyListEncoder().encode(selection)
             defaults.set(data, forKey: selectionKey)
         } catch {
-            print("Failed to save selection: \(error)")
+            sharedDataLogger.error("Failed to save selection: \(error)")
         }
     }
 
@@ -64,7 +68,7 @@ final class SharedDataManager {
         do {
             return try PropertyListDecoder().decode(FamilyActivitySelection.self, from: data)
         } catch {
-            print("Failed to load selection: \(error)")
+            sharedDataLogger.error("Failed to load selection: \(error)")
             return nil
         }
     }
@@ -123,7 +127,7 @@ final class SharedDataManager {
             let data = try PropertyListEncoder().encode(schedules)
             defaults.set(data, forKey: schedulesKey)
         } catch {
-            print("Failed to save schedules: \(error)")
+            sharedDataLogger.error("Failed to save schedules: \(error)")
         }
     }
 
@@ -137,7 +141,7 @@ final class SharedDataManager {
         do {
             return try PropertyListDecoder().decode([TimeSchedule].self, from: data)
         } catch {
-            print("Failed to load schedules: \(error)")
+            sharedDataLogger.error("Failed to load schedules: \(error)")
             return []
         }
     }
@@ -152,7 +156,7 @@ final class SharedDataManager {
             let data = try PropertyListEncoder().encode(limits)
             defaults.set(data, forKey: limitsKey)
         } catch {
-            print("Failed to save limits: \(error)")
+            sharedDataLogger.error("Failed to save limits: \(error)")
         }
     }
 
@@ -166,7 +170,7 @@ final class SharedDataManager {
         do {
             return try PropertyListDecoder().decode([AppLimit].self, from: data)
         } catch {
-            print("Failed to load limits: \(error)")
+            sharedDataLogger.error("Failed to load limits: \(error)")
             return []
         }
     }
@@ -181,7 +185,7 @@ final class SharedDataManager {
             let data = try PropertyListEncoder().encode(store)
             defaults.set(data, forKey: usageRecordsKey)
         } catch {
-            print("Failed to save usage records: \(error)")
+            sharedDataLogger.error("Failed to save usage records: \(error)")
         }
     }
 
@@ -195,7 +199,7 @@ final class SharedDataManager {
         do {
             return try PropertyListDecoder().decode(UsageRecordStore.self, from: data)
         } catch {
-            print("Failed to load usage records: \(error)")
+            sharedDataLogger.error("Failed to load usage records: \(error)")
             return UsageRecordStore()
         }
     }
@@ -222,7 +226,7 @@ final class SharedDataManager {
                 let data = try PropertyListEncoder().encode(Array(newValue))
                 defaults.set(data, forKey: activeScheduleIdsKey)
             } catch {
-                print("Failed to save active schedule IDs: \(error)")
+                sharedDataLogger.error("Failed to save active schedule IDs: \(error)")
             }
         }
     }
@@ -247,7 +251,7 @@ final class SharedDataManager {
                 let data = try PropertyListEncoder().encode(Array(newValue))
                 defaults.set(data, forKey: activeLimitIdsKey)
             } catch {
-                print("Failed to save active limit IDs: \(error)")
+                sharedDataLogger.error("Failed to save active limit IDs: \(error)")
             }
         }
     }

@@ -227,7 +227,7 @@ struct CoolDownOverlayView: View {
 #Preview {
     CoolDownOverlayView(
         anteAmount: 50,
-        onResume: { print("Resume") },
-        onConfirmQuit: { print("Quit") }
+        onResume: { },
+        onConfirmQuit: { }
     )
 }

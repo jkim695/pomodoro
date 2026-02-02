@@ -111,6 +111,6 @@ struct InsufficientFundsOverlayView: View {
     InsufficientFundsOverlayView(
         required: 50,
         current: 23,
-        onDismiss: { print("Dismissed") }
+        onDismiss: { }
     )
 }
