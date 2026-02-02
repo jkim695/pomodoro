@@ -5,6 +5,7 @@ struct TimerView: View {
     @EnvironmentObject var rewardsManager: RewardsManager
     @State private var showSettings = false
     @State private var showCelebration = false
+    @State private var showOrbSelector = false
     @State private var previousState: SessionState = .idle
     @State private var earnedStardust: Int = 0
     @State private var earnedMilestones: [Milestone] = []
@@ -15,25 +16,21 @@ struct TimerView: View {
     /// The duration of the session that was started (captured at start to track on completion)
     @State private var sessionDurationAtStart: Int = 0
 
-    /// Opacity for ante toggle fade animation
-    @State private var anteToggleOpacity: Double = 1.0
-
     var body: some View {
         ZStack {
             // Background
             Color.pomBackground
                 .ignoresSafeArea()
 
+            // Main timer display centered in the screen
+            timerDisplay
+                .offset(y: -40)
+
             VStack(spacing: 0) {
                 // Top navigation bar
                 topNavBar
                     .padding(.horizontal, 24)
                     .padding(.top, 8)
-
-                Spacer()
-
-                // Main timer display
-                timerDisplay
 
                 Spacer()
 
@@ -81,6 +78,11 @@ struct TimerView: View {
         .sheet(isPresented: $showSettings) {
             SettingsView()
         }
+        .sheet(isPresented: $showOrbSelector) {
+            QuickOrbSelectorView()
+                .presentationDetents([.large])
+                .presentationDragIndicator(.visible)
+        }
         .onChange(of: session.state) { newState in
             // Capture session duration when starting
             if previousState == .idle && newState == .focusing {
@@ -99,13 +101,6 @@ struct TimerView: View {
                 triggerCelebration()
             }
 
-            // Reset ante toggle opacity when returning to idle
-            if newState == .idle {
-                withAnimation(.easeIn(duration: 0.3).delay(0.3)) {
-                    anteToggleOpacity = 1.0
-                }
-            }
-
             previousState = newState
         }
         .onAppear {
@@ -120,6 +115,11 @@ struct TimerView: View {
     // MARK: - Top Navigation Bar
     private var topNavBar: some View {
         HStack {
+            // Stardust balance (left side)
+            if session.state == .idle {
+                StardustBadge(amount: rewardsManager.balance.current, size: .small)
+            }
+
             Spacer()
 
             if session.state == .idle {
@@ -167,6 +167,13 @@ struct TimerView: View {
                 style: rewardsManager.equippedStyle,
                 starLevel: equippedStarLevel
             )
+            .contentShape(Circle())
+            .onTapGesture {
+                if session.state == .idle {
+                    UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                    showOrbSelector = true
+                }
+            }
         }
     }
 
@@ -191,14 +198,7 @@ struct TimerView: View {
                 timeRemaining: displayTimeRemaining,
                 isRunning: session.timer.isRunning
             )
-
-            // State label
-            Text(stateLabel)
-                .font(.pomHeading2)
-                .fontWeight(.semibold)
-                .foregroundColor(.pomTextSecondary)
-                .textCase(.uppercase)
-                .tracking(2)
+            .padding(.top, 16)
 
             // Focus time today or app blocked info
             if session.state == .idle {
@@ -211,7 +211,7 @@ struct TimerView: View {
                     .foregroundColor(.pomTextTertiary)
             }
 
-            // Focus message during session
+            // Motivational message during session
             if session.state == .focusing {
                 Text("Put down your phone and focus on your work.")
                     .font(.pomCaption)
@@ -223,31 +223,12 @@ struct TimerView: View {
         }
     }
 
-    private var stateLabel: String {
-        switch session.state {
-        case .idle:
-            return "Focus"
-        case .focusing:
-            return "Focusing"
-        case .coolingDown:
-            return "Paused"
-        }
-    }
-
     private var displayTimeRemaining: Int {
         if session.state == .idle {
             return session.focusDuration * 60
         }
         // For focusing and cooling down, show the timer
         return session.timer.timeRemaining
-    }
-
-    private var stardustGradient: LinearGradient {
-        LinearGradient(
-            colors: [Color(hex: "FFD700"), Color(hex: "FFA500")],
-            startPoint: .topLeading,
-            endPoint: .bottomTrailing
-        )
     }
 
     private var hasBlockedApps: Bool {
@@ -270,21 +251,8 @@ struct TimerView: View {
         Group {
             switch session.state {
             case .idle:
-                VStack(spacing: 12) {
-                    RoundedButton("Begin", style: .primary, customPrimaryColor: rewardsManager.equippedStyle.primaryColor) {
-                        // Animate toggle fade before starting session
-                        withAnimation(.easeOut(duration: 0.2)) {
-                            anteToggleOpacity = 0
-                        }
-                        // Small delay to allow animation, then start session
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
-                            session.startFocusSession()
-                        }
-                    }
-
-                    // Ante toggle for bonus rewards
-                    anteToggle
-                        .opacity(anteToggleOpacity)
+                RoundedButton("Begin", style: .primary, customPrimaryColor: rewardsManager.equippedStyle.primaryColor) {
+                    session.startFocusSession()
                 }
 
             case .focusing:
@@ -309,41 +277,6 @@ struct TimerView: View {
                 EmptyView()
             }
         }
-    }
-
-    // MARK: - Ante Toggle
-    private var anteToggle: some View {
-        Button {
-            if rewardsManager.canAffordAnte {
-                session.useAnte.toggle()
-            }
-        } label: {
-            HStack(spacing: 6) {
-                Image(systemName: session.useAnte ? "checkmark.circle.fill" : "circle")
-                    .font(.system(size: 18))
-                    .foregroundColor(session.useAnte ? .pomAccent : .pomTextTertiary)
-
-                Text("Bet \(RewardsManager.sessionAnteAmount)")
-                    .font(.pomCaption)
-                    .foregroundColor(rewardsManager.canAffordAnte ? .pomTextSecondary : .pomTextTertiary)
-
-                Image(systemName: "sparkles")
-                    .font(.caption2)
-                    .foregroundStyle(stardustGradient)
-
-                Text("for 2× rewards")
-                    .font(.pomCaption)
-                    .foregroundColor(rewardsManager.canAffordAnte ? .pomTextSecondary : .pomTextTertiary)
-            }
-            .padding(.horizontal, 12)
-            .padding(.vertical, 8)
-            .background(
-                RoundedRectangle(cornerRadius: 8)
-                    .fill(session.useAnte ? Color.pomAccent.opacity(0.15) : Color.clear)
-            )
-        }
-        .disabled(!rewardsManager.canAffordAnte)
-        .opacity(rewardsManager.canAffordAnte ? 1.0 : 0.5)
     }
 
     // MARK: - Celebration

@@ -77,6 +77,7 @@
 		H1000005001 /* OrbCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000005000 /* OrbCatalog.swift */; };
 		H1000006001 /* RewardsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000006000 /* RewardsManager.swift */; };
 		H1000007001 /* StardustBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000007000 /* StardustBadge.swift */; };
+		Q1000001001 /* QuickOrbSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = Q1000001000 /* QuickOrbSelectorView.swift */; };
 		H1000008001 /* CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000008000 /* CollectionView.swift */; };
 		H1000010001 /* OrbPreviewCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000010000 /* OrbPreviewCard.swift */; };
 		H1000011001 /* OrbDetailSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000011000 /* OrbDetailSheet.swift */; };
@@ -168,6 +169,7 @@
 		H1000005000 /* OrbCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrbCatalog.swift; sourceTree = "<group>"; };
 		H1000006000 /* RewardsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardsManager.swift; sourceTree = "<group>"; };
 		H1000007000 /* StardustBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StardustBadge.swift; sourceTree = "<group>"; };
+		Q1000001000 /* QuickOrbSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickOrbSelectorView.swift; sourceTree = "<group>"; };
 		H1000008000 /* CollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionView.swift; sourceTree = "<group>"; };
 		H1000010000 /* OrbPreviewCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrbPreviewCard.swift; sourceTree = "<group>"; };
 		H1000011000 /* OrbDetailSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrbDetailSheet.swift; sourceTree = "<group>"; };
@@ -412,6 +414,7 @@
 				N1000002000 /* GlowingProgressBar.swift */,
 				N1000003000 /* CosmicCard.swift */,
 				H1000007000 /* StardustBadge.swift */,
+				Q1000001000 /* QuickOrbSelectorView.swift */,
 				J1000001000 /* CoolDownOverlayView.swift */,
 				J1000002000 /* InsufficientFundsOverlayView.swift */,
 			);
@@ -766,6 +769,7 @@
 				H1000005001 /* OrbCatalog.swift in Sources */,
 				H1000006001 /* RewardsManager.swift in Sources */,
 				H1000007001 /* StardustBadge.swift in Sources */,
+				Q1000001001 /* QuickOrbSelectorView.swift in Sources */,
 				H1000008001 /* CollectionView.swift in Sources */,
 				H1000010001 /* OrbPreviewCard.swift in Sources */,
 				H1000011001 /* OrbDetailSheet.swift in Sources */,
