@@ -3,6 +3,7 @@ import SwiftUI
 struct TimerView: View {
     @EnvironmentObject var session: PomodoroSession
     @EnvironmentObject var rewardsManager: RewardsManager
+    @Environment(\.horizontalSizeClass) private var sizeClass
     @State private var showSettings = false
     @State private var showCelebration = false
     @State private var showOrbSelector = false
@@ -15,6 +16,11 @@ struct TimerView: View {
 
     /// The duration of the session that was started (captured at start to track on completion)
     @State private var sessionDurationAtStart: Int = 0
+
+    /// Adaptive sizes for iPad
+    private var orbSize: CGFloat { sizeClass == .regular ? 200 : 144 }
+    private var ringSize: CGFloat { sizeClass == .regular ? 340 : 252 }
+    private var ringWidth: CGFloat { sizeClass == .regular ? 16 : 12 }
 
     var body: some View {
         ZStack {
@@ -145,8 +151,8 @@ struct TimerView: View {
             if session.state == .idle {
                 CircularDurationSlider(
                     duration: $session.focusDuration,
-                    size: 252,
-                    trackWidth: 12,
+                    size: ringSize,
+                    trackWidth: ringWidth,
                     isEnabled: true,
                     accentColor: rewardsManager.equippedStyle.primaryColor
                 )
@@ -155,8 +161,8 @@ struct TimerView: View {
                 // Animate from slider's fill position for smooth transition
                 CircularProgressView(
                     progress: session.timer.progress,
-                    lineWidth: 12,
-                    size: 252,
+                    lineWidth: ringWidth,
+                    size: ringSize,
                     animateFromProgress: sliderFillProgress,
                     accentColor: rewardsManager.equippedStyle.primaryColor
                 )
@@ -165,7 +171,7 @@ struct TimerView: View {
             // Gradient orb in center (uses equipped style with star level)
             GradientOrbView(
                 state: orbState,
-                size: 144,
+                size: orbSize,
                 style: rewardsManager.equippedStyle,
                 starLevel: equippedStarLevel
             )

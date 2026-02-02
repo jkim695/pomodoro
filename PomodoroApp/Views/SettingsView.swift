@@ -3,8 +3,24 @@ import SwiftUI
 struct SettingsView: View {
     @EnvironmentObject var session: PomodoroSession
     @EnvironmentObject var rewardsManager: RewardsManager
+    @EnvironmentObject var limitsSession: LimitsSession
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.horizontalSizeClass) private var sizeClass
     @State private var showAppSelection = false
+    @State private var showDeleteConfirmation = false
+    @State private var showFinalDeleteConfirmation = false
+    @State private var deleteConfirmationText = ""
+
+    // AppStorage keys that need to be reset
+    @AppStorage("completedSessions") private var completedSessions: Int = 0
+    @AppStorage("focusedMinutesToday") private var focusedMinutesToday: Int = 0
+    @AppStorage("lastFocusDate") private var lastFocusDate: String = ""
+    @AppStorage("focusDuration") private var focusDuration: Int = 25
+
+    /// Adaptive horizontal padding
+    private var horizontalPadding: CGFloat {
+        sizeClass == .regular ? 40 : 24
+    }
 
     var body: some View {
         NavigationStack {
@@ -19,13 +35,18 @@ struct SettingsView: View {
                             blockedAppsSection
                         }
 
+                        // Data Management
+                        settingsSection(title: "Data", icon: "cylinder.split.1x2.fill") {
+                            dataManagementSection
+                        }
+
                         // About
                         settingsSection(title: "About", icon: "info.circle.fill") {
                             aboutSection
                         }
                     }
-                    .padding(.horizontal, 24)
-                    .padding(.vertical, 16)
+                    .padding(.horizontal, horizontalPadding)
+                    .padding(.vertical, sizeClass == .regular ? 24 : 16)
                 }
             }
             .navigationTitle("Settings")
@@ -44,6 +65,28 @@ struct SettingsView: View {
         }
         .sheet(isPresented: $showAppSelection) {
             AppSelectionView()
+        }
+        .alert("Delete All Data?", isPresented: $showDeleteConfirmation) {
+            Button("Cancel", role: .cancel) { }
+            Button("Continue", role: .destructive) {
+                showFinalDeleteConfirmation = true
+            }
+        } message: {
+            Text("This will permanently delete all your progress, Stardust balance, orb collection, schedules, and limits. This action cannot be undone.")
+        }
+        .alert("Confirm Deletion", isPresented: $showFinalDeleteConfirmation) {
+            TextField("Type DELETE to confirm", text: $deleteConfirmationText)
+            Button("Cancel", role: .cancel) {
+                deleteConfirmationText = ""
+            }
+            Button("Delete Everything", role: .destructive) {
+                if deleteConfirmationText.uppercased() == "DELETE" {
+                    performDataDeletion()
+                }
+                deleteConfirmationText = ""
+            }
+        } message: {
+            Text("Type DELETE to confirm you want to erase all data.")
         }
     }
 
@@ -100,6 +143,48 @@ struct SettingsView: View {
         }
     }
 
+    // MARK: - Data Management Section
+    private var dataManagementSection: some View {
+        VStack(spacing: 16) {
+            HStack {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Reset App Data")
+                        .font(.pomBody)
+                        .fontWeight(.medium)
+                        .foregroundColor(.pomTextPrimary)
+
+                    Text("Delete all progress, Stardust, orbs, and limits")
+                        .font(.pomCaption)
+                        .foregroundColor(.pomTextSecondary)
+                }
+
+                Spacer()
+            }
+
+            RoundedButton("Delete All Data", style: .destructive) {
+                showDeleteConfirmation = true
+            }
+        }
+    }
+
+    // MARK: - Data Deletion
+    private func performDataDeletion() {
+        // Reset rewards (balance, progress, collection, gacha)
+        rewardsManager.deleteAllData()
+
+        // Reset limits (schedules, limits, usage records)
+        limitsSession.deleteAllData()
+
+        // Reset @AppStorage values
+        completedSessions = 0
+        focusedMinutesToday = 0
+        lastFocusDate = ""
+        focusDuration = 25
+
+        // Dismiss settings after deletion
+        dismiss()
+    }
+
     // MARK: - About Section
     private var aboutSection: some View {
         VStack(spacing: 12) {
@@ -137,4 +222,5 @@ struct SettingsView: View {
     SettingsView()
         .environmentObject(PomodoroSession())
         .environmentObject(RewardsManager.shared)
+        .environmentObject(LimitsSession())
 }

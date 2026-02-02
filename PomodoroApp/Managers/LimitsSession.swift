@@ -235,6 +235,24 @@ final class LimitsSession: ObservableObject {
         limits = sharedData.loadLimits()
     }
 
+    // MARK: - Data Reset
+
+    /// Deletes all limits data (schedules, limits, usage records)
+    /// Stops all monitoring before clearing data
+    func deleteAllData() {
+        // Stop all monitoring
+        scheduler.stopAllMonitoring()
+
+        // Clear in-memory state
+        schedules = []
+        limits = []
+        usageRecords = UsageRecordStore()
+        error = nil
+
+        // Clear persisted data
+        sharedData.deleteAllData()
+    }
+
     // MARK: - Private Methods
 
     private func saveSchedules() {

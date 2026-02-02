@@ -3,6 +3,12 @@ import SwiftUI
 /// Main rewards tab container with navigation to Collection, Gacha, and Progress
 struct RewardsTabView: View {
     @EnvironmentObject var rewardsManager: RewardsManager
+    @Environment(\.horizontalSizeClass) private var sizeClass
+
+    /// Adaptive horizontal padding
+    private var horizontalPadding: CGFloat {
+        sizeClass == .regular ? 40 : 16
+    }
 
     var body: some View {
         NavigationStack {
@@ -24,7 +30,7 @@ struct RewardsTabView: View {
 
                                 HStack(spacing: 8) {
                                     Image(systemName: "sparkles")
-                                        .font(.title)
+                                        .font(sizeClass == .regular ? .largeTitle : .title)
                                         .foregroundStyle(
                                             LinearGradient(
                                                 colors: [Color(hex: "FFD700"), Color(hex: "FFA500")],
@@ -34,7 +40,7 @@ struct RewardsTabView: View {
                                         )
 
                                     Text("\(rewardsManager.balance.current)")
-                                        .font(.system(size: 36, weight: .bold, design: .rounded))
+                                        .font(.system(size: sizeClass == .regular ? 44 : 36, weight: .bold, design: .rounded))
                                         .foregroundColor(.pomTextPrimary)
                                         .contentTransition(.numericText())
                                 }
@@ -49,7 +55,8 @@ struct RewardsTabView: View {
                                         Image(systemName: "flame.fill")
                                             .foregroundColor(.pomAccent)
                                         Text("\(rewardsManager.progress.currentStreak)")
-                                            .font(.title2.weight(.bold))
+                                            .font(sizeClass == .regular ? .title : .title2)
+                                            .fontWeight(.bold)
                                             .foregroundColor(.pomTextPrimary)
                                     }
                                     Text("day streak")
@@ -58,7 +65,7 @@ struct RewardsTabView: View {
                                 }
                             }
                         }
-                        .padding()
+                        .padding(sizeClass == .regular ? 24 : 16)
                         .background(
                             RoundedRectangle(cornerRadius: 20)
                                 .fill(Color.pomCardBackground)
@@ -67,7 +74,7 @@ struct RewardsTabView: View {
                         .accessibilityElement(children: .ignore)
                         .accessibilityLabel("Your Stardust: \(rewardsManager.balance.current)\(rewardsManager.progress.currentStreak > 0 ? ", \(rewardsManager.progress.currentStreak) day streak" : "")")
                     }
-                    .padding(.horizontal)
+                    .padding(.horizontal, horizontalPadding)
 
                     // Currently equipped orb preview
                     VStack(spacing: 12) {
@@ -75,22 +82,22 @@ struct RewardsTabView: View {
                             .font(.headline)
                             .foregroundColor(.pomTextPrimary)
                             .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(.horizontal)
+                            .padding(.horizontal, horizontalPadding)
 
                         NavigationLink {
                             CollectionView()
                         } label: {
-                            HStack(spacing: 16) {
+                            HStack(spacing: sizeClass == .regular ? 20 : 16) {
                                 GradientOrbView(
                                     state: .idle,
-                                    size: 70,
+                                    size: sizeClass == .regular ? 90 : 70,
                                     style: rewardsManager.equippedStyle,
                                     starLevel: rewardsManager.starLevel(for: rewardsManager.equippedStyle.id)
                                 )
 
                                 VStack(alignment: .leading, spacing: 4) {
                                     Text(rewardsManager.equippedStyle.name)
-                                        .font(.headline)
+                                        .font(sizeClass == .regular ? .title3 : .headline)
                                         .foregroundColor(.pomTextPrimary)
 
                                     let starLevel = rewardsManager.starLevel(for: rewardsManager.equippedStyle.id)
@@ -108,12 +115,12 @@ struct RewardsTabView: View {
                                 Image(systemName: "chevron.right")
                                     .foregroundColor(.pomTextTertiary)
                             }
-                            .padding()
+                            .padding(sizeClass == .regular ? 20 : 16)
                             .background(
                                 RoundedRectangle(cornerRadius: 16)
                                     .fill(Color.pomCardBackground)
                             )
-                            .padding(.horizontal)
+                            .padding(.horizontal, horizontalPadding)
                         }
                     }
 
@@ -123,12 +130,12 @@ struct RewardsTabView: View {
                             .font(.headline)
                             .foregroundColor(.pomTextPrimary)
                             .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(.horizontal)
+                            .padding(.horizontal, horizontalPadding)
 
                         LazyVGrid(columns: [
-                        GridItem(.flexible(), spacing: 12),
-                        GridItem(.flexible(), spacing: 12)
-                    ], spacing: 12) {
+                            GridItem(.flexible(), spacing: sizeClass == .regular ? 16 : 12),
+                            GridItem(.flexible(), spacing: sizeClass == .regular ? 16 : 12)
+                        ], spacing: sizeClass == .regular ? 16 : 12) {
                             NavigationLink {
                                 CollectionView()
                             } label: {
@@ -136,7 +143,8 @@ struct RewardsTabView: View {
                                     icon: "square.grid.2x2.fill",
                                     title: "Collection",
                                     subtitle: "\(rewardsManager.ownedStyles.count) orbs",
-                                    color: .pomPrimary
+                                    color: .pomPrimary,
+                                    isRegular: sizeClass == .regular
                                 )
                             }
 
@@ -147,7 +155,8 @@ struct RewardsTabView: View {
                                     icon: "gift.fill",
                                     title: "Gacha",
                                     subtitle: "Pull orbs",
-                                    color: .purple
+                                    color: .purple,
+                                    isRegular: sizeClass == .regular
                                 )
                             }
 
@@ -158,7 +167,8 @@ struct RewardsTabView: View {
                                     icon: "chart.bar.fill",
                                     title: "Progress",
                                     subtitle: "Stats",
-                                    color: .pomAccent
+                                    color: .pomAccent,
+                                    isRegular: sizeClass == .regular
                                 )
                             }
 
@@ -169,11 +179,12 @@ struct RewardsTabView: View {
                                     icon: "sparkles",
                                     title: "Nebula",
                                     subtitle: "\(rewardsManager.orbCollectionHistory.totalCollected) orbs",
-                                    color: .indigo
+                                    color: .indigo,
+                                    isRegular: sizeClass == .regular
                                 )
                             }
                         }
-                        .padding(.horizontal)
+                        .padding(.horizontal, horizontalPadding)
                     }
 
                     // Recent milestones or next milestone
@@ -181,26 +192,27 @@ struct RewardsTabView: View {
                         Text("Next Milestone")
                             .font(.headline)
                             .foregroundColor(.pomTextPrimary)
-                            .padding(.horizontal)
+                            .padding(.horizontal, horizontalPadding)
 
                         if let nextMilestone = nextUnachievedMilestone {
                             NavigationLink {
                                 ProgressSummaryView()
                             } label: {
-                                HStack(spacing: 12) {
+                                HStack(spacing: sizeClass == .regular ? 16 : 12) {
                                     ZStack {
                                         Circle()
                                             .fill(Color.pomCardBackgroundAlt)
-                                            .frame(width: 50, height: 50)
+                                            .frame(width: sizeClass == .regular ? 60 : 50, height: sizeClass == .regular ? 60 : 50)
 
                                         Image(systemName: nextMilestone.iconName)
-                                            .font(.title3)
+                                            .font(sizeClass == .regular ? .title2 : .title3)
                                             .foregroundColor(.pomTextSecondary)
                                     }
 
                                     VStack(alignment: .leading, spacing: 4) {
                                         Text(nextMilestone.name)
-                                            .font(.subheadline.weight(.medium))
+                                            .font(sizeClass == .regular ? .headline : .subheadline)
+                                            .fontWeight(.medium)
                                             .foregroundColor(.pomTextPrimary)
 
                                         Text(nextMilestone.requirement.progressDescription)
@@ -214,16 +226,17 @@ struct RewardsTabView: View {
                                         Image(systemName: "sparkles")
                                             .font(.caption)
                                         Text("+\(nextMilestone.reward)")
-                                            .font(.subheadline.weight(.medium))
+                                            .font(sizeClass == .regular ? .headline : .subheadline)
+                                            .fontWeight(.medium)
                                     }
                                     .foregroundColor(.pomAccent)
                                 }
-                                .padding()
+                                .padding(sizeClass == .regular ? 20 : 16)
                                 .background(
                                     RoundedRectangle(cornerRadius: 16)
                                         .fill(Color.pomCardBackground)
                                 )
-                                .padding(.horizontal)
+                                .padding(.horizontal, horizontalPadding)
                             }
                         } else {
                             HStack {
@@ -234,12 +247,12 @@ struct RewardsTabView: View {
                                     .foregroundColor(.pomTextSecondary)
                             }
                             .frame(maxWidth: .infinity)
-                            .padding()
+                            .padding(sizeClass == .regular ? 20 : 16)
                             .background(
                                 RoundedRectangle(cornerRadius: 16)
                                     .fill(Color.pomCardBackground)
                             )
-                            .padding(.horizontal)
+                            .padding(.horizontal, horizontalPadding)
                         }
                     }
 
@@ -263,23 +276,24 @@ private struct QuickActionCard: View {
     let title: String
     let subtitle: String
     let color: Color
+    var isRegular: Bool = false
 
     var body: some View {
-        VStack(spacing: 8) {
+        VStack(spacing: isRegular ? 12 : 8) {
             Image(systemName: icon)
-                .font(.title2)
+                .font(isRegular ? .title : .title2)
                 .foregroundColor(color)
 
             Text(title)
-                .font(.caption.weight(.semibold))
+                .font(isRegular ? .subheadline.weight(.semibold) : .caption.weight(.semibold))
                 .foregroundColor(.pomTextPrimary)
 
             Text(subtitle)
-                .font(.caption2)
+                .font(isRegular ? .caption : .caption2)
                 .foregroundColor(.pomTextTertiary)
         }
         .frame(maxWidth: .infinity)
-        .padding(.vertical, 16)
+        .padding(.vertical, isRegular ? 24 : 16)
         .background(
             RoundedRectangle(cornerRadius: 16)
                 .fill(Color.pomCardBackground)

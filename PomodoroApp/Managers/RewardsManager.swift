@@ -561,4 +561,26 @@ final class RewardsManager: ObservableObject {
             save()
         }
     }
+
+    // MARK: - Data Reset
+
+    /// Resets all rewards data to initial state
+    /// This clears balance, progress, collection, and gacha state
+    func deleteAllData() {
+        // Reset to fresh state
+        balance = StardustBalance()
+        progress = UserProgress()
+        collection = UserCollection()
+        pendingMilestones = []
+
+        // Persist the reset state
+        save()
+
+        AppLogger.rewards.info("All rewards data deleted")
+    }
+
+    /// All UserDefaults keys used by RewardsManager
+    static var allUserDefaultsKeys: [String] {
+        [balanceKey, progressKey, collectionKey]
+    }
 }
