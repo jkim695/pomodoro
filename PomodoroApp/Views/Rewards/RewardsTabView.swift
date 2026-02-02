@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// Main rewards tab container with navigation to Collection, Shop, and Progress
+/// Main rewards tab container with navigation to Collection, Gacha, and Progress
 struct RewardsTabView: View {
     @EnvironmentObject var rewardsManager: RewardsManager
 
@@ -145,21 +145,10 @@ struct RewardsTabView: View {
                             }
 
                             NavigationLink {
-                                ShopView()
-                            } label: {
-                                QuickActionCard(
-                                    icon: "bag.fill",
-                                    title: "Shop",
-                                    subtitle: "\(rewardsManager.lockedStyles.count) available",
-                                    color: .pomSecondary
-                                )
-                            }
-
-                            NavigationLink {
                                 GachaView()
                             } label: {
                                 QuickActionCard(
-                                    icon: "dice.fill",
+                                    icon: "gift.fill",
                                     title: "Gacha",
                                     subtitle: "Pull orbs",
                                     color: .purple

@@ -9,7 +9,7 @@ struct OrbStyle: Identifiable, Codable, Equatable {
     /// Display name (e.g., "Focus Orb", "Cosmic Dust")
     let name: String
 
-    /// Description for shop display
+    /// Description for display
     let description: String
 
     /// Category grouping
@@ -48,7 +48,7 @@ struct OrbStyle: Identifiable, Codable, Equatable {
     }
 }
 
-/// Orb category for shop organization
+/// Orb category for organization
 enum OrbCategory: String, Codable, CaseIterable {
     case starter = "Starter"
     case nebula = "Nebulae"

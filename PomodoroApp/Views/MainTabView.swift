@@ -23,7 +23,8 @@ struct MainTabView: View {
                     Label("Rewards", systemImage: "sparkles")
                 }
         }
-        .tint(Color.pomPrimary)
+        .tint(rewardsManager.equippedStyle.primaryColor)
+        .toolbar(session.state == .idle ? .visible : .hidden, for: .tabBar)
     }
 }
 

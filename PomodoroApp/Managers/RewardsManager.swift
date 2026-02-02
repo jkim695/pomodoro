@@ -447,6 +447,15 @@ final class RewardsManager: ObservableObject {
         collection = Self.loadCollection()
     }
 
+    #if DEBUG
+    /// Add test stardust for development/testing purposes
+    func addTestStardust(_ amount: Int) {
+        balance.current += amount
+        balance.total += amount
+        save()
+    }
+    #endif
+
     // MARK: - Static Persistence Helpers
 
     private static func saveBalance(_ balance: StardustBalance) {

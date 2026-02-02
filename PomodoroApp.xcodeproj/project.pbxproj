@@ -35,6 +35,7 @@
 		B1000012001 /* Animations.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000012000 /* Animations.swift */; };
 		B1000020001 /* CircularProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000020000 /* CircularProgressView.swift */; };
 		B1000021001 /* RoundedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000021000 /* RoundedButton.swift */; };
+		HB00001001 /* HoldToGiveUpButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = HB00001000 /* HoldToGiveUpButton.swift */; };
 		B1000022001 /* AnimatedTimerText.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000022000 /* AnimatedTimerText.swift */; };
 		B1000030001 /* TimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000030000 /* TimerView.swift */; };
 		B1000031001 /* AppSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000031000 /* AppSelectionView.swift */; };
@@ -82,7 +83,6 @@
 		H1000006001 /* RewardsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000006000 /* RewardsManager.swift */; };
 		H1000007001 /* StardustBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000007000 /* StardustBadge.swift */; };
 		H1000008001 /* CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000008000 /* CollectionView.swift */; };
-		H1000009001 /* ShopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000009000 /* ShopView.swift */; };
 		H1000010001 /* OrbPreviewCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000010000 /* OrbPreviewCard.swift */; };
 		H1000011001 /* OrbDetailSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000011000 /* OrbDetailSheet.swift */; };
 		H1000012001 /* ProgressSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000012000 /* ProgressSummaryView.swift */; };
@@ -138,6 +138,7 @@
 		B1000012000 /* Animations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Animations.swift; sourceTree = "<group>"; };
 		B1000020000 /* CircularProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularProgressView.swift; sourceTree = "<group>"; };
 		B1000021000 /* RoundedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedButton.swift; sourceTree = "<group>"; };
+		HB00001000 /* HoldToGiveUpButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoldToGiveUpButton.swift; sourceTree = "<group>"; };
 		B1000022000 /* AnimatedTimerText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedTimerText.swift; sourceTree = "<group>"; };
 		B1000030000 /* TimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerView.swift; sourceTree = "<group>"; };
 		B1000031000 /* AppSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSelectionView.swift; sourceTree = "<group>"; };
@@ -171,7 +172,6 @@
 		H1000006000 /* RewardsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardsManager.swift; sourceTree = "<group>"; };
 		H1000007000 /* StardustBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StardustBadge.swift; sourceTree = "<group>"; };
 		H1000008000 /* CollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionView.swift; sourceTree = "<group>"; };
-		H1000009000 /* ShopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopView.swift; sourceTree = "<group>"; };
 		H1000010000 /* OrbPreviewCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrbPreviewCard.swift; sourceTree = "<group>"; };
 		H1000011000 /* OrbDetailSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrbDetailSheet.swift; sourceTree = "<group>"; };
 		H1000012000 /* ProgressSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressSummaryView.swift; sourceTree = "<group>"; };
@@ -430,6 +430,7 @@
 				B1000020000 /* CircularProgressView.swift */,
 				G1000004000 /* CircularDurationSlider.swift */,
 				B1000021000 /* RoundedButton.swift */,
+				HB00001000 /* HoldToGiveUpButton.swift */,
 				B1000022000 /* AnimatedTimerText.swift */,
 				C1000001000 /* GradientOrbView.swift */,
 				N1000001000 /* ShieldOrbView.swift */,
@@ -492,7 +493,6 @@
 			isa = PBXGroup;
 			children = (
 				H1000008000 /* CollectionView.swift */,
-				H1000009000 /* ShopView.swift */,
 				H1000010000 /* OrbPreviewCard.swift */,
 				H1000011000 /* OrbDetailSheet.swift */,
 				H1000012000 /* ProgressSummaryView.swift */,
@@ -805,6 +805,7 @@
 				B1000020001 /* CircularProgressView.swift in Sources */,
 				G1000004001 /* CircularDurationSlider.swift in Sources */,
 				B1000021001 /* RoundedButton.swift in Sources */,
+				HB00001001 /* HoldToGiveUpButton.swift in Sources */,
 				B1000022001 /* AnimatedTimerText.swift in Sources */,
 				B1000030001 /* TimerView.swift in Sources */,
 				B1000031001 /* AppSelectionView.swift in Sources */,
@@ -836,7 +837,6 @@
 				H1000006001 /* RewardsManager.swift in Sources */,
 				H1000007001 /* StardustBadge.swift in Sources */,
 				H1000008001 /* CollectionView.swift in Sources */,
-				H1000009001 /* ShopView.swift in Sources */,
 				H1000010001 /* OrbPreviewCard.swift in Sources */,
 				H1000011001 /* OrbDetailSheet.swift in Sources */,
 				H1000012001 /* ProgressSummaryView.swift in Sources */,

@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// Card displaying an orb style preview for collection/shop grids
+/// Card displaying an orb style preview for collection grids
 struct OrbPreviewCard: View {
     let style: OrbStyle
     let isOwned: Bool
