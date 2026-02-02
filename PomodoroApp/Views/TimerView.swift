@@ -15,6 +15,9 @@ struct TimerView: View {
     /// The duration of the session that was started (captured at start to track on completion)
     @State private var sessionDurationAtStart: Int = 0
 
+    /// Opacity for ante toggle fade animation
+    @State private var anteToggleOpacity: Double = 1.0
+
     var body: some View {
         ZStack {
             // Background
@@ -95,6 +98,14 @@ struct TimerView: View {
                 earnedMilestones = rewardsManager.pendingMilestones
                 triggerCelebration()
             }
+
+            // Reset ante toggle opacity when returning to idle
+            if newState == .idle {
+                withAnimation(.easeIn(duration: 0.3).delay(0.3)) {
+                    anteToggleOpacity = 1.0
+                }
+            }
+
             previousState = newState
         }
         .onAppear {
@@ -149,11 +160,12 @@ struct TimerView: View {
                 )
             }
 
-            // Gradient orb in center (uses equipped style)
+            // Gradient orb in center (uses equipped style with star level)
             GradientOrbView(
                 state: orbState,
                 size: 144,
-                style: rewardsManager.equippedStyle
+                style: rewardsManager.equippedStyle,
+                starLevel: equippedStarLevel
             )
         }
     }
@@ -165,6 +177,10 @@ struct TimerView: View {
         case .focusing, .coolingDown:
             return .focusing
         }
+    }
+
+    private var equippedStarLevel: Int {
+        rewardsManager.starLevel(for: rewardsManager.collection.equippedOrbStyleId)
     }
 
     // MARK: - State Section
@@ -256,17 +272,37 @@ struct TimerView: View {
             case .idle:
                 VStack(spacing: 12) {
                     RoundedButton("Begin", style: .primary, customPrimaryColor: rewardsManager.equippedStyle.primaryColor) {
-                        session.startFocusSession()
+                        // Animate toggle fade before starting session
+                        withAnimation(.easeOut(duration: 0.2)) {
+                            anteToggleOpacity = 0
+                        }
+                        // Small delay to allow animation, then start session
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+                            session.startFocusSession()
+                        }
                     }
 
                     // Ante toggle for bonus rewards
                     anteToggle
+                        .opacity(anteToggleOpacity)
                 }
 
             case .focusing:
-                RoundedButton("Give Up", style: .secondary) {
-                    session.requestQuit()
+                VStack(spacing: 16) {
+                    // Only show Give Up button after grace period ends
+                    if !session.isInGracePeriod {
+                        RoundedButton("Give Up", style: .secondary) {
+                            session.requestQuit()
+                        }
+                        .transition(.opacity.combined(with: .scale(scale: 0.95)))
+                    }
+
+                    // Grace period cancel button with countdown (first 10 seconds, no penalty)
+                    if session.isInGracePeriod {
+                        GracePeriodCancelButton(session: session)
+                    }
                 }
+                .animation(.easeInOut(duration: 0.3), value: session.isInGracePeriod)
 
             case .coolingDown:
                 // Buttons shown in overlay instead
@@ -328,6 +364,55 @@ struct TimerView: View {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
         return formatter.string(from: Date())
+    }
+}
+
+// MARK: - Grace Period Cancel Button
+
+/// Cancel button shown during grace period with countdown
+private struct GracePeriodCancelButton: View {
+    @ObservedObject var session: PomodoroSession
+    @State private var remainingSeconds: Int = 10
+    @State private var opacity: Double = 1.0
+
+    private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+
+    var body: some View {
+        Button {
+            session.cancelInGracePeriod()
+        } label: {
+            Text("Cancel (\(remainingSeconds)s)")
+                .font(.pomCaption)
+                .foregroundColor(.pomTextTertiary)
+        }
+        .opacity(opacity)
+        .transition(.opacity.combined(with: .scale(scale: 0.9)))
+        .onReceive(timer) { _ in
+            updateCountdown()
+        }
+        .onAppear {
+            updateCountdown()
+        }
+    }
+
+    private func updateCountdown() {
+        guard let startTime = session.sessionStartTime else {
+            remainingSeconds = 0
+            return
+        }
+
+        let elapsed = Date().timeIntervalSince(startTime)
+        let remaining = Int(PomodoroSession.gracePeriodSeconds - elapsed)
+
+        if remaining > 0 {
+            remainingSeconds = remaining
+        } else {
+            remainingSeconds = 0
+            // Fade out when countdown ends
+            withAnimation(.easeOut(duration: 0.3)) {
+                opacity = 0
+            }
+        }
     }
 }
 

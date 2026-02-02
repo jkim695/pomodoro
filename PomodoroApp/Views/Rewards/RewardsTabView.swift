@@ -87,20 +87,14 @@ struct RewardsTabView: View {
                                 )
 
                                 VStack(alignment: .leading, spacing: 4) {
-                                    HStack(spacing: 8) {
-                                        Text(rewardsManager.equippedStyle.name)
-                                            .font(.headline)
-                                            .foregroundColor(.pomTextPrimary)
+                                    Text(rewardsManager.equippedStyle.name)
+                                        .font(.headline)
+                                        .foregroundColor(.pomTextPrimary)
 
-                                        let starLevel = rewardsManager.starLevel(for: rewardsManager.equippedStyle.id)
-                                        if starLevel > 1 {
-                                            StarBadge(level: starLevel)
-                                        }
+                                    let starLevel = rewardsManager.starLevel(for: rewardsManager.equippedStyle.id)
+                                    if starLevel > 1 {
+                                        StarBadge(level: starLevel)
                                     }
-
-                                    Text(rewardsManager.equippedStyle.rarity.displayName)
-                                        .font(.caption)
-                                        .foregroundColor(rewardsManager.equippedStyle.rarity.color)
 
                                     Text("Tap to view collection")
                                         .font(.caption)

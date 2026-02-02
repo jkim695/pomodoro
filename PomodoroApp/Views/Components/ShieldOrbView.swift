@@ -1,20 +1,21 @@
 import SwiftUI
 
 /// Shield-themed orb for the Limits feature
-/// Shows cyan glow when active (protecting from distractions)
+/// Shows colored glow when active (protecting from distractions)
 struct ShieldOrbView: View {
     let isActive: Bool
     var size: CGFloat = 60
+    var accentColor: Color = .pomShieldActive  // Customizable accent color
 
     @State private var breathingScale: CGFloat = 1.0
     @State private var glowOpacity: Double = 0.5
 
     private var primaryColor: Color {
-        isActive ? .pomShieldActive : .pomShieldInactive
+        isActive ? accentColor : .pomShieldInactive
     }
 
     private var secondaryColor: Color {
-        isActive ? Color(hex: "0099CC") : Color(hex: "3A3A3A")
+        isActive ? accentColor.opacity(0.7) : Color(hex: "3A3A3A")
     }
 
     var body: some View {

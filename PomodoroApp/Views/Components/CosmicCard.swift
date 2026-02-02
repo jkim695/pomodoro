@@ -6,6 +6,7 @@ struct CosmicCardModifier: ViewModifier {
     let isActive: Bool
     var cornerRadius: CGFloat = 16
     var showBorder: Bool = true
+    var accentColor: Color = .pomShieldActive  // Customizable accent color
 
     @State private var breathingScale: CGFloat = 1.0
 
@@ -37,9 +38,9 @@ struct CosmicCardModifier: ViewModifier {
                             .stroke(
                                 LinearGradient(
                                     colors: [
-                                        Color.pomShieldActive.opacity(0.4),
-                                        Color.pomShieldActive.opacity(0.2),
-                                        Color.pomShieldActive.opacity(0.1)
+                                        accentColor.opacity(0.4),
+                                        accentColor.opacity(0.2),
+                                        accentColor.opacity(0.1)
                                     ],
                                     startPoint: .topLeading,
                                     endPoint: .bottomTrailing
@@ -50,7 +51,7 @@ struct CosmicCardModifier: ViewModifier {
                 }
             )
             .shadow(
-                color: isActive ? Color.pomShieldActive.opacity(0.15) : Color.black.opacity(0.08),
+                color: isActive ? accentColor.opacity(0.15) : Color.black.opacity(0.08),
                 radius: isActive ? 12 : 8,
                 x: 0,
                 y: 4
@@ -89,6 +90,7 @@ struct CosmicCard<Content: View>: View {
     var cornerRadius: CGFloat = 16
     var padding: CGFloat = 16
     var showBorder: Bool = true
+    var accentColor: Color = .pomShieldActive
     @ViewBuilder let content: () -> Content
 
     var body: some View {
@@ -97,14 +99,15 @@ struct CosmicCard<Content: View>: View {
             .modifier(CosmicCardModifier(
                 isActive: isActive,
                 cornerRadius: cornerRadius,
-                showBorder: showBorder
+                showBorder: showBorder,
+                accentColor: accentColor
             ))
     }
 }
 
 extension View {
-    func cosmicCard(isActive: Bool = false, cornerRadius: CGFloat = 16, showBorder: Bool = true) -> some View {
-        modifier(CosmicCardModifier(isActive: isActive, cornerRadius: cornerRadius, showBorder: showBorder))
+    func cosmicCard(isActive: Bool = false, cornerRadius: CGFloat = 16, showBorder: Bool = true, accentColor: Color = .pomShieldActive) -> some View {
+        modifier(CosmicCardModifier(isActive: isActive, cornerRadius: cornerRadius, showBorder: showBorder, accentColor: accentColor))
     }
 }
 

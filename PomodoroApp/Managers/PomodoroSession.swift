@@ -34,6 +34,9 @@ final class PomodoroSession: ObservableObject {
     /// Duration of the cool-down period before quit is allowed (seconds)
     static let coolDownDurationSeconds: Int = 10
 
+    /// Duration of the grace period where user can cancel without penalty (seconds)
+    static let gracePeriodSeconds: TimeInterval = 10
+
     // MARK: - Published State
 
     @Published var state: SessionState = .idle
@@ -43,6 +46,13 @@ final class PomodoroSession: ObservableObject {
     @Published var startError: SessionStartError?
     @Published var coolDownTimeRemaining: Int = 0
     @Published var useAnte: Bool = false  // User's choice to bet ante for 2x rewards
+    @Published var sessionStartTime: Date?  // Track when session started for grace period
+
+    /// Whether the session is within the grace period (can cancel without penalty)
+    var isInGracePeriod: Bool {
+        guard let startTime = sessionStartTime, state == .focusing else { return false }
+        return Date().timeIntervalSince(startTime) < Self.gracePeriodSeconds
+    }
 
     /// Tracks whether ante was held for the current session (for reward calculation)
     private var sessionAnteUsed: Bool = false
@@ -140,6 +150,9 @@ final class PomodoroSession: ObservableObject {
         // Schedule notification
         notifications.scheduleFocusComplete(in: focusDuration * 60)
 
+        // Track session start time for grace period
+        sessionStartTime = Date()
+
         state = .focusing
         avatarState = .working
     }
@@ -187,6 +200,7 @@ final class PomodoroSession: ObservableObject {
         // Reset ante tracking for next session
         sessionAnteUsed = false
         useAnte = false
+        sessionStartTime = nil
 
         // Celebrate completion then return to idle
         avatarState = .celebrating
@@ -219,6 +233,31 @@ final class PomodoroSession: ObservableObject {
         // Reset everything
         timer.reset()
         notifications.cancelAll()
+        sessionStartTime = nil
+        state = .idle
+        avatarState = .sleeping
+    }
+
+    /// Cancels the session during grace period (no penalty)
+    func cancelInGracePeriod() {
+        guard isInGracePeriod else { return }
+
+        // Return ante if it was used (no penalty during grace period)
+        if sessionAnteUsed {
+            RewardsManager.shared.returnSessionAnte()
+            sessionAnteUsed = false
+        }
+        useAnte = false
+
+        // Clean up session
+        shieldManager.removeAllShields()
+        activityScheduler.stopMonitoring()
+        sharedData.isSessionActive = false
+
+        timer.reset()
+        notifications.cancelAll()
+        sessionStartTime = nil
+
         state = .idle
         avatarState = .sleeping
     }
@@ -263,9 +302,9 @@ final class PomodoroSession: ObservableObject {
         state = .focusing
     }
 
-    /// Confirms quit after cool-down period (burns ante if used)
+    /// Confirms quit after hold-to-confirm (burns ante if used)
     func confirmQuit() {
-        guard state == .coolingDown, coolDownTimeRemaining == 0 else { return }
+        guard state == .coolingDown else { return }
 
         // Cancel cool-down timer
         coolDownTimer?.cancel()
@@ -286,6 +325,7 @@ final class PomodoroSession: ObservableObject {
         // Reset timer
         timer.reset()
         notifications.cancelAll()
+        sessionStartTime = nil
 
         // Show disappointed state
         state = .idle

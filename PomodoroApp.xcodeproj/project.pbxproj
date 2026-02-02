@@ -96,6 +96,7 @@
 		I1000011001 /* RecentPullsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = I1000011000 /* RecentPullsSection.swift */; };
 		J1000001001 /* CoolDownOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = J1000001000 /* CoolDownOverlayView.swift */; };
 		J1000002001 /* InsufficientFundsOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = J1000002000 /* InsufficientFundsOverlayView.swift */; };
+		K1000001001 /* SaturnRingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = K1000001000 /* SaturnRingView.swift */; };
 		N1000001001 /* ShieldOrbView.swift in Sources */ = {isa = PBXBuildFile; fileRef = N1000001000 /* ShieldOrbView.swift */; };
 		N1000002001 /* GlowingProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = N1000002000 /* GlowingProgressBar.swift */; };
 		N1000003001 /* CosmicCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = N1000003000 /* CosmicCard.swift */; };
@@ -140,6 +141,7 @@
 		B1000032000 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		B1000033000 /* AuthorizationRequestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorizationRequestView.swift; sourceTree = "<group>"; };
 		C1000001000 /* GradientOrbView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientOrbView.swift; sourceTree = "<group>"; };
+		K1000001000 /* SaturnRingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaturnRingView.swift; sourceTree = "<group>"; };
 		D1000001000 /* TimeSchedule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeSchedule.swift; sourceTree = "<group>"; };
 		D1000002000 /* AppLimit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLimit.swift; sourceTree = "<group>"; };
 		D1000003000 /* UsageRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageRecord.swift; sourceTree = "<group>"; };
@@ -405,6 +407,7 @@
 				HB00001000 /* HoldToGiveUpButton.swift */,
 				B1000022000 /* AnimatedTimerText.swift */,
 				C1000001000 /* GradientOrbView.swift */,
+				K1000001000 /* SaturnRingView.swift */,
 				N1000001000 /* ShieldOrbView.swift */,
 				N1000002000 /* GlowingProgressBar.swift */,
 				N1000003000 /* CosmicCard.swift */,
@@ -738,6 +741,7 @@
 				B1000032001 /* SettingsView.swift in Sources */,
 				B1000033001 /* AuthorizationRequestView.swift in Sources */,
 				C1000001001 /* GradientOrbView.swift in Sources */,
+				K1000001001 /* SaturnRingView.swift in Sources */,
 				N1000001001 /* ShieldOrbView.swift in Sources */,
 				N1000002001 /* GlowingProgressBar.swift in Sources */,
 				N1000003001 /* CosmicCard.swift in Sources */,

@@ -115,6 +115,9 @@ final class RewardsManager: ObservableObject {
         self.progress = Self.loadProgress()
         self.collection = Self.loadCollection()
 
+        // Ensure all owned orbs have star levels initialized
+        migrateToGachaSystem()
+
         // Recover any orphaned ante from a previous crash
         recoverOrphanedAnte()
 

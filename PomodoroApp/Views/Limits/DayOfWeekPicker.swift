@@ -3,6 +3,11 @@ import SwiftUI
 /// Multi-select day of week picker component
 struct DayOfWeekPicker: View {
     @Binding var selectedDays: Set<Weekday>
+    @EnvironmentObject var rewardsManager: RewardsManager
+
+    private var accentColor: Color {
+        rewardsManager.equippedStyle.primaryColor
+    }
 
     var body: some View {
         HStack(spacing: 10) {
@@ -37,15 +42,15 @@ struct DayOfWeekPicker: View {
                         // Glow layer (only when selected)
                         if isSelected {
                             Circle()
-                                .fill(Color.pomShieldActive.opacity(0.3))
+                                .fill(accentColor.opacity(0.3))
                                 .frame(width: 46, height: 46)
                                 .blur(radius: 4)
                         }
                         // Main circle
                         Circle()
-                            .fill(isSelected ? Color.pomShieldActive : Color.pomCardBackgroundAlt)
+                            .fill(isSelected ? accentColor : Color.pomCardBackgroundAlt)
                             .shadow(
-                                color: isSelected ? Color.pomShieldActive.opacity(0.5) : .clear,
+                                color: isSelected ? accentColor.opacity(0.5) : .clear,
                                 radius: 6
                             )
                     }
@@ -58,6 +63,11 @@ struct DayOfWeekPicker: View {
 /// Quick preset buttons for day selection
 struct DayPresetButtons: View {
     @Binding var selectedDays: Set<Weekday>
+    @EnvironmentObject var rewardsManager: RewardsManager
+
+    private var accentColor: Color {
+        rewardsManager.equippedStyle.primaryColor
+    }
 
     var body: some View {
         HStack(spacing: 12) {
@@ -84,14 +94,14 @@ struct DayPresetButtons: View {
                     ZStack {
                         if isSelected {
                             Capsule()
-                                .fill(Color.pomShieldActive.opacity(0.3))
+                                .fill(accentColor.opacity(0.3))
                                 .blur(radius: 4)
                                 .padding(-2)
                         }
                         Capsule()
-                            .fill(isSelected ? Color.pomShieldActive : Color.pomCardBackgroundAlt)
+                            .fill(isSelected ? accentColor : Color.pomCardBackgroundAlt)
                             .shadow(
-                                color: isSelected ? Color.pomShieldActive.opacity(0.4) : .clear,
+                                color: isSelected ? accentColor.opacity(0.4) : .clear,
                                 radius: 6
                             )
                     }

@@ -149,12 +149,21 @@ struct GradientOrbView: View {
                 )
                 .frame(width: size * 0.8, height: size * 0.8)
 
-            // Star particles for 3+ star orbs
+            // Saturn rings for all star levels
+            if starLevel >= 1 {
+                SaturnRingView(
+                    size: size,
+                    color: ringColor,
+                    starLevel: starLevel
+                )
+            }
+
+            // Star particles for 3+ star orbs (orbit around the rings)
             if particleCount > 0 {
                 StarParticlesView(
                     count: particleCount,
                     size: size,
-                    color: primaryColor
+                    color: starColor
                 )
             }
         }
@@ -212,6 +221,18 @@ struct GradientOrbView: View {
         case .complete:
             return Color.pomSecondary
         }
+    }
+
+    /// Golden/warm white color for Saturn rings - contrasts well with most orb colors
+    private var ringColor: Color {
+        // Warm gold/silver that represents cosmic rings
+        Color(hex: "E8DCC8").opacity(0.9)  // Warm champagne/silver
+    }
+
+    /// Golden starlight color for orbiting particles
+    private var starColor: Color {
+        // Classic golden starlight
+        Color(hex: "FFD700")  // Gold
     }
 
     // MARK: - Gradients

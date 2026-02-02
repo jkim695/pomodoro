@@ -45,20 +45,21 @@ struct CollectionView: View {
                         )
 
                         VStack(alignment: .leading, spacing: 4) {
-                            HStack(spacing: 8) {
-                                Text(rewardsManager.equippedStyle.name)
-                                    .font(.headline)
-                                    .foregroundColor(.pomTextPrimary)
+                            Text(rewardsManager.equippedStyle.name)
+                                .font(.headline)
+                                .foregroundColor(.pomTextPrimary)
 
+                            HStack(spacing: 8) {
                                 let equippedStarLevel = rewardsManager.starLevel(for: rewardsManager.equippedStyle.id)
                                 if equippedStarLevel > 1 {
                                     StarBadge(level: equippedStarLevel)
                                 }
-                            }
 
-                            Text(rewardsManager.equippedStyle.rarity.displayName)
-                                .font(.caption)
-                                .foregroundColor(rewardsManager.equippedStyle.rarity.color)
+                                Text(rewardsManager.equippedStyle.rarity.displayName)
+                                    .font(.caption)
+                                    .foregroundColor(rewardsManager.equippedStyle.rarity.color)
+                                    .lineLimit(1)
+                            }
                         }
 
                         Spacer()

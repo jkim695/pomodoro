@@ -19,21 +19,26 @@ struct CircularDurationSlider: View {
     private let minDuration: Int = 10
     private let maxDuration: Int = 180
     private let stepSize: Int = 5
+    private let minDisplayAngle: CGFloat = 20 / 360  // 20 degrees minimum arc at lowest duration
 
     // Radius for the track center
     private var radius: CGFloat {
         (size - trackWidth) / 2
     }
 
-    // Progress for display (0 to 1)
+    // Progress for display (minDisplayAngle to 1)
     // When dragging: use smooth visual angle
     // When not dragging: use snapped duration
+    // Always shows at least minDisplayAngle (20 degrees) even at minimum duration
     private var displayProgress: CGFloat {
+        let rawProgress: CGFloat
         if isDragging {
-            return visualAngle / (2 * .pi)
+            rawProgress = visualAngle / (2 * .pi)
         } else {
-            return CGFloat(duration - minDuration) / CGFloat(maxDuration - minDuration)
+            rawProgress = CGFloat(duration - minDuration) / CGFloat(maxDuration - minDuration)
         }
+        // Scale progress to leave room for minimum angle
+        return minDisplayAngle + (rawProgress * (1 - minDisplayAngle))
     }
 
     var body: some View {
