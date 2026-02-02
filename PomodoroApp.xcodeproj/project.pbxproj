@@ -11,6 +11,7 @@
 		A1000002001 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000002000 /* ContentView.swift */; };
 		A1000003001 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1000003000 /* Assets.xcassets */; };
 		A1000004001 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1000004000 /* Preview Assets.xcassets */; };
+		P1000001001 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = P1000001000 /* PrivacyInfo.xcprivacy */; };
 		A1000005001 /* AuthorizationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000005000 /* AuthorizationManager.swift */; };
 		A1000006001 /* ShieldManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000006000 /* ShieldManager.swift */; };
 		A1000007001 /* ActivityScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000007000 /* ActivityScheduler.swift */; };
@@ -111,6 +112,7 @@
 		A1000007000 /* ActivityScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityScheduler.swift; sourceTree = "<group>"; };
 		A1000008000 /* SharedDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedDataManager.swift; sourceTree = "<group>"; };
 		A1000009000 /* PomodoroApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PomodoroApp.entitlements; sourceTree = "<group>"; };
+		P1000001000 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		A2000000000 /* DeviceActivityMonitorExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = DeviceActivityMonitorExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		A2000001000 /* PomodoroActivityMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PomodoroActivityMonitor.swift; sourceTree = "<group>"; };
 		A2000005000 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -293,6 +295,7 @@
 				B1000034000 /* Theme */,
 				A1000003000 /* Assets.xcassets */,
 				A1000009000 /* PomodoroApp.entitlements */,
+				P1000001000 /* PrivacyInfo.xcprivacy */,
 				A1000033000 /* Preview Content */,
 			);
 			path = PomodoroApp;
@@ -405,8 +408,8 @@
 				N1000002000 /* GlowingProgressBar.swift */,
 				N1000003000 /* CosmicCard.swift */,
 				H1000007000 /* StardustBadge.swift */,
-				I1000001000 /* CoolDownOverlayView.swift */,
-				I1000002000 /* InsufficientFundsOverlayView.swift */,
+				J1000001000 /* CoolDownOverlayView.swift */,
+				J1000002000 /* InsufficientFundsOverlayView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -657,6 +660,7 @@
 			files = (
 				A1000004001 /* Preview Assets.xcassets in Resources */,
 				A1000003001 /* Assets.xcassets in Resources */,
+				P1000001001 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
