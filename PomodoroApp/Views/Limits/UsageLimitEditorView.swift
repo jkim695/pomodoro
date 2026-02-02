@@ -4,9 +4,14 @@ import FamilyControls
 /// Editor view for creating or editing a usage limit
 struct UsageLimitEditorView: View {
     @EnvironmentObject var limitsSession: LimitsSession
+    @EnvironmentObject var rewardsManager: RewardsManager
     @Environment(\.dismiss) private var dismiss
 
     let limit: AppLimit?
+
+    private var accentColor: Color {
+        rewardsManager.equippedStyle.primaryColor
+    }
 
     @State private var selection = FamilyActivitySelection()
     @State private var dailyLimitMinutes: Int = 30
@@ -52,11 +57,11 @@ struct UsageLimitEditorView: View {
                                         Spacer()
                                         Image(systemName: "chevron.right")
                                     }
-                                    .foregroundColor(.pomShieldActive)
+                                    .foregroundColor(accentColor)
                                     .padding(12)
                                     .background(
                                         RoundedRectangle(cornerRadius: 12)
-                                            .fill(Color.pomShieldActive.opacity(0.1))
+                                            .fill(accentColor.opacity(0.1))
                                     )
                                 }
                             }
@@ -122,14 +127,14 @@ struct UsageLimitEditorView: View {
                             ZStack {
                                 if isSelected {
                                     RoundedRectangle(cornerRadius: 10)
-                                        .fill(Color.pomShieldActive.opacity(0.3))
+                                        .fill(accentColor.opacity(0.3))
                                         .blur(radius: 4)
                                         .padding(-2)
                                 }
                                 RoundedRectangle(cornerRadius: 10)
-                                    .fill(isSelected ? Color.pomShieldActive : Color.pomCardBackgroundAlt)
+                                    .fill(isSelected ? accentColor : Color.pomCardBackgroundAlt)
                                     .shadow(
-                                        color: isSelected ? Color.pomShieldActive.opacity(0.4) : .clear,
+                                        color: isSelected ? accentColor.opacity(0.4) : .clear,
                                         radius: 6
                                     )
                             }
@@ -145,7 +150,7 @@ struct UsageLimitEditorView: View {
         VStack(alignment: .leading, spacing: 8) {
             HStack(spacing: 8) {
                 Image(systemName: "info.circle")
-                    .foregroundColor(.pomShieldActive)
+                    .foregroundColor(accentColor)
                 Text("How it works")
                     .font(.pomBody)
                     .fontWeight(.medium)
@@ -165,7 +170,7 @@ struct UsageLimitEditorView: View {
     private func bulletPoint(_ text: String) -> some View {
         HStack(alignment: .top, spacing: 8) {
             Text("•")
-                .foregroundColor(.pomShieldActive)
+                .foregroundColor(accentColor)
             Text(text)
                 .font(.pomCaption)
                 .foregroundColor(.pomTextSecondary)
@@ -182,7 +187,7 @@ struct UsageLimitEditorView: View {
             HStack(spacing: 8) {
                 Image(systemName: icon)
                     .font(.system(size: 16))
-                    .foregroundColor(.pomShieldActive)
+                    .foregroundColor(accentColor)
 
                 Text(title)
                     .font(.pomBody)
@@ -225,7 +230,12 @@ struct UsageLimitEditorView: View {
 /// App selection view for usage limits
 struct LimitAppSelectionView: View {
     @Binding var selection: FamilyActivitySelection
+    @EnvironmentObject var rewardsManager: RewardsManager
     @Environment(\.dismiss) private var dismiss
+
+    private var accentColor: Color {
+        rewardsManager.equippedStyle.primaryColor
+    }
 
     var body: some View {
         NavigationStack {
@@ -235,7 +245,7 @@ struct LimitAppSelectionView: View {
 
                 VStack(spacing: 24) {
                     VStack(spacing: 12) {
-                        ShieldOrbView(isActive: true, size: 48)
+                        ShieldOrbView(isActive: true, size: 48, accentColor: accentColor)
 
                         Text("Apps to Limit")
                             .font(.pomHeading2)
@@ -268,7 +278,7 @@ struct LimitAppSelectionView: View {
                         dismiss()
                     }
                     .font(.pomButton)
-                    .foregroundColor(.pomShieldActive)
+                    .foregroundColor(accentColor)
                 }
             }
         }

@@ -4,9 +4,14 @@ import FamilyControls
 /// Editor view for creating or editing a time schedule
 struct TimeScheduleEditorView: View {
     @EnvironmentObject var limitsSession: LimitsSession
+    @EnvironmentObject var rewardsManager: RewardsManager
     @Environment(\.dismiss) private var dismiss
 
     let schedule: TimeSchedule?
+
+    private var accentColor: Color {
+        rewardsManager.equippedStyle.primaryColor
+    }
 
     @State private var name: String = "New Schedule"
     @State private var selection = FamilyActivitySelection()
@@ -83,7 +88,7 @@ struct TimeScheduleEditorView: View {
 
                                     DatePicker("", selection: $startTime, displayedComponents: .hourAndMinute)
                                         .labelsHidden()
-                                        .tint(.pomShieldActive)
+                                        .tint(accentColor)
                                 }
 
                                 HStack {
@@ -95,13 +100,13 @@ struct TimeScheduleEditorView: View {
 
                                     DatePicker("", selection: $endTime, displayedComponents: .hourAndMinute)
                                         .labelsHidden()
-                                        .tint(.pomShieldActive)
+                                        .tint(accentColor)
                                 }
 
                                 if isOvernight {
                                     HStack {
                                         Image(systemName: "moon.fill")
-                                            .foregroundColor(.pomShieldActive)
+                                            .foregroundColor(accentColor)
                                         Text("This schedule runs overnight")
                                             .font(.pomCaption)
                                             .foregroundColor(.pomTextSecondary)
@@ -109,7 +114,7 @@ struct TimeScheduleEditorView: View {
                                     .padding(8)
                                     .background(
                                         RoundedRectangle(cornerRadius: 8)
-                                            .fill(Color.pomShieldActive.opacity(0.1))
+                                            .fill(accentColor.opacity(0.1))
                                     )
                                 }
                             }
@@ -144,11 +149,11 @@ struct TimeScheduleEditorView: View {
                                         Spacer()
                                         Image(systemName: "chevron.right")
                                     }
-                                    .foregroundColor(.pomShieldActive)
+                                    .foregroundColor(accentColor)
                                     .padding(12)
                                     .background(
                                         RoundedRectangle(cornerRadius: 12)
-                                            .fill(Color.pomShieldActive.opacity(0.1))
+                                            .fill(accentColor.opacity(0.1))
                                     )
                                 }
                             }
@@ -191,7 +196,7 @@ struct TimeScheduleEditorView: View {
             HStack(spacing: 8) {
                 Image(systemName: icon)
                     .font(.system(size: 16))
-                    .foregroundColor(.pomShieldActive)
+                    .foregroundColor(accentColor)
 
                 Text(title)
                     .font(.pomBody)
@@ -267,7 +272,12 @@ struct TimeScheduleEditorView: View {
 /// App selection view for schedules
 struct ScheduleAppSelectionView: View {
     @Binding var selection: FamilyActivitySelection
+    @EnvironmentObject var rewardsManager: RewardsManager
     @Environment(\.dismiss) private var dismiss
+
+    private var accentColor: Color {
+        rewardsManager.equippedStyle.primaryColor
+    }
 
     var body: some View {
         NavigationStack {
@@ -277,7 +287,7 @@ struct ScheduleAppSelectionView: View {
 
                 VStack(spacing: 24) {
                     VStack(spacing: 12) {
-                        ShieldOrbView(isActive: true, size: 48)
+                        ShieldOrbView(isActive: true, size: 48, accentColor: accentColor)
 
                         Text("Apps to Block")
                             .font(.pomHeading2)
@@ -310,7 +320,7 @@ struct ScheduleAppSelectionView: View {
                         dismiss()
                     }
                     .font(.pomButton)
-                    .foregroundColor(.pomShieldActive)
+                    .foregroundColor(accentColor)
                 }
             }
         }

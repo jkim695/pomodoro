@@ -6,41 +6,94 @@ struct StarParticlesView: View {
     let size: CGFloat
     let color: Color
 
-    @State private var rotation: Double = 0
+    @State private var rotation1: Double = 0
+    @State private var rotation2: Double = 0
+    @State private var rotation3: Double = 0
 
     var body: some View {
         ZStack {
-            ForEach(0..<count, id: \.self) { index in
-                StarParticle(
-                    particleSize: CGFloat.random(in: 4...8),
-                    color: color,
-                    angle: Double(index) * (360.0 / Double(count)),
-                    radius: size * 0.6
-                )
-            }
+            // Orbital plane 1: Horizontal
+            OrbitalPlane(
+                particleCount: max(1, count / 3),
+                size: size,
+                color: color,
+                yScale: 1.0,
+                angleOffset: 0
+            )
+            .rotationEffect(.degrees(rotation1))
+
+            // Orbital plane 2: Tilted (elliptical)
+            OrbitalPlane(
+                particleCount: max(1, count / 3),
+                size: size,
+                color: color,
+                yScale: 0.4,
+                angleOffset: 40
+            )
+            .rotationEffect(.degrees(rotation2))
+
+            // Orbital plane 3: Tilted opposite (elliptical)
+            OrbitalPlane(
+                particleCount: max(1, count / 3),
+                size: size,
+                color: color,
+                yScale: 0.4,
+                angleOffset: 80
+            )
+            .rotation3DEffect(.degrees(90), axis: (x: 0, y: 1, z: 0))
+            .rotationEffect(.degrees(rotation3))
         }
-        .rotationEffect(.degrees(rotation))
         .onAppear {
-            withAnimation(.linear(duration: 8).repeatForever(autoreverses: false)) {
-                rotation = 360
+            // 1/5 the speed = 5x the duration (8s -> 40s)
+            withAnimation(.linear(duration: 40).repeatForever(autoreverses: false)) {
+                rotation1 = 360
+            }
+            withAnimation(.linear(duration: 48).repeatForever(autoreverses: false)) {
+                rotation2 = -360  // Opposite direction
+            }
+            withAnimation(.linear(duration: 52).repeatForever(autoreverses: false)) {
+                rotation3 = 360
             }
         }
     }
 }
 
-/// Individual orbiting particle
-private struct StarParticle: View {
-    let particleSize: CGFloat
+/// A single orbital plane containing multiple particles
+private struct OrbitalPlane: View {
+    let particleCount: Int
+    let size: CGFloat
     let color: Color
-    let angle: Double
-    let radius: CGFloat
+    let yScale: CGFloat
+    let angleOffset: Double
+
+    var body: some View {
+        ZStack {
+            ForEach(0..<particleCount, id: \.self) { index in
+                let angle = Double(index) * (360.0 / Double(particleCount)) + angleOffset
+                StarSparkle(
+                    size: CGFloat.random(in: 4...8),
+                    color: color
+                )
+                .offset(
+                    x: cos(angle * .pi / 180) * size * 0.6,
+                    y: sin(angle * .pi / 180) * size * 0.6 * yScale
+                )
+            }
+        }
+    }
+}
+
+/// Individual sparkle that twinkles but doesn't rotate
+private struct StarSparkle: View {
+    let size: CGFloat
+    let color: Color
 
     @State private var opacity: Double = 0.6
     @State private var scale: CGFloat = 1.0
 
     var body: some View {
         Image(systemName: "sparkle")
-            .font(.system(size: particleSize))
+            .font(.system(size: size))
             .foregroundStyle(
                 LinearGradient(
                     colors: [color, color.opacity(0.6)],
@@ -50,12 +103,7 @@ private struct StarParticle: View {
             )
             .opacity(opacity)
             .scaleEffect(scale)
-            .offset(
-                x: cos(angle * .pi / 180) * radius,
-                y: sin(angle * .pi / 180) * radius
-            )
             .onAppear {
-                // Subtle twinkle animation
                 withAnimation(
                     .easeInOut(duration: Double.random(in: 1.0...2.0))
                     .repeatForever(autoreverses: true)

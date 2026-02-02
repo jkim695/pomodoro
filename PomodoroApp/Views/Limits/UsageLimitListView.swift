@@ -35,8 +35,13 @@ struct UsageLimitRow: View {
     let onEdit: () -> Void
     let onToggle: (Bool) -> Void
     let onDelete: () -> Void
+    @EnvironmentObject var rewardsManager: RewardsManager
 
     @State private var showDeleteConfirmation = false
+
+    private var accentColor: Color {
+        rewardsManager.equippedStyle.primaryColor
+    }
     @State private var filter: DeviceActivityFilter
 
     init(
@@ -113,7 +118,7 @@ struct UsageLimitRow: View {
                     get: { limit.isEnabled },
                     set: { onToggle($0) }
                 ))
-                .tint(.pomShieldActive)
+                .tint(accentColor)
                 .labelsHidden()
             }
 

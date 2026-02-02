@@ -82,6 +82,7 @@ struct OrbDetailSheet: View {
                 Text(style.name)
                     .font(.title2.weight(.bold))
                     .foregroundColor(.pomTextPrimary)
+                    .lineLimit(1)
 
                 // Star level display for owned orbs
                 if isOwned {

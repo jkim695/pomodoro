@@ -29,8 +29,13 @@ struct ScheduleRow: View {
     let onEdit: () -> Void
     let onToggle: (Bool) -> Void
     let onDelete: () -> Void
+    @EnvironmentObject var rewardsManager: RewardsManager
 
     @State private var showDeleteConfirmation = false
+
+    private var accentColor: Color {
+        rewardsManager.equippedStyle.primaryColor
+    }
 
     var body: some View {
         HStack(spacing: 12) {
@@ -64,12 +69,12 @@ struct ScheduleRow: View {
                                 ZStack {
                                     if isActive && schedule.isEnabled {
                                         Circle()
-                                            .fill(Color.pomShieldActive.opacity(0.3))
+                                            .fill(accentColor.opacity(0.3))
                                             .frame(width: 26, height: 26)
                                             .blur(radius: 3)
                                     }
                                     Circle()
-                                        .fill(isActive ? Color.pomShieldActive : Color.pomCardBackgroundAlt)
+                                        .fill(isActive ? accentColor : Color.pomCardBackgroundAlt)
                                 }
                             )
                     }
@@ -84,7 +89,7 @@ struct ScheduleRow: View {
                 get: { schedule.isEnabled },
                 set: { onToggle($0) }
             ))
-            .tint(.pomShieldActive)
+            .tint(accentColor)
             .labelsHidden()
         }
         .padding(16)

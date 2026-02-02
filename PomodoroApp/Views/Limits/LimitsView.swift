@@ -4,8 +4,14 @@ import FamilyControls
 /// Main view for the Limits tab - shows time schedules and usage limits
 struct LimitsView: View {
     @EnvironmentObject var limitsSession: LimitsSession
+    @EnvironmentObject var rewardsManager: RewardsManager
     @State private var showAddSchedule = false
     @State private var showAddLimit = false
+
+    /// Accent color from equipped orb
+    private var accentColor: Color {
+        rewardsManager.equippedStyle.primaryColor
+    }
 
     var body: some View {
         NavigationStack {
@@ -80,7 +86,7 @@ struct LimitsView: View {
             // Header
             HStack {
                 HStack(spacing: 12) {
-                    ShieldOrbView(isActive: !isEmpty, size: 28)
+                    ShieldOrbView(isActive: !isEmpty, size: 28, accentColor: accentColor)
 
                     VStack(alignment: .leading, spacing: 2) {
                         Text(title)
@@ -102,11 +108,11 @@ struct LimitsView: View {
                 } label: {
                     ZStack {
                         Circle()
-                            .fill(Color.pomShieldActive.opacity(0.15))
+                            .fill(accentColor.opacity(0.15))
                             .frame(width: 36, height: 36)
                         Image(systemName: "plus")
                             .font(.system(size: 16, weight: .semibold))
-                            .foregroundColor(.pomShieldActive)
+                            .foregroundColor(accentColor)
                     }
                 }
             }
@@ -119,12 +125,12 @@ struct LimitsView: View {
             }
         }
         .padding(20)
-        .cosmicCard(isActive: !isEmpty, cornerRadius: 16, showBorder: !isEmpty)
+        .cosmicCard(isActive: !isEmpty, cornerRadius: 16, showBorder: !isEmpty, accentColor: accentColor)
     }
 
     private func emptyState(message: String) -> some View {
         VStack(spacing: 16) {
-            ShieldOrbView(isActive: false, size: 48)
+            ShieldOrbView(isActive: false, size: 48, accentColor: accentColor)
                 .opacity(0.6)
 
             Text(message)
@@ -139,4 +145,5 @@ struct LimitsView: View {
 #Preview {
     LimitsView()
         .environmentObject(LimitsSession())
+        .environmentObject(RewardsManager.shared)
 }
