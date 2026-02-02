@@ -1,6 +1,7 @@
 import Foundation
 import SwiftUI
 import Combine
+import os.log
 
 /// Notification posted when a focus session is successfully completed
 extension Notification.Name {
@@ -295,7 +296,7 @@ final class RewardsManager: ObservableObject {
             balance.anteInEscrow = 0
             SharedDataManager.shared.anteInEscrow = 0
             save()
-            print("Recovered \(orphanedAnte) orphaned Stardust ante from previous crash")
+            AppLogger.rewards.info("Recovered \(orphanedAnte) orphaned Stardust ante from previous crash")
         }
     }
 
@@ -465,7 +466,7 @@ final class RewardsManager: ObservableObject {
             let data = try PropertyListEncoder().encode(balance)
             UserDefaults.standard.set(data, forKey: balanceKey)
         } catch {
-            print("Failed to save rewards balance: \(error)")
+            AppLogger.data.error("Failed to save rewards balance: \(error)")
         }
     }
 
@@ -476,7 +477,7 @@ final class RewardsManager: ObservableObject {
         do {
             return try PropertyListDecoder().decode(StardustBalance.self, from: data)
         } catch {
-            print("Failed to load rewards balance: \(error)")
+            AppLogger.data.error("Failed to load rewards balance: \(error)")
             return StardustBalance()
         }
     }
@@ -486,7 +487,7 @@ final class RewardsManager: ObservableObject {
             let data = try PropertyListEncoder().encode(progress)
             UserDefaults.standard.set(data, forKey: progressKey)
         } catch {
-            print("Failed to save rewards progress: \(error)")
+            AppLogger.data.error("Failed to save rewards progress: \(error)")
         }
     }
 
@@ -497,7 +498,7 @@ final class RewardsManager: ObservableObject {
         do {
             return try PropertyListDecoder().decode(UserProgress.self, from: data)
         } catch {
-            print("Failed to load rewards progress: \(error)")
+            AppLogger.data.error("Failed to load rewards progress: \(error)")
             return UserProgress()
         }
     }
@@ -507,7 +508,7 @@ final class RewardsManager: ObservableObject {
             let data = try PropertyListEncoder().encode(collection)
             UserDefaults.standard.set(data, forKey: collectionKey)
         } catch {
-            print("Failed to save rewards collection: \(error)")
+            AppLogger.data.error("Failed to save rewards collection: \(error)")
         }
     }
 
@@ -518,7 +519,7 @@ final class RewardsManager: ObservableObject {
         do {
             return try PropertyListDecoder().decode(UserCollection.self, from: data)
         } catch {
-            print("Failed to load rewards collection: \(error)")
+            AppLogger.data.error("Failed to load rewards collection: \(error)")
             return UserCollection()
         }
     }

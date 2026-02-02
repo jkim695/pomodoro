@@ -1,4 +1,5 @@
 import SwiftUI
+import os.log
 
 /// Detail sheet for viewing and purchasing/equipping an orb style
 struct OrbDetailSheet: View {
@@ -304,7 +305,7 @@ struct OrbDetailSheet: View {
         if let newLevel = rewardsManager.upgradeStarLevel(style.id) {
             UINotificationFeedbackGenerator().notificationOccurred(.success)
             // Show brief feedback - the UI will update automatically
-            print("Upgraded to \(newLevel) stars!")
+            AppLogger.rewards.info("Upgraded to \(newLevel) stars!")
         } else {
             UINotificationFeedbackGenerator().notificationOccurred(.error)
         }
