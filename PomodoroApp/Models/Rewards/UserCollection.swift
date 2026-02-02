@@ -25,6 +25,9 @@ struct UserCollection: Codable, Equatable {
     /// History of gacha pulls
     var pullHistory: GachaPullHistory = GachaPullHistory()
 
+    /// History of orbs collected from completed sessions
+    var orbCollectionHistory: OrbCollectionHistory = OrbCollectionHistory()
+
     // MARK: - Methods
 
     /// Check if user owns a specific orb style

@@ -159,6 +159,17 @@ struct RewardsTabView: View {
                                     color: .pomAccent
                                 )
                             }
+
+                            NavigationLink {
+                                OrbNebulaView()
+                            } label: {
+                                QuickActionCard(
+                                    icon: "sparkles",
+                                    title: "Nebula",
+                                    subtitle: "\(rewardsManager.orbCollectionHistory.totalCollected) orbs",
+                                    color: .indigo
+                                )
+                            }
                         }
                         .padding(.horizontal)
                     }

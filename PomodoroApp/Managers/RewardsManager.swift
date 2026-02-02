@@ -104,6 +104,11 @@ final class RewardsManager: ObservableObject {
         balance.anteInEscrow > 0
     }
 
+    /// History of orbs collected from completed sessions
+    var orbCollectionHistory: OrbCollectionHistory {
+        collection.orbCollectionHistory
+    }
+
     // MARK: - Private
 
     private var cancellables = Set<AnyCancellable>()
@@ -128,7 +133,8 @@ final class RewardsManager: ObservableObject {
             .sink { [weak self] notification in
                 if let duration = notification.userInfo?["duration"] as? Int {
                     let anteUsed = notification.userInfo?["anteUsed"] as? Bool ?? false
-                    self?.awardSessionCompletion(duration: duration, anteUsed: anteUsed)
+                    let equippedOrbId = notification.userInfo?["equippedOrbId"] as? String
+                    self?.awardSessionCompletion(duration: duration, anteUsed: anteUsed, equippedOrbId: equippedOrbId)
                 }
             }
             .store(in: &cancellables)
@@ -165,7 +171,8 @@ final class RewardsManager: ObservableObject {
     /// - Parameters:
     ///   - duration: Session duration in minutes
     ///   - anteUsed: Whether user bet the ante (applies 2x bonus if true)
-    func awardSessionCompletion(duration: Int, anteUsed: Bool = false) {
+    ///   - equippedOrbId: The orb style ID that was equipped during the session
+    func awardSessionCompletion(duration: Int, anteUsed: Bool = false, equippedOrbId: String? = nil) {
         let reward = calculateReward(forDuration: duration, completed: true, withAnteBonus: anteUsed)
 
         // Update balance
@@ -173,6 +180,10 @@ final class RewardsManager: ObservableObject {
 
         // Update progress
         progress.recordSession(durationMinutes: duration)
+
+        // Record orb collection (use equipped orb or fall back to current)
+        let orbId = equippedOrbId ?? collection.equippedOrbStyleId
+        collection.orbCollectionHistory.recordCollection(orbStyleId: orbId)
 
         // Check for new milestones
         let newMilestones = checkAndAwardMilestones()
@@ -449,15 +460,6 @@ final class RewardsManager: ObservableObject {
         progress = Self.loadProgress()
         collection = Self.loadCollection()
     }
-
-    #if DEBUG
-    /// Add test stardust for development/testing purposes
-    func addTestStardust(_ amount: Int) {
-        balance.current += amount
-        balance.total += amount
-        save()
-    }
-    #endif
 
     // MARK: - Static Persistence Helpers
 
