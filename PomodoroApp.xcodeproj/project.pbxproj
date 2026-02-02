@@ -77,7 +77,6 @@
 		H1000006001 /* RewardsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000006000 /* RewardsManager.swift */; };
 		H1000007001 /* StardustBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000007000 /* StardustBadge.swift */; };
 		H1000008001 /* CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000008000 /* CollectionView.swift */; };
-		H1000009001 /* ShopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000009000 /* ShopView.swift */; };
 		H1000010001 /* OrbPreviewCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000010000 /* OrbPreviewCard.swift */; };
 		H1000011001 /* OrbDetailSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000011000 /* OrbDetailSheet.swift */; };
 		H1000012001 /* ProgressSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = H1000012000 /* ProgressSummaryView.swift */; };
@@ -166,7 +165,6 @@
 		H1000006000 /* RewardsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardsManager.swift; sourceTree = "<group>"; };
 		H1000007000 /* StardustBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StardustBadge.swift; sourceTree = "<group>"; };
 		H1000008000 /* CollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionView.swift; sourceTree = "<group>"; };
-		H1000009000 /* ShopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopView.swift; sourceTree = "<group>"; };
 		H1000010000 /* OrbPreviewCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrbPreviewCard.swift; sourceTree = "<group>"; };
 		H1000011000 /* OrbDetailSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrbDetailSheet.swift; sourceTree = "<group>"; };
 		H1000012000 /* ProgressSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressSummaryView.swift; sourceTree = "<group>"; };
@@ -464,7 +462,6 @@
 			isa = PBXGroup;
 			children = (
 				H1000008000 /* CollectionView.swift */,
-				H1000009000 /* ShopView.swift */,
 				H1000010000 /* OrbPreviewCard.swift */,
 				H1000011000 /* OrbDetailSheet.swift */,
 				H1000012000 /* ProgressSummaryView.swift */,
@@ -762,7 +759,6 @@
 				H1000006001 /* RewardsManager.swift in Sources */,
 				H1000007001 /* StardustBadge.swift in Sources */,
 				H1000008001 /* CollectionView.swift in Sources */,
-				H1000009001 /* ShopView.swift in Sources */,
 				H1000010001 /* OrbPreviewCard.swift in Sources */,
 				H1000011001 /* OrbDetailSheet.swift in Sources */,
 				H1000012001 /* ProgressSummaryView.swift in Sources */,

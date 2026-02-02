@@ -112,9 +112,9 @@ struct CollectionView: View {
                             Spacer()
 
                             NavigationLink {
-                                ShopView()
+                                GachaView()
                             } label: {
-                                Text("View Shop")
+                                Text("Try Gacha")
                                     .font(.caption.weight(.medium))
                                     .foregroundColor(.pomPrimary)
                             }
@@ -135,7 +135,7 @@ struct CollectionView: View {
 
                                 if rewardsManager.lockedStyles.count > 5 {
                                     NavigationLink {
-                                        ShopView()
+                                        GachaView()
                                     } label: {
                                         VStack {
                                             Image(systemName: "ellipsis")
