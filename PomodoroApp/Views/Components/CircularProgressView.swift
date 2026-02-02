@@ -5,6 +5,7 @@ struct CircularProgressView: View {
     var lineWidth: CGFloat = 24
     var size: CGFloat = 280
     var animateFromProgress: Double? = nil  // Initial fill to animate from (for smooth session start)
+    var accentColor: Color = .pomPrimary  // Customizable ring color
 
     @State private var displayedProgress: CGFloat = 0
     @State private var hasAnimatedIn: Bool = false
@@ -28,7 +29,7 @@ struct CircularProgressView: View {
             Circle()
                 .trim(from: 0, to: displayedProgress)
                 .stroke(
-                    Color.pomPrimary,
+                    accentColor,
                     style: StrokeStyle(lineWidth: lineWidth, lineCap: .round)
                 )
                 .frame(width: size - lineWidth, height: size - lineWidth)

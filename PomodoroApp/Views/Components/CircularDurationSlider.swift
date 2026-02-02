@@ -7,6 +7,7 @@ struct CircularDurationSlider: View {
     var size: CGFloat = 340
     var trackWidth: CGFloat = 20
     var isEnabled: Bool = true
+    var accentColor: Color = .pomPrimary  // Customizable ring and thumb color
 
     // Internal state
     @State private var isDragging: Bool = false
@@ -49,7 +50,7 @@ struct CircularDurationSlider: View {
             Circle()
                 .trim(from: 0, to: displayProgress)
                 .stroke(
-                    Color.pomPrimary,
+                    accentColor,
                     style: StrokeStyle(lineWidth: trackWidth, lineCap: .round)
                 )
                 .frame(width: size - trackWidth, height: size - trackWidth)
@@ -57,7 +58,7 @@ struct CircularDurationSlider: View {
 
             // Thumb/knob at current position
             Circle()
-                .fill(Color.pomPrimary)
+                .fill(accentColor)
                 .frame(width: 20, height: 20)
                 .shadow(color: Color.black.opacity(0.25), radius: 2, x: 0, y: 1)
                 .offset(thumbOffset)

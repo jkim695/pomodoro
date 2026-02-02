@@ -9,6 +9,11 @@ struct TimerView: View {
     @State private var earnedStardust: Int = 0
     @State private var earnedMilestones: [Milestone] = []
     @AppStorage("completedSessions") private var completedSessions: Int = 0
+    @AppStorage("focusedMinutesToday") private var focusedMinutesToday: Int = 0
+    @AppStorage("lastFocusDate") private var lastFocusDate: String = ""
+
+    /// The duration of the session that was started (captured at start to track on completion)
+    @State private var sessionDurationAtStart: Int = 0
 
     var body: some View {
         ZStack {
@@ -55,7 +60,6 @@ struct TimerView: View {
             // Cool-down overlay (quit confirmation)
             if session.state == .coolingDown {
                 CoolDownOverlayView(
-                    timeRemaining: session.coolDownTimeRemaining,
                     anteAmount: RewardsManager.sessionAnteAmount,
                     onResume: { session.cancelQuit() },
                     onConfirmQuit: { session.confirmQuit() }
@@ -75,11 +79,17 @@ struct TimerView: View {
             SettingsView()
         }
         .onChange(of: session.state) { newState in
+            // Capture session duration when starting
+            if previousState == .idle && newState == .focusing {
+                sessionDurationAtStart = session.focusDuration
+            }
+
             // Trigger celebration when focus session completes (from focusing or coolingDown)
             // Only celebrate if there was a reward (natural completion, not quit)
             let wasInSession = previousState == .focusing || previousState == .coolingDown
             if wasInSession && newState == .idle && rewardsManager.balance.lastSessionReward > 0 {
                 completedSessions += 1
+                focusedMinutesToday += sessionDurationAtStart
                 // Capture reward info for celebration display
                 earnedStardust = rewardsManager.balance.lastSessionReward
                 earnedMilestones = rewardsManager.pendingMilestones
@@ -89,6 +99,8 @@ struct TimerView: View {
         }
         .onAppear {
             previousState = session.state
+            // Reset daily counter if it's a new day
+            resetDailyCounterIfNeeded()
             // Migrate existing sessions if this is first launch with rewards
             rewardsManager.migrateExistingSessions(completedSessions)
         }
@@ -99,13 +111,15 @@ struct TimerView: View {
         HStack {
             Spacer()
 
-            Button {
-                showSettings = true
-            } label: {
-                Image(systemName: "gearshape.fill")
-                    .font(.system(size: 24, weight: .medium))
-                    .foregroundColor(.pomTextSecondary)
-                    .padding(8)
+            if session.state == .idle {
+                Button {
+                    showSettings = true
+                } label: {
+                    Image(systemName: "gearshape.fill")
+                        .font(.system(size: 24, weight: .medium))
+                        .foregroundColor(.pomTextSecondary)
+                        .padding(8)
+                }
             }
         }
     }
@@ -120,7 +134,8 @@ struct TimerView: View {
                     duration: $session.focusDuration,
                     size: 252,
                     trackWidth: 12,
-                    isEnabled: true
+                    isEnabled: true,
+                    accentColor: rewardsManager.equippedStyle.primaryColor
                 )
             } else {
                 // Progress ring (during focus sessions and cool-down)
@@ -129,7 +144,8 @@ struct TimerView: View {
                     progress: session.timer.progress,
                     lineWidth: 12,
                     size: 252,
-                    animateFromProgress: sliderFillProgress
+                    animateFromProgress: sliderFillProgress,
+                    accentColor: rewardsManager.equippedStyle.primaryColor
                 )
             }
 
@@ -168,15 +184,25 @@ struct TimerView: View {
                 .textCase(.uppercase)
                 .tracking(2)
 
-            // Session counter or app blocked info
+            // Focus time today or app blocked info
             if session.state == .idle {
-                Text("Today: \(completedSessions) session\(completedSessions == 1 ? "" : "s")")
+                Text("Today: \(focusedMinutesToday) min\(focusedMinutesToday == 1 ? "" : "s") focused")
                     .font(.pomCaption)
                     .foregroundColor(.pomTextTertiary)
             } else if (session.state == .focusing || session.state == .coolingDown) && hasBlockedApps {
                 Text("\(blockedAppCount) app\(blockedAppCount == 1 ? "" : "s") blocked")
                     .font(.pomCaption)
                     .foregroundColor(.pomTextTertiary)
+            }
+
+            // Focus message during session
+            if session.state == .focusing {
+                Text("Put down your phone and focus on your work.")
+                    .font(.pomCaption)
+                    .foregroundColor(.pomTextTertiary)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 40)
+                    .padding(.top, 8)
             }
         }
     }
@@ -229,7 +255,7 @@ struct TimerView: View {
             switch session.state {
             case .idle:
                 VStack(spacing: 12) {
-                    RoundedButton("Begin", style: .primary) {
+                    RoundedButton("Begin", style: .primary, customPrimaryColor: rewardsManager.equippedStyle.primaryColor) {
                         session.startFocusSession()
                     }
 
@@ -287,6 +313,21 @@ struct TimerView: View {
     // MARK: - Celebration
     private func triggerCelebration() {
         showCelebration = true
+    }
+
+    // MARK: - Daily Reset
+    private func resetDailyCounterIfNeeded() {
+        let today = todayDateString()
+        if lastFocusDate != today {
+            focusedMinutesToday = 0
+            lastFocusDate = today
+        }
+    }
+
+    private func todayDateString() -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        return formatter.string(from: Date())
     }
 }
 
