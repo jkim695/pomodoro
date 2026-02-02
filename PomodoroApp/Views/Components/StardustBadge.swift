@@ -54,6 +54,8 @@ struct StardustBadge: View {
                 .fill(Color.pomCardBackground)
                 .shadow(color: Color.black.opacity(0.1), radius: 2, x: 0, y: 1)
         )
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("\(amount) Stardust")
     }
 
     private var formattedAmount: String {

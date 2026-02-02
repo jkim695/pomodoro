@@ -98,6 +98,10 @@ struct ScheduleRow: View {
         .onTapGesture {
             onEdit()
         }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(schedule.name), \(schedule.formattedTimeRange), \(schedule.selectionCount) app\(schedule.selectionCount == 1 ? "" : "s")")
+        .accessibilityValue(schedule.isEnabled ? "Enabled" : "Disabled")
+        .accessibilityHint("Double tap to edit")
         .contextMenu {
             Button {
                 onEdit()

@@ -76,6 +76,7 @@ struct RoundedButton: View {
                 .onChanged { _ in isPressed = true }
                 .onEnded { _ in isPressed = false }
         )
+        .accessibilityLabel(title)
     }
 
     private var foregroundColor: Color {
@@ -153,6 +154,7 @@ struct IconRoundedButton: View {
                 .onChanged { _ in isPressed = true }
                 .onEnded { _ in isPressed = false }
         )
+        .accessibilityLabel(title)
     }
 
     private var foregroundColor: Color {

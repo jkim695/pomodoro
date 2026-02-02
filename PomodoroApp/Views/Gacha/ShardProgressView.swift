@@ -89,6 +89,18 @@ struct ShardProgressView: View {
                 }
             }
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(accessibilityDescription)
+    }
+
+    private var accessibilityDescription: String {
+        if starLevel >= OrbStarLevels.maxStarLevel {
+            return "\(style.name) at maximum level"
+        }
+        if !isOwned {
+            return "Unlock progress: \(shardCount) of \(targetShards) shards\(isReady ? ", ready to unlock" : "")"
+        }
+        return "Upgrade progress: \(shardCount) of \(targetShards) shards to reach \(starLevel + 1) star\(isReady ? ", ready to upgrade" : "")"
     }
 }
 
@@ -111,6 +123,8 @@ struct ShardCountBadge: View {
             Capsule()
                 .fill(Color.pomCardBackground)
         )
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("\(count) of \(required) shards")
     }
 }
 

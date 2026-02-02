@@ -77,7 +77,11 @@ struct InsufficientFundsOverlayView: View {
                                 .fill(Color.pomPrimary)
                         )
                 }
+                .accessibilityLabel("OK")
+                .accessibilityHint("Dismiss this message")
             }
+            .accessibilityElement(children: .contain)
+            .accessibilityLabel("Not enough Stardust. You need \(required) but have \(current). Need \(shortfall) more.")
             .padding(32)
             .background(
                 RoundedRectangle(cornerRadius: 24)

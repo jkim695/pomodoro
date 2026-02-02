@@ -115,6 +115,8 @@ struct LimitsView: View {
                             .foregroundColor(accentColor)
                     }
                 }
+                .accessibilityLabel("Add \(title.lowercased())")
+                .accessibilityHint("Create a new \(title.lowercased().dropLast())")
             }
 
             // Content or empty state

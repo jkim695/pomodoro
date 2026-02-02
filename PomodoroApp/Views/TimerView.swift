@@ -131,6 +131,8 @@ struct TimerView: View {
                         .foregroundColor(.pomTextSecondary)
                         .padding(8)
                 }
+                .accessibilityLabel("Settings")
+                .accessibilityHint("Opens app settings")
             }
         }
     }
@@ -174,6 +176,9 @@ struct TimerView: View {
                     showOrbSelector = true
                 }
             }
+            .accessibilityLabel("\(rewardsManager.equippedStyle.name) orb, \(equippedStarLevel) star")
+            .accessibilityHint(session.state == .idle ? "Tap to change orb" : "")
+            .accessibilityAddTraits(session.state == .idle ? .isButton : [])
         }
     }
 
@@ -318,6 +323,8 @@ private struct GracePeriodCancelButton: View {
                 .font(.pomCaption)
                 .foregroundColor(.pomTextTertiary)
         }
+        .accessibilityLabel("Cancel session")
+        .accessibilityHint("Cancel within \(remainingSeconds) seconds without penalty")
         .opacity(opacity)
         .transition(.opacity.combined(with: .scale(scale: 0.9)))
         .onReceive(timer) { _ in

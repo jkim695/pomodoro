@@ -42,6 +42,8 @@ struct PityProgressView: View {
             RoundedRectangle(cornerRadius: 12)
                 .fill(Color.pomCardBackground)
         )
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("Pity Progress. \(counter.pullsSinceRare) pulls since Rare, \(GachaConfig.pityRare - counter.pullsSinceRare) until guaranteed. \(counter.pullsSinceEpic) pulls since Epic, \(GachaConfig.pityEpic - counter.pullsSinceEpic) until guaranteed. \(counter.pullsSinceLegendary) pulls since Legendary, \(GachaConfig.pityLegendary - counter.pullsSinceLegendary) until guaranteed. Total pulls: \(counter.totalPulls)")
     }
 }
 
@@ -82,6 +84,8 @@ private struct PityProgressItem: View {
                 .foregroundColor(.pomTextSecondary)
         }
         .frame(maxWidth: .infinity)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("\(label): \(remaining) pulls until guaranteed")
     }
 }
 

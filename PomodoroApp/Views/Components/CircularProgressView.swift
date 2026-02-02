@@ -36,6 +36,7 @@ struct CircularProgressView: View {
                 .rotationEffect(.degrees(-90))
         }
         .frame(width: size, height: size)
+        .accessibilityHidden(true) // Timer text provides the accessible time info
         .onAppear {
             if let initialProgress = animateFromProgress, !hasAnimatedIn {
                 // Start from the slider's fill position for smooth transition

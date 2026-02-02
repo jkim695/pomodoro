@@ -33,6 +33,9 @@ struct DropRatesDisclosure: View {
                         .fill(Color.pomCardBackground)
                 )
             }
+            .accessibilityLabel("Drop Rates")
+            .accessibilityHint(isExpanded ? "Double tap to collapse" : "Double tap to expand")
+            .accessibilityValue(isExpanded ? "Expanded" : "Collapsed")
 
             // Expanded content
             if isExpanded {
@@ -89,6 +92,8 @@ private struct DropRateRow: View {
                 .font(.caption2)
                 .foregroundColor(.pomTextTertiary)
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("\(rarity.displayName): \(Int(rarity.dropRate))% drop rate, \(rarity.shardsPerPull) shards per pull")
     }
 }
 

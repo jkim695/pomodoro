@@ -77,6 +77,11 @@ struct GachaPullButton: View {
             .foregroundColor(canAfford ? .white : .pomTextSecondary)
         }
         .disabled(!canAfford || isPulling)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("\(title), \(cost) Stardust\(discount != nil ? ", \(discount!)" : "")")
+        .accessibilityValue(canAfford ? "Available" : "Not enough Stardust")
+        .accessibilityHint(canAfford ? "Double tap to pull" : "Earn more Stardust to use")
+        .accessibilityAddTraits(canAfford && !isPulling ? .isButton : [])
     }
 }
 

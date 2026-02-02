@@ -64,6 +64,8 @@ struct RewardsTabView: View {
                                 .fill(Color.pomCardBackground)
                                 .shadow(color: Color.black.opacity(0.05), radius: 10, x: 0, y: 4)
                         )
+                        .accessibilityElement(children: .ignore)
+                        .accessibilityLabel("Your Stardust: \(rewardsManager.balance.current)\(rewardsManager.progress.currentStreak > 0 ? ", \(rewardsManager.progress.currentStreak) day streak" : "")")
                     }
                     .padding(.horizontal)
 
@@ -282,6 +284,8 @@ private struct QuickActionCard: View {
             RoundedRectangle(cornerRadius: 16)
                 .fill(Color.pomCardBackground)
         )
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("\(title), \(subtitle)")
     }
 }
 

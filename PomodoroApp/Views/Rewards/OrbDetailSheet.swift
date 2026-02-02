@@ -51,6 +51,8 @@ struct OrbDetailSheet: View {
                         .font(.title2)
                         .foregroundStyle(Color.pomTextTertiary)
                 }
+                .accessibilityLabel("Close")
+                .accessibilityHint("Dismiss orb details")
             }
             .padding(.horizontal)
 
@@ -150,6 +152,8 @@ struct OrbDetailSheet: View {
                                     )
                             )
                         }
+                        .accessibilityLabel("Upgrade to \(starLevel + 1) star")
+                        .accessibilityHint("Spend shards to upgrade this orb")
                     }
 
                     if isEquipped {
@@ -166,6 +170,7 @@ struct OrbDetailSheet: View {
                             RoundedRectangle(cornerRadius: 12)
                                 .fill(Color.pomSecondary.opacity(0.15))
                         )
+                        .accessibilityLabel("Currently equipped")
                     } else {
                         // Equip button
                         Button {
@@ -183,6 +188,8 @@ struct OrbDetailSheet: View {
                                         .fill(Color.pomPrimary)
                                 )
                         }
+                        .accessibilityLabel("Equip")
+                        .accessibilityHint("Set this orb as your active orb")
                     }
                 } else {
                     // Unlock with shards button (if available)
@@ -209,6 +216,8 @@ struct OrbDetailSheet: View {
                                     )
                             )
                         }
+                        .accessibilityLabel("Unlock with shards")
+                        .accessibilityHint("Use collected shards to unlock this orb")
                     }
 
                     // Direct purchase button
@@ -235,6 +244,8 @@ struct OrbDetailSheet: View {
                         )
                     }
                     .disabled(!canAfford || isPurchasing)
+                    .accessibilityLabel("Purchase for \(style.price) Stardust")
+                    .accessibilityValue(canAfford ? "Available" : "Not enough Stardust")
 
                     if !canAfford && !canUnlockWithShards {
                         Text("Not enough Stardust")

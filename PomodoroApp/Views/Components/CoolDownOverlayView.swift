@@ -85,6 +85,8 @@ struct CoolDownOverlayView: View {
                                 .fill(Color.pomSecondary)
                         )
                     }
+                    .accessibilityLabel("Resume session")
+                    .accessibilityHint("Continue your focus session")
 
                     // Hold-to-confirm quit button
                     holdToConfirmButton
@@ -149,6 +151,8 @@ struct CoolDownOverlayView: View {
                     endHold()
                 }
         )
+        .accessibilityLabel("Hold to confirm quit")
+        .accessibilityHint("Press and hold for 5 seconds to quit and lose \(anteAmount) Stardust")
     }
 
     private var holdButtonText: String {
