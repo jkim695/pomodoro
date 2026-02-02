@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		100D53149D164120A2AEF280 /* OrbCollectionHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0692CC9E49DC400494EC4E8F /* OrbCollectionHistory.swift */; };
+		51A5651549C04762BB788377 /* OrbNebulaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1EE75AC63864C2E87991C71 /* OrbNebulaView.swift */; };
+		80285C83AACC4ED081BDC755 /* OrbNebulaDetailSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C905C2EA7AE54A44A7514AE4 /* OrbNebulaDetailSheet.swift */; };
+		3972B347B5B34C8198A848C7 /* OrbNebulaCanvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B80937A95164CDAAC931036 /* OrbNebulaCanvas.swift */; };
+		E6B4C3D298F15061CFDE2345 /* OrbNebula3DView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A3B2C198E04F60BFCD1234 /* OrbNebula3DView.swift */; };
 		A1000001001 /* PomodoroAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000001000 /* PomodoroAppApp.swift */; };
 		A1000002001 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000002000 /* ContentView.swift */; };
 		A1000003001 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1000003000 /* Assets.xcassets */; };
@@ -103,6 +108,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0692CC9E49DC400494EC4E8F /* OrbCollectionHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrbCollectionHistory.swift; sourceTree = "<group>"; };
+		F1EE75AC63864C2E87991C71 /* OrbNebulaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrbNebulaView.swift; sourceTree = "<group>"; };
+		C905C2EA7AE54A44A7514AE4 /* OrbNebulaDetailSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrbNebulaDetailSheet.swift; sourceTree = "<group>"; };
+		2B80937A95164CDAAC931036 /* OrbNebulaCanvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrbNebulaCanvas.swift; sourceTree = "<group>"; };
+		D5A3B2C198E04F60BFCD1234 /* OrbNebula3DView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrbNebula3DView.swift; sourceTree = "<group>"; };
 		A1000000000 /* PomodoroApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PomodoroApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1000001000 /* PomodoroAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PomodoroAppApp.swift; sourceTree = "<group>"; };
 		A1000002000 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -407,6 +417,7 @@
 				HB00001000 /* HoldToGiveUpButton.swift */,
 				B1000022000 /* AnimatedTimerText.swift */,
 				C1000001000 /* GradientOrbView.swift */,
+				2B80937A95164CDAAC931036 /* OrbNebulaCanvas.swift */,
 				K1000001000 /* SaturnRingView.swift */,
 				N1000001000 /* ShieldOrbView.swift */,
 				N1000002000 /* GlowingProgressBar.swift */,
@@ -456,6 +467,7 @@
 				I1000001000 /* Gacha.swift */,
 				I1000002000 /* GachaConfig.swift */,
 				H1000001000 /* Currency.swift */,
+				0692CC9E49DC400494EC4E8F /* OrbCollectionHistory.swift */,
 				H1000002000 /* OrbStyle.swift */,
 				H1000003000 /* UserProgress.swift */,
 				H1000004000 /* UserCollection.swift */,
@@ -473,6 +485,9 @@
 				H1000012000 /* ProgressSummaryView.swift */,
 				H1000013000 /* RewardCelebrationView.swift */,
 				H1000014000 /* RewardsTabView.swift */,
+				F1EE75AC63864C2E87991C71 /* OrbNebulaView.swift */,
+				C905C2EA7AE54A44A7514AE4 /* OrbNebulaDetailSheet.swift */,
+				D5A3B2C198E04F60BFCD1234 /* OrbNebula3DView.swift */,
 			);
 			path = Rewards;
 			sourceTree = "<group>";
@@ -737,6 +752,11 @@
 				HB00001001 /* HoldToGiveUpButton.swift in Sources */,
 				B1000022001 /* AnimatedTimerText.swift in Sources */,
 				B1000030001 /* TimerView.swift in Sources */,
+				100D53149D164120A2AEF280 /* OrbCollectionHistory.swift in Sources */,
+				51A5651549C04762BB788377 /* OrbNebulaView.swift in Sources */,
+				80285C83AACC4ED081BDC755 /* OrbNebulaDetailSheet.swift in Sources */,
+				3972B347B5B34C8198A848C7 /* OrbNebulaCanvas.swift in Sources */,
+				E6B4C3D298F15061CFDE2345 /* OrbNebula3DView.swift in Sources */,
 				B1000031001 /* AppSelectionView.swift in Sources */,
 				B1000032001 /* SettingsView.swift in Sources */,
 				B1000033001 /* AuthorizationRequestView.swift in Sources */,

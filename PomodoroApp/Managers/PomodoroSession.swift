@@ -193,7 +193,11 @@ final class PomodoroSession: ObservableObject {
             NotificationCenter.default.post(
                 name: .sessionCompleted,
                 object: nil,
-                userInfo: ["duration": focusDuration, "anteUsed": sessionAnteUsed]
+                userInfo: [
+                    "duration": focusDuration,
+                    "anteUsed": sessionAnteUsed,
+                    "equippedOrbId": RewardsManager.shared.collection.equippedOrbStyleId
+                ]
             )
         }
 
