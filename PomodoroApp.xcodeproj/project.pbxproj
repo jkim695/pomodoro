@@ -11,6 +11,7 @@
 		A1000002001 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000002000 /* ContentView.swift */; };
 		A1000003001 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1000003000 /* Assets.xcassets */; };
 		A1000004001 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1000004000 /* Preview Assets.xcassets */; };
+		P1000001001 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = P1000001000 /* PrivacyInfo.xcprivacy */; };
 		A1000005001 /* AuthorizationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000005000 /* AuthorizationManager.swift */; };
 		A1000006001 /* ShieldManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000006000 /* ShieldManager.swift */; };
 		A1000007001 /* ActivityScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000007000 /* ActivityScheduler.swift */; };
@@ -111,6 +112,7 @@
 		A1000007000 /* ActivityScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityScheduler.swift; sourceTree = "<group>"; };
 		A1000008000 /* SharedDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedDataManager.swift; sourceTree = "<group>"; };
 		A1000009000 /* PomodoroApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PomodoroApp.entitlements; sourceTree = "<group>"; };
+		P1000001000 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		A2000000000 /* DeviceActivityMonitorExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = DeviceActivityMonitorExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		A2000001000 /* PomodoroActivityMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PomodoroActivityMonitor.swift; sourceTree = "<group>"; };
 		A2000005000 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -293,6 +295,7 @@
 				B1000034000 /* Theme */,
 				A1000003000 /* Assets.xcassets */,
 				A1000009000 /* PomodoroApp.entitlements */,
+				P1000001000 /* PrivacyInfo.xcprivacy */,
 				A1000033000 /* Preview Content */,
 			);
 			path = PomodoroApp;
@@ -657,6 +660,7 @@
 			files = (
 				A1000004001 /* Preview Assets.xcassets in Resources */,
 				A1000003001 /* Assets.xcassets in Resources */,
+				P1000001001 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -963,6 +967,7 @@
 				DEVELOPMENT_TEAM = GMR2G7RSAM;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Orchard;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -973,7 +978,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.pomodoroo.app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.orchard.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -994,6 +999,7 @@
 				DEVELOPMENT_TEAM = GMR2G7RSAM;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Orchard;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -1004,7 +1010,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.pomodoroo.app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.orchard.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -1030,7 +1036,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.pomodoroo.app.DeviceActivityMonitorExtension;
+				PRODUCT_BUNDLE_IDENTIFIER = com.orchard.app.DeviceActivityMonitorExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = iphoneos;
@@ -1059,7 +1065,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.pomodoroo.app.DeviceActivityMonitorExtension;
+				PRODUCT_BUNDLE_IDENTIFIER = com.orchard.app.DeviceActivityMonitorExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = iphoneos;
@@ -1088,7 +1094,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.pomodoroo.app.ShieldConfigurationExtension;
+				PRODUCT_BUNDLE_IDENTIFIER = com.orchard.app.ShieldConfigurationExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = iphoneos;
@@ -1117,7 +1123,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.pomodoroo.app.ShieldConfigurationExtension;
+				PRODUCT_BUNDLE_IDENTIFIER = com.orchard.app.ShieldConfigurationExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = iphoneos;
@@ -1146,7 +1152,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.pomodoroo.app.ShieldActionExtension;
+				PRODUCT_BUNDLE_IDENTIFIER = com.orchard.app.ShieldActionExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = iphoneos;
@@ -1175,7 +1181,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.pomodoroo.app.ShieldActionExtension;
+				PRODUCT_BUNDLE_IDENTIFIER = com.orchard.app.ShieldActionExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = iphoneos;
@@ -1204,7 +1210,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.pomodoroo.app.DeviceActivityReportExtension;
+				PRODUCT_BUNDLE_IDENTIFIER = com.orchard.app.DeviceActivityReportExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = iphoneos;
@@ -1233,7 +1239,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.pomodoroo.app.DeviceActivityReportExtension;
+				PRODUCT_BUNDLE_IDENTIFIER = com.orchard.app.DeviceActivityReportExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = iphoneos;

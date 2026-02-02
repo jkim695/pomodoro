@@ -28,6 +28,11 @@ struct SettingsView: View {
                         settingsSection(title: "Block Apps", icon: "shield.fill") {
                             blockedAppsSection
                         }
+
+                        // About
+                        settingsSection(title: "About", icon: "info.circle.fill") {
+                            aboutSection
+                        }
                     }
                     .padding(.horizontal, 24)
                     .padding(.vertical, 16)
@@ -143,6 +148,36 @@ struct SettingsView: View {
 
             RoundedButton("Manage Apps", style: .secondary) {
                 showAppSelection = true
+            }
+        }
+    }
+
+    // MARK: - About Section
+    private var aboutSection: some View {
+        VStack(spacing: 12) {
+            Link(destination: URL(string: "https://jkim695.github.io/pomodoro/privacy-policy")!) {
+                HStack {
+                    Text("Privacy Policy")
+                        .font(.pomBody)
+                        .foregroundColor(.pomTextPrimary)
+                    Spacer()
+                    Image(systemName: "arrow.up.right")
+                        .font(.system(size: 14))
+                        .foregroundColor(.pomTextSecondary)
+                }
+            }
+
+            Divider()
+                .background(Color.pomBorder)
+
+            HStack {
+                Text("Version")
+                    .font(.pomBody)
+                    .foregroundColor(.pomTextPrimary)
+                Spacer()
+                Text(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0")
+                    .font(.pomBody)
+                    .foregroundColor(.pomTextSecondary)
             }
         }
     }
