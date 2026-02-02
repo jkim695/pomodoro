@@ -37,6 +37,8 @@ struct SettingsView: View {
                     }
                     .font(.pomButton)
                     .foregroundColor(.pomPrimary)
+                    .accessibilityLabel("Done")
+                    .accessibilityHint("Close settings")
                 }
             }
         }
@@ -112,6 +114,8 @@ struct SettingsView: View {
                         .foregroundColor(.pomTextSecondary)
                 }
             }
+            .accessibilityLabel("Privacy Policy")
+            .accessibilityHint("Opens in web browser")
 
             Divider()
                 .background(Color.pomBorder)

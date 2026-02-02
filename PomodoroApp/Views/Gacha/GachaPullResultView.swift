@@ -75,6 +75,8 @@ struct GachaPullResultView: View {
                             Capsule()
                                 .stroke(Color.white.opacity(0.3), lineWidth: 1)
                         )
+                        .accessibilityLabel("Skip")
+                        .accessibilityHint("Reveal all results immediately")
                     }
 
                     Button {
@@ -90,6 +92,8 @@ struct GachaPullResultView: View {
                                     .fill(Color.pomPrimary)
                             )
                     }
+                    .accessibilityLabel("Continue")
+                    .accessibilityHint("Dismiss results and return to gacha")
                 }
                 .padding(.horizontal)
             }
@@ -207,6 +211,8 @@ struct SinglePullResultCard: View {
                         )
                 )
         )
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(revealed ? "\(result.orbName), \(result.rarity.displayName), plus \(result.shardsAwarded) shards\(result.wasGuaranteed ? ", pity guaranteed" : "")" : "Result not yet revealed")
     }
 }
 
@@ -302,6 +308,8 @@ struct PullResultCard: View {
                         )
                 )
         )
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(revealed ? "\(result.orbName), plus \(result.shardsAwarded) shards" : "Not revealed")
     }
 }
 
@@ -359,6 +367,8 @@ struct PullSummaryView: View {
             RoundedRectangle(cornerRadius: 12)
                 .fill(Color.white.opacity(0.1))
         )
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Total: plus \(totalShards) shards. \(rarityCounts.map { "\($0.1) \($0.0.displayName)" }.joined(separator: ", "))")
     }
 }
 

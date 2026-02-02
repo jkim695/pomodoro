@@ -12,11 +12,22 @@ struct AnimatedTimerText: View {
         return String(format: "%02d:%02d", minutes, seconds)
     }
 
+    private var accessibleTime: String {
+        let minutes = timeRemaining / 60
+        let seconds = timeRemaining % 60
+        if seconds == 0 {
+            return "\(minutes) minute\(minutes == 1 ? "" : "s")"
+        }
+        return "\(minutes) minute\(minutes == 1 ? "" : "s") and \(seconds) second\(seconds == 1 ? "" : "s")"
+    }
+
     var body: some View {
         Text(formattedTime)
             .font(.timerDisplay)
             .foregroundColor(.pomTextPrimary)
             .scaleEffect(scale)
+            .accessibilityLabel(accessibleTime)
+            .accessibilityAddTraits(.updatesFrequently)
             .onChange(of: isRunning) { running in
                 if running {
                     startPulse()

@@ -50,6 +50,7 @@ struct AuthorizationRequestView: View {
                 .font(.system(size: 64))
                 .foregroundColor(.pomSage)
         }
+        .accessibilityHidden(true)
         .onAppear {
             isAnimating = true
         }
@@ -90,6 +91,7 @@ struct AuthorizationRequestView: View {
 
             Spacer()
         }
+        .accessibilityElement(children: .combine)
     }
 
     // MARK: - Action Button
@@ -113,6 +115,7 @@ struct AuthorizationDeniedView: View {
                 Image(systemName: "exclamationmark.triangle.fill")
                     .font(.system(size: 60))
                     .foregroundColor(.pomPeach)
+                    .accessibilityHidden(true)
 
                 VStack(spacing: 16) {
                     Text("Screen Time Access Needed")

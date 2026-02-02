@@ -57,6 +57,10 @@ struct DayOfWeekPicker: View {
                 )
         }
         .animation(.spring(response: 0.3, dampingFraction: 0.7), value: selectedDays)
+        .accessibilityLabel(day.fullName)
+        .accessibilityValue(isSelected ? "Selected" : "Not selected")
+        .accessibilityHint("Double tap to \(isSelected ? "deselect" : "select")")
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 }
 
@@ -108,6 +112,10 @@ struct DayPresetButtons: View {
                 )
         }
         .animation(.spring(response: 0.3, dampingFraction: 0.7), value: selectedDays)
+        .accessibilityLabel(title)
+        .accessibilityValue(isSelected ? "Currently selected" : "")
+        .accessibilityHint("Double tap to select \(title.lowercased())")
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 }
 

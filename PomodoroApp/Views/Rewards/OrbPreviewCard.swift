@@ -147,6 +147,10 @@ struct OrbPreviewCard: View {
             )
         }
         .buttonStyle(.plain)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("\(style.name) orb\(isOwned ? (starLevel > 1 ? ", \(starLevel) star" : "") : ", locked")\(isEquipped ? ", currently equipped" : "")")
+        .accessibilityHint(isOwned ? (isEquipped ? "" : "Double tap to view details") : "Double tap to view unlock options, costs \(style.price) Stardust")
+        .accessibilityAddTraits(isEquipped ? .isSelected : [])
     }
 }
 

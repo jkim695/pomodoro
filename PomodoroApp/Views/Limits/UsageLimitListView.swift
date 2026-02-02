@@ -158,6 +158,10 @@ struct UsageLimitRow: View {
         .onTapGesture {
             onEdit()
         }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(limit.selectionCount) app\(limit.selectionCount == 1 ? "" : "s") limit, \(limit.formattedLimit)")
+        .accessibilityValue("\(limit.isEnabled ? "Enabled" : "Disabled"), \(remainingText)")
+        .accessibilityHint("Double tap to edit")
         .contextMenu {
             Button {
                 onEdit()

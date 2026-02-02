@@ -41,6 +41,8 @@ struct QuickOrbSelectorView: View {
                         dismiss()
                     }
                     .foregroundColor(.pomAccent)
+                    .accessibilityLabel("Done")
+                    .accessibilityHint("Close orb selector")
                 }
             }
         }
@@ -66,6 +68,8 @@ struct QuickOrbSelectorView: View {
                 .foregroundColor(.pomTextSecondary)
         }
         .padding()
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("Currently equipped: \(rewardsManager.equippedStyle.name) orb")
     }
 
     // MARK: - Orbs Grid
@@ -212,6 +216,10 @@ private struct QuickOrbCard: View {
             )
         }
         .buttonStyle(.plain)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("\(style.name) orb\(starLevel > 1 ? ", \(starLevel) star" : "")\(isEquipped ? ", currently equipped" : "")")
+        .accessibilityHint(isEquipped ? "This orb is currently equipped" : "Double tap to equip this orb")
+        .accessibilityAddTraits(isEquipped ? .isSelected : [])
     }
 }
 

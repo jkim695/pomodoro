@@ -80,6 +80,20 @@ struct CircularDurationSlider: View {
                     endDrag()
                 }
         )
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Focus duration")
+        .accessibilityValue("\(duration) minutes")
+        .accessibilityHint("Drag around the circle to adjust duration")
+        .accessibilityAdjustableAction { direction in
+            switch direction {
+            case .increment:
+                duration = min(maxDuration, duration + stepSize)
+            case .decrement:
+                duration = max(minDuration, duration - stepSize)
+            @unknown default:
+                break
+            }
+        }
     }
 
     // MARK: - Thumb Position

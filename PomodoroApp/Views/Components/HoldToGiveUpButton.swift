@@ -69,6 +69,8 @@ struct HoldToGiveUpButton: View {
                     endHold()
                 }
         )
+        .accessibilityLabel("Hold to give up")
+        .accessibilityHint("Press and hold for 5 seconds to end session")
     }
 
     private var buttonText: String {

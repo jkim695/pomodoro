@@ -84,6 +84,8 @@ private struct RecentPullCard: View {
             RoundedRectangle(cornerRadius: 10)
                 .fill(Color.pomCardBackground)
         )
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("\(pull.orbName), \(pull.rarity.displayName), plus \(pull.shardsAwarded) shards")
     }
 }
 
