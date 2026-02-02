@@ -1,5 +1,6 @@
 import Foundation
 import UserNotifications
+import os.log
 
 /// Manages local notifications for focus completion
 final class NotificationManager {
@@ -16,12 +17,12 @@ final class NotificationManager {
         do {
             let granted = try await center.requestAuthorization(options: [.alert, .sound, .badge])
             if granted {
-                print("Notification permission granted")
+                AppLogger.notifications.info("Notification permission granted")
             } else {
-                print("Notification permission denied")
+                AppLogger.notifications.info("Notification permission denied")
             }
         } catch {
-            print("Failed to request notification permission: \(error)")
+            AppLogger.notifications.error("Failed to request notification permission: \(error)")
         }
     }
 
@@ -73,7 +74,7 @@ final class NotificationManager {
         let center = UNUserNotificationCenter.current()
         center.add(request) { error in
             if let error = error {
-                print("Failed to schedule notification: \(error)")
+                AppLogger.notifications.error("Failed to schedule notification: \(error)")
             }
         }
     }

@@ -199,7 +199,5 @@ struct RewardCelebrationView: View {
     RewardCelebrationView(
         earnedStardust: 15,
         milestones: [Milestones.all[0], Milestones.all[1]]
-    ) {
-        print("Dismissed")
-    }
+    ) { }
 }

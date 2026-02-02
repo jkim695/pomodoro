@@ -1,6 +1,7 @@
 import Foundation
 import DeviceActivity
 import FamilyControls
+import os.log
 
 /// Schedules and manages device activity monitoring for App Limits feature
 final class LimitsScheduler {
@@ -246,7 +247,7 @@ final class LimitsScheduler {
             do {
                 try startScheduleMonitoring(schedule)
             } catch {
-                print("Failed to start schedule monitoring for \(schedule.name): \(error)")
+                AppLogger.shield.error("Failed to start schedule monitoring for \(schedule.name): \(error)")
             }
         }
 
@@ -256,7 +257,7 @@ final class LimitsScheduler {
             do {
                 try startUsageMonitoring(limit)
             } catch {
-                print("Failed to start usage monitoring for limit: \(error)")
+                AppLogger.shield.error("Failed to start usage monitoring for limit: \(error)")
             }
         }
     }

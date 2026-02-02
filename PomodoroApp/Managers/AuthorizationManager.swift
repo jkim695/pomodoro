@@ -1,5 +1,6 @@
 import Foundation
 import FamilyControls
+import os.log
 
 /// Manages Screen Time authorization status
 @MainActor
@@ -23,7 +24,7 @@ final class AuthorizationManager: ObservableObject {
             try await authorizationCenter.requestAuthorization(for: .individual)
             checkStatus()
         } catch {
-            print("Authorization request failed: \(error)")
+            AppLogger.general.error("Authorization request failed: \(error)")
             checkStatus()
         }
     }

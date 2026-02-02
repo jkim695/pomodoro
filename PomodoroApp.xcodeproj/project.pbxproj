@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		L1000001001 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = L1000001000 /* Logger.swift */; };
+		T1000001001 /* RewardsManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = T1000001000 /* RewardsManagerTests.swift */; };
+		T1000002001 /* TimerManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = T1000002000 /* TimerManagerTests.swift */; };
+		T1000003001 /* GachaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = T1000003000 /* GachaTests.swift */; };
+		T1000004001 /* SessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = T1000004000 /* SessionTests.swift */; };
 		A1000001001 /* PomodoroAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000001000 /* PomodoroAppApp.swift */; };
 		A1000002001 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000002000 /* ContentView.swift */; };
 		A1000003001 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1000003000 /* Assets.xcassets */; };
@@ -188,6 +193,12 @@
 		N1000001000 /* ShieldOrbView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShieldOrbView.swift; sourceTree = "<group>"; };
 		N1000002000 /* GlowingProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlowingProgressBar.swift; sourceTree = "<group>"; };
 		N1000003000 /* CosmicCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CosmicCard.swift; sourceTree = "<group>"; };
+		L1000001000 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
+		T0000000000 /* PomodoroAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PomodoroAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		T1000001000 /* RewardsManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardsManagerTests.swift; sourceTree = "<group>"; };
+		T1000002000 /* TimerManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerManagerTests.swift; sourceTree = "<group>"; };
+		T1000003000 /* GachaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GachaTests.swift; sourceTree = "<group>"; };
+		T1000004000 /* SessionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -226,6 +237,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		T0000020000 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXContainerItemProxy section */
@@ -257,6 +275,13 @@
 			remoteGlobalIDString = E5000000001;
 			remoteInfo = DeviceActivityReportExtension;
 		};
+		T0000020001 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A0000000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A1000000001;
+			remoteInfo = PomodoroApp;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXGroup section */
@@ -269,6 +294,7 @@
 				A3000030000 /* ShieldConfigurationExtension */,
 				A4000030000 /* ShieldActionExtension */,
 				E5000030000 /* DeviceActivityReportExtension */,
+				T0000030000 /* PomodoroAppTests */,
 				A0000000002 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -281,6 +307,7 @@
 				A3000000000 /* ShieldConfigurationExtension.appex */,
 				A4000000000 /* ShieldActionExtension.appex */,
 				E5000000000 /* DeviceActivityReportExtension.appex */,
+				T0000000000 /* PomodoroAppTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -331,6 +358,7 @@
 				D1000005000 /* LimitsScheduler.swift */,
 				D1000006000 /* LimitsShieldManager.swift */,
 				H1000006000 /* RewardsManager.swift */,
+				L1000001000 /* Logger.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -488,6 +516,17 @@
 			path = Gacha;
 			sourceTree = "<group>";
 		};
+		T0000030000 /* PomodoroAppTests */ = {
+			isa = PBXGroup;
+			children = (
+				T1000001000 /* RewardsManagerTests.swift */,
+				T1000002000 /* TimerManagerTests.swift */,
+				T1000003000 /* GachaTests.swift */,
+				T1000004000 /* SessionTests.swift */,
+			);
+			path = PomodoroAppTests;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXTargetDependency section */
@@ -510,6 +549,11 @@
 			isa = PBXTargetDependency;
 			target = E5000000001 /* DeviceActivityReportExtension */;
 			targetProxy = F1000020004 /* PBXContainerItemProxy */;
+		};
+		T0000030001 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A1000000001 /* PomodoroApp */;
+			targetProxy = T0000020001 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -604,6 +648,24 @@
 			productReference = E5000000000 /* DeviceActivityReportExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
+		T0000000001 /* PomodoroAppTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = T0000050000 /* Build configuration list for PBXNativeTarget "PomodoroAppTests" */;
+			buildPhases = (
+				T0000060000 /* Sources */,
+				T0000020000 /* Frameworks */,
+				T0000070000 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				T0000030001 /* PBXTargetDependency */,
+			);
+			name = PomodoroAppTests;
+			productName = PomodoroAppTests;
+			productReference = T0000000000 /* PomodoroAppTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -629,6 +691,10 @@
 					E5000000001 = {
 						CreatedOnToolsVersion = 15.0;
 					};
+					T0000000001 = {
+						CreatedOnToolsVersion = 15.0;
+						TestTargetID = A1000000001;
+					};
 				};
 			};
 			buildConfigurationList = A0000000003 /* Build configuration list for PBXProject "PomodoroApp" */;
@@ -649,6 +715,7 @@
 				A3000000001 /* ShieldConfigurationExtension */,
 				A4000000001 /* ShieldActionExtension */,
 				E5000000001 /* DeviceActivityReportExtension */,
+				T0000000001 /* PomodoroAppTests */,
 			);
 		};
 /* End PBXProject section */
@@ -686,6 +753,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		E5000070000 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		T0000070000 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -781,6 +855,7 @@
 				I1000011001 /* RecentPullsSection.swift in Sources */,
 				J1000001001 /* CoolDownOverlayView.swift in Sources */,
 				J1000002001 /* InsufficientFundsOverlayView.swift in Sources */,
+				L1000001001 /* Logger.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -829,6 +904,17 @@
 				E5000003001 /* TimeSchedule.swift in Sources */,
 				E5000004001 /* AppLimit.swift in Sources */,
 				E5000005001 /* UsageRecord.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		T0000060000 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				T1000001001 /* RewardsManagerTests.swift in Sources */,
+				T1000002001 /* TimerManagerTests.swift in Sources */,
+				T1000003001 /* GachaTests.swift in Sources */,
+				T1000004001 /* SessionTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1250,6 +1336,44 @@
 			};
 			name = Release;
 		};
+		T0000051000 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = GMR2G7RSAM;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.orchard.app.PomodoroAppTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PomodoroApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/PomodoroApp";
+			};
+			name = Debug;
+		};
+		T0000052000 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = GMR2G7RSAM;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.orchard.app.PomodoroAppTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PomodoroApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/PomodoroApp";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1303,6 +1427,15 @@
 			buildConfigurations = (
 				E5000051000 /* Debug */,
 				E5000052000 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		T0000050000 /* Build configuration list for PBXNativeTarget "PomodoroAppTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				T0000051000 /* Debug */,
+				T0000052000 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
