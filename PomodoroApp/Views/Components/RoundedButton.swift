@@ -10,13 +10,49 @@ struct RoundedButton: View {
     let title: String
     let style: ButtonStyle
     let action: () -> Void
+    var customPrimaryColor: Color? = nil  // Optional override for primary button color
 
     @State private var isPressed = false
 
-    init(_ title: String, style: ButtonStyle = .primary, action: @escaping () -> Void) {
+    init(_ title: String, style: ButtonStyle = .primary, customPrimaryColor: Color? = nil, action: @escaping () -> Void) {
         self.title = title
         self.style = style
+        self.customPrimaryColor = customPrimaryColor
         self.action = action
+    }
+
+    // Computed color variants for custom primary color
+    private var effectivePrimaryColor: Color {
+        customPrimaryColor ?? .pomPrimary
+    }
+
+    private var effectivePrimaryColorDark: Color {
+        if let custom = customPrimaryColor {
+            return custom.opacity(0.85)
+        }
+        return .pomPrimaryDark
+    }
+
+    private var effectivePrimaryColorLight: Color {
+        if let custom = customPrimaryColor {
+            return custom.opacity(0.15)
+        }
+        return .pomPrimaryLight
+    }
+
+    /// Check if the custom primary color is light (needs dark text)
+    private var isLightColor: Bool {
+        guard let custom = customPrimaryColor else { return false }
+        // Convert Color to UIColor to get RGB components
+        let uiColor = UIColor(custom)
+        var red: CGFloat = 0
+        var green: CGFloat = 0
+        var blue: CGFloat = 0
+        var alpha: CGFloat = 0
+        uiColor.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+        // Calculate relative luminance
+        let luminance = 0.299 * red + 0.587 * green + 0.114 * blue
+        return luminance > 0.7
     }
 
     var body: some View {
@@ -44,10 +80,12 @@ struct RoundedButton: View {
 
     private var foregroundColor: Color {
         switch style {
-        case .primary, .destructive:
+        case .primary:
+            return isLightColor ? Color(white: 0.15) : .white
+        case .destructive:
             return .white
         case .secondary:
-            return .pomPrimary
+            return effectivePrimaryColor
         }
     }
 
@@ -56,15 +94,15 @@ struct RoundedButton: View {
         switch style {
         case .primary:
             RoundedRectangle(cornerRadius: 16)
-                .fill(isPressed ? Color.pomPrimaryDark : Color.pomPrimary)
-                .shadow(color: Color.pomPrimary.opacity(0.3), radius: 8, x: 0, y: 4)
+                .fill(isPressed ? effectivePrimaryColorDark : effectivePrimaryColor)
+                .shadow(color: effectivePrimaryColor.opacity(0.3), radius: 8, x: 0, y: 4)
 
         case .secondary:
             RoundedRectangle(cornerRadius: 16)
-                .fill(Color.pomPrimaryLight)
+                .fill(effectivePrimaryColorLight)
                 .overlay(
                     RoundedRectangle(cornerRadius: 16)
-                        .stroke(Color.pomPrimary, lineWidth: 2)
+                        .stroke(effectivePrimaryColor, lineWidth: 2)
                 )
 
         case .destructive:
