@@ -3,13 +3,19 @@ import SwiftUI
 /// Grid display of owned orb styles
 struct CollectionView: View {
     @EnvironmentObject var rewardsManager: RewardsManager
+    @Environment(\.horizontalSizeClass) private var sizeClass
     @State private var selectedStyle: OrbStyle?
 
-    private let columns = [
-        GridItem(.flexible(), spacing: 16),
-        GridItem(.flexible(), spacing: 16),
-        GridItem(.flexible(), spacing: 16)
-    ]
+    /// Adaptive columns based on device size class
+    private var columns: [GridItem] {
+        let columnCount = sizeClass == .regular ? 4 : 3
+        return Array(repeating: GridItem(.flexible(), spacing: 16), count: columnCount)
+    }
+
+    /// Adaptive horizontal padding
+    private var horizontalPadding: CGFloat {
+        sizeClass == .regular ? 32 : 16
+    }
 
     var body: some View {
         ScrollView {
@@ -26,27 +32,27 @@ struct CollectionView: View {
                         .font(.subheadline)
                         .foregroundColor(.pomTextSecondary)
                 }
-                .padding(.horizontal)
+                .padding(.horizontal, horizontalPadding)
 
                 // Currently equipped
                 VStack(alignment: .leading, spacing: 12) {
                     Text("Currently Equipped")
                         .font(.subheadline.weight(.semibold))
                         .foregroundColor(.pomTextSecondary)
-                        .padding(.horizontal)
+                        .padding(.horizontal, horizontalPadding)
 
                     HStack(spacing: 16) {
-                        // Mini orb preview with star level
+                        // Mini orb preview with star level (larger on iPad)
                         GradientOrbView(
                             state: .idle,
-                            size: 60,
+                            size: sizeClass == .regular ? 80 : 60,
                             style: rewardsManager.equippedStyle,
                             starLevel: rewardsManager.starLevel(for: rewardsManager.equippedStyle.id)
                         )
 
                         VStack(alignment: .leading, spacing: 4) {
                             Text(rewardsManager.equippedStyle.name)
-                                .font(.headline)
+                                .font(sizeClass == .regular ? .title3 : .headline)
                                 .foregroundColor(.pomTextPrimary)
 
                             HStack(spacing: 8) {
@@ -64,12 +70,12 @@ struct CollectionView: View {
 
                         Spacer()
                     }
-                    .padding()
+                    .padding(sizeClass == .regular ? 20 : 16)
                     .background(
                         RoundedRectangle(cornerRadius: 16)
                             .fill(Color.pomCardBackground)
                     )
-                    .padding(.horizontal)
+                    .padding(.horizontal, horizontalPadding)
                 }
 
                 // Owned orbs grid
@@ -77,7 +83,7 @@ struct CollectionView: View {
                     Text("Owned Orbs")
                         .font(.subheadline.weight(.semibold))
                         .foregroundColor(.pomTextSecondary)
-                        .padding(.horizontal)
+                        .padding(.horizontal, horizontalPadding)
 
                     if rewardsManager.ownedStyles.isEmpty {
                         Text("Complete focus sessions to earn Stardust and unlock new orbs!")
@@ -86,7 +92,7 @@ struct CollectionView: View {
                             .multilineTextAlignment(.center)
                             .padding()
                     } else {
-                        LazyVGrid(columns: columns, spacing: 16) {
+                        LazyVGrid(columns: columns, spacing: sizeClass == .regular ? 20 : 16) {
                             ForEach(rewardsManager.ownedStyles) { style in
                                 OrbPreviewCard(
                                     style: style,
@@ -98,7 +104,7 @@ struct CollectionView: View {
                                 }
                             }
                         }
-                        .padding(.horizontal)
+                        .padding(.horizontal, horizontalPadding)
                     }
                 }
 
@@ -120,11 +126,11 @@ struct CollectionView: View {
                                     .foregroundColor(.pomPrimary)
                             }
                         }
-                        .padding(.horizontal)
+                        .padding(.horizontal, horizontalPadding)
 
                         ScrollView(.horizontal, showsIndicators: false) {
-                            HStack(spacing: 12) {
-                                ForEach(rewardsManager.lockedStyles.prefix(5)) { style in
+                            HStack(spacing: sizeClass == .regular ? 16 : 12) {
+                                ForEach(rewardsManager.lockedStyles.prefix(sizeClass == .regular ? 8 : 5)) { style in
                                     OrbPreviewCard(
                                         style: style,
                                         isOwned: false,
@@ -134,7 +140,8 @@ struct CollectionView: View {
                                     }
                                 }
 
-                                if rewardsManager.lockedStyles.count > 5 {
+                                let maxVisible = sizeClass == .regular ? 8 : 5
+                                if rewardsManager.lockedStyles.count > maxVisible {
                                     NavigationLink {
                                         GachaView()
                                     } label: {
@@ -142,11 +149,11 @@ struct CollectionView: View {
                                             Image(systemName: "ellipsis")
                                                 .font(.title2)
                                                 .foregroundColor(.pomTextSecondary)
-                                            Text("+\(rewardsManager.lockedStyles.count - 5) more")
+                                            Text("+\(rewardsManager.lockedStyles.count - maxVisible) more")
                                                 .font(.caption)
                                                 .foregroundColor(.pomTextTertiary)
                                         }
-                                        .frame(width: 100, height: 130)
+                                        .frame(width: sizeClass == .regular ? 120 : 100, height: sizeClass == .regular ? 150 : 130)
                                         .background(
                                             RoundedRectangle(cornerRadius: 16)
                                                 .fill(Color.pomCardBackgroundAlt)
@@ -154,7 +161,7 @@ struct CollectionView: View {
                                     }
                                 }
                             }
-                            .padding(.horizontal)
+                            .padding(.horizontal, horizontalPadding)
                         }
                     }
                 }

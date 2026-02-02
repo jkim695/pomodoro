@@ -355,6 +355,37 @@ final class SharedDataManager {
 
         return try? PropertyListDecoder().decode(AppUsageData.self, from: data)
     }
+
+    // MARK: - Data Reset
+
+    /// Deletes all shared data (schedules, limits, session state, etc.)
+    /// Note: Does NOT delete FamilyActivitySelection to preserve Screen Time authorization
+    func deleteAllData() {
+        guard let defaults = userDefaults else { return }
+
+        // Clear session state
+        resetSessionState()
+
+        // Clear schedules and limits
+        defaults.removeObject(forKey: schedulesKey)
+        defaults.removeObject(forKey: limitsKey)
+        defaults.removeObject(forKey: usageRecordsKey)
+
+        // Clear active monitoring state
+        defaults.removeObject(forKey: activeScheduleIdsKey)
+        defaults.removeObject(forKey: activeLimitIdsKey)
+
+        // Clear shield context
+        clearShieldContext()
+
+        // Clear app usage data
+        defaults.removeObject(forKey: appUsageDataKey)
+
+        // Note: We intentionally keep familyActivitySelection
+        // so users don't need to re-select their blocked apps
+
+        sharedDataLogger.info("All shared data deleted")
+    }
 }
 
 /// Raw app usage data persisted by the DeviceActivityMonitor extension

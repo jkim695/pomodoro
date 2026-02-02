@@ -5,12 +5,18 @@ import FamilyControls
 struct LimitsView: View {
     @EnvironmentObject var limitsSession: LimitsSession
     @EnvironmentObject var rewardsManager: RewardsManager
+    @Environment(\.horizontalSizeClass) private var sizeClass
     @State private var showAddSchedule = false
     @State private var showAddLimit = false
 
     /// Accent color from equipped orb
     private var accentColor: Color {
         rewardsManager.equippedStyle.primaryColor
+    }
+
+    /// Adaptive horizontal padding
+    private var horizontalPadding: CGFloat {
+        sizeClass == .regular ? 40 : 24
     }
 
     var body: some View {
@@ -45,8 +51,8 @@ struct LimitsView: View {
                             UsageLimitListView()
                         }
                     }
-                    .padding(.horizontal, 24)
-                    .padding(.vertical, 16)
+                    .padding(.horizontal, horizontalPadding)
+                    .padding(.vertical, sizeClass == .regular ? 24 : 16)
                 }
             }
             .navigationTitle("Limits")
